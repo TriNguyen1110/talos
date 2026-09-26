@@ -1,0 +1,13 @@
+{
+  "name": "talos",
+  "private": true,
+  "type": "module",
+  "description": "The governed path between rooms in a software factory. Own Your Intelligence, 2026-09-27.",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "clock": "node scripts/clock.mjs",
+    "kickoff": "node scripts/clock.mjs --start",
+    "timeline": "node src/timeline.mjs"
+  },
+  "license": "MIT"
+}

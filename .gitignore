@@ -1,0 +1,7 @@
+.env
+.env.local
+node_modules/
+*.mp4
+data/train.jsonl
+rooms/*/brain/*.md
+!rooms/*/brain/.keep
