@@ -17,39 +17,39 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const START_FILE = join(ROOT, "demo/START");
-/** Own Your Intelligence kickoff: Sun 2026-09-27 12:00 PT = 19:00 UTC. */
-const SCHEDULED_KICKOFF = "2026-09-27T19:00:00Z";
+/** Own Your Intelligence: doors 12:00 PT, hacking begins 13:15 PT = 20:15 UTC (the event listing). */
+const SCHEDULED_KICKOFF = "2026-09-27T20:15:00Z";
 
 /**
  * One phase of the day. `from`/`to` are minutes after kickoff. `allow` is the paths a builder
  * may create or edit; anything else is refused by --gate. `cut` is what goes first if behind.
  */
 const PHASES = [
-  { name: "plan",      from: 0,   to: 20,  clock: "12:00–12:20",
+  { name: "plan",      from: 0,   to: 15,  clock: "13:15–13:30",
     does: "Decide the path and commit plan.md. No code, not one line.",
     allow: [/^plan\.md$/, /^BOARD\.tsv$/, /^demo\/STATUS\.md$/],
-    cut: "Nothing to cut yet. If the path is unclear at 12:20, take the fallback and move on." },
-  { name: "test",      from: 20,  to: 90,  clock: "12:20–13:30",
+    cut: "Nothing to cut yet. If the path is unclear at 13:30, take the fallback and move on." },
+  { name: "test",      from: 15,  to: 60,  clock: "13:30–14:15",
     does: "Write the demo-path test so it fails for the right reason. Still no implementation.",
     allow: [/^tests\//, /^plan\.md$/, /^BOARD\.tsv$/, /^\.env/],
     cut: "Cut beats 3 and 4 from the test before cutting the test. Never cut the test." },
-  { name: "implement", from: 90,  to: 210, clock: "13:30–15:30",
+  { name: "implement", from: 60,  to: 165, clock: "14:15–16:00",
     does: "Make the beats green locally. The audit table and v0 rules before any adapter.",
     allow: [/^src\//, /^tests\//, /^demo\//, /^scripts\//, /^data\//, /^BOARD\.tsv$/, /^plan\.md$/],
     cut: "1 River. 2 Jev, rules only. 3 QM rooms, directories instead. 4 timeline page, tail -f instead." },
-  { name: "review",    from: 210, to: 230, clock: "15:30–15:50",
+  { name: "review",    from: 165, to: 180, clock: "16:00–16:15",
     does: "Verifier, fresh context, on the diff and the recording. Fixes only, nothing new.",
     allow: [/^tests\//, /^BOARD\.tsv$/],
     cut: "A finding that needs a new file is a note in the README, not a build." },
-  { name: "present",   from: 230, to: 270, clock: "15:50–16:30",
+  { name: "present",   from: 180, to: 210, clock: "16:15–16:45",
     does: "README and the 60-second recording. The sentence, one command, numbers with dates.",
     allow: [/^README\.md$/, /^demo\//, /^BOARD\.tsv$/],
     cut: "Cut the numbers you cannot date before cutting the 'not true yet' list." },
-  { name: "buffer",    from: 270, to: 300, clock: "16:30–17:00",
+  { name: "buffer",    from: 210, to: 225, clock: "16:45–17:00",
     does: "Nothing new. Fix only what the recording shows.",
     allow: [/^README\.md$/, /^demo\//, /^BOARD\.tsv$/],
     cut: "Everything. Ship what runs." },
-  { name: "judging",   from: 300, to: 345, clock: "17:00–17:45",
+  { name: "judging",   from: 225, to: 270, clock: "17:00–17:45",
     does: "Hands off the keyboard. Demo it.",
     allow: [/^BOARD\.tsv$/],
     cut: "n/a" },

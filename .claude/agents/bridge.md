@@ -30,7 +30,7 @@ Two halves, and they land in this order:
 2. **QM side second.** Attach to the point where a QM tool call returns to the model and
    append the change block. Name the exact file and function in `plan.md` before you edit it.
 
-If the table and v0 are not green by 14:30, stop and take the cut the clock prints. A shipped
+If the table and v0 are not green by 15:15, stop and take the cut the clock prints. A shipped
 rules decider with a real audit table beats a half-built Jev call.
 
 ## The clock

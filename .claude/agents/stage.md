@@ -18,7 +18,7 @@ You own `demo/**` and `README.md`. You do not open `src/**`.
 
 `demo/script.md` is the shot list and the contract for what `run.sh` prints. Build **shot 2
 first**, the run where B fails because nobody told it: it needs no product, so it is the one
-thing that is certainly done by 15:00. Then shot 3 against whatever the bridge has.
+thing that is certainly done by 15:45. Then shot 3 against whatever the bridge has.
 
 ## What you are building
 

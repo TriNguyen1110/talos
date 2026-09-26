@@ -1,7 +1,8 @@
 # Talos — the governed path between rooms in a software factory
 
-Built for Own Your Intelligence, **Sun 2026-09-27, 12:00–18:00 PT** (hacking ends 17:00,
-judging 17:00–17:45). Cloned from `hacker-kit` plus the ECC pieces, then specialized for this
+Built for Own Your Intelligence, **Sun 2026-09-27**. Per the event listing: doors and lunch 12:00 PT,
+remarks 13:00, **hacking 13:15 to 17:00** (three hours forty-five), judging 17:00–17:45, prizes 18:00.
+The hour before kickoff is for standing rooms up and testing the Jev key, not for code. Cloned from `hacker-kit` plus the ECC pieces, then specialized for this
 one build. Read `strategy.md` before `plan.md`: it says who is in the room and why the aim is
 what it is. The deck the two humans share is the pitch; this file is the spec.
 
@@ -97,7 +98,7 @@ means something different per version and the row says which version produced it
 
 `TALOS_DECIDER=off|rules|jev|river`, default `jev` when `JEV_API_KEY` is set, else `rules`. `off` is
 beat 1's control and the A/B baseline. Jev is early access behind a waitlist; the key, or access via
-OpenRouter (`jev-1.13`), must exist before Sunday. If neither does at 12:00, `rules` is the day.
+OpenRouter (`jev-1.13`), must exist before Sunday. If neither does at 13:15, `rules` is the day.
 
 ## Numbers, measured on the day, never asserted
 
@@ -129,12 +130,13 @@ never argue with it.
 
 | Time | Phase | Writes allowed | Output |
 |---|---|---|---|
-| 12:00–12:20 | plan | `plan.md`, `BOARD.tsv`, `demo/STATUS.md` | path chosen, committed |
-| 12:20–13:30 | test | `tests/` | the demo-path test, failing for the right reason |
-| 13:30–15:30 | implement | `src/`, `tests/`, `demo/`, `scripts/`, `data/` | the five beats green locally |
-| 15:30–15:50 | review | `tests/` | verifier's verdict, fresh context |
-| 15:50–16:30 | present | `README.md`, `demo/` | the page and the 60-second recording |
-| 16:30–17:00 | buffer | `README.md`, `demo/` | nothing new; only what the recording showed |
+| 12:00–13:15 | before kickoff | nothing in the repo | rooms up, Jev key tested, plan.md already committed |
+| 13:15–13:30 | plan | `plan.md`, `BOARD.tsv`, `demo/STATUS.md` | path confirmed, committed |
+| 13:30–14:15 | test | `tests/` | the demo-path test, failing for the right reason |
+| 14:15–16:00 | implement | `src/`, `tests/`, `demo/`, `scripts/`, `data/` | the beats green locally |
+| 16:00–16:15 | review | `tests/` | verifier's verdict, fresh context |
+| 16:15–16:45 | present | `README.md`, `demo/` | the page and the 60-second recording |
+| 16:45–17:00 | buffer | `README.md`, `demo/` | nothing new; only what the recording showed |
 | 17:00–17:45 | judging | — | hands off |
 
 - **A write outside the phase is refused.** A `PreToolUse` hook runs `clock.mjs --gate` on
