@@ -31,7 +31,7 @@ Both terminals show B already working: `B: task = write the REST client for deci
 | 0:30 | (nothing) | `B: done. 120 lines, REST client, tests green.` |
 
 > "B finished. B is correct, careful, and wrong. My decision was forty seconds old and B never
-> heard it. In our own crew this gap runs one to five hours, because every agent reads the
+> heard it. In real teams this gap runs one to five hours, because every agent reads the
 > world once when it starts and never looks again. I've just compressed five hours into forty
 > seconds. Nothing else about this is sped up."
 

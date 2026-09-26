@@ -52,7 +52,7 @@ Tell the motivating incident in the first person, because it is ours. **Never na
 decision was about**: the real one was removing a company from a comparison table and that
 company is a host here. "A decision about what our public page said" is the whole story.
 
-## README rules (from the crew's `docs/presenting.md`, short form)
+## README rules (short form)
 
 - The sentence first, before anything about how it works.
 - **What existed before today, said plainly, near the top.** Talos was live before Sunday;

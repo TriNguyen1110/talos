@@ -22,8 +22,8 @@ when you read what shipped.
 
 **What happens today.** Every agent is a batch: it reads the world once at the start of its
 run and does not look again. So a decision reaches a running agent only when that agent
-happens to start over. Measured in Tri's own six-agent crew: **1 to 5 hours** of latency
-between a decision being recorded and the agents acting on it. Three failures in the crew's
+happens to start over. Measured in a real multi-agent team: **1 to 5 hours** of latency
+between a decision being recorded and the agents acting on it. Three failures in that team's
 incident log come from exactly this and nothing else: work done against a superseded decision,
 the same stale rule copied into six separate rows before anyone caught it, and a page rewritten
 seven hours after the decision that changed what it should say, still carrying the old thing.
