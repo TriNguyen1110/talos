@@ -82,14 +82,22 @@ produce the same demo with Jev unplugged.
 
 ## The decider (one function, three implementations, same signature)
 
-`decide(change) -> { verdict, targets, confidence, version }`. v0 is rules (`private_note`
-to hold, `contract` to its declared crossers, `noise` to discard); it ships in hour one and
-the demo never depends on anything else. v1 is Jev behind `JEV_API_KEY`, pinned to one model
-version, option order logged. v2 is a River LoRA on an open-weight model (River's floor is about 35B; preview API, Python
+`decide(change) -> { verdict, targets, confidence, version }`. **v1 Jev is the default decider**:
+it is cheap ($0.042 per million input tokens, output free), 70 to 500 ms, and returns a choice plus a
+probability per option plus a confidence score. Two Choice questions against one state (the change
+text, the author room, the access matrix as reference material): `kind` over five options and `verdict`
+over three; targets come from `access.crossers(fromRoom, kind)`, never from the model. Pin `JEV_MODEL`
+to one version (never `jev-latest`); log the option order and every per-option probability in the
+audit row, because v1.5 trains on them. v0 rules (`private_note` to hold, `contract` to its declared
+crossers, `noise` to discard) ships in the same hour as the fallback: if `JEV_API_KEY` is unset or
+Jev errors or exceeds 2 s, the bridge falls back to rules and the audit row says `decider_version:
+rules-v0 (fallback)`. The demo must pass with Jev unplugged. v2 is a River LoRA on an open-weight model (River's floor is about 35B; preview API, Python
 client), trained on `data/train.jsonl`, started in hour three; whether it finishes does not matter. Confidence
 means something different per version and the row says which version produced it.
 
-`TALOS_DECIDER=off|rules|jev|river`. `off` is beat 1's control and the A/B baseline.
+`TALOS_DECIDER=off|rules|jev|river`, default `jev` when `JEV_API_KEY` is set, else `rules`. `off` is
+beat 1's control and the A/B baseline. Jev is early access behind a waitlist; the key, or access via
+OpenRouter (`jev-1.13`), must exist before Sunday. If neither does at 12:00, `rules` is the day.
 
 ## Numbers, measured on the day, never asserted
 
@@ -109,8 +117,8 @@ quoted here; this repo measures itself.
 - The product the rooms build is real and small: a CLI that summarizes a public repo's open
   PRs (`product/`). It is throwaway in importance, not in function: beat 6 runs it.
 - Talos: Node 24, TypeScript-free ESM (`.mjs`) so nothing needs a build step, `node --test`.
-- Optional: `JEV_API_KEY` for v1, `RIVER_API_KEY` for v2. Both read from the environment,
-  never printed, never committed. The demo passes with neither set.
+- `JEV_API_KEY` (or an OpenRouter key routing to `jev-1.13`) for v1, `RIVER_API_KEY` for v2. Both
+  read from the environment, never printed, never committed. The demo passes with neither set.
 - No framework the demo does not need. No hosted memory service.
 
 ## Timeboxes (hard, and enforced)
@@ -140,7 +148,7 @@ never argue with it.
 ## Cut order if behind
 
 1. River (v2) → show the job or nothing; the deck already says it may not finish.
-2. Jev (v1) → rules only; say on stage that v1 is a config flag.
+2. Jev (v1) → rules only; the fallback is automatic and the audit row says so.
 3. QM rooms → two directories with a file watcher, saying out loud which QM hook it would be.
 4. The timeline page → `tail -f data/audit.jsonl` on screen, which is honest and readable.
 5. Beat 4 (injected) → keep beats 1, 2, 3, 5. **Never cut beat 1, the test, or the README.**

@@ -11,7 +11,8 @@ routing a room's memory to an external provider; if QM is standing, Talos is tha
 Files to touch, in order:
 1. `src/audit.mjs` — the one table. Append, read, and `since(seq)`.
 2. `src/access.mjs` — roles, tokens, the matrix, `check(token, room, action)`, `revoke(token)`.
-3. `src/decider.mjs` — `decide(change)`; v0 rules; `TALOS_DECIDER` switch; v1/v2 adapters behind env.
+3. `src/decider.mjs` — `decide(change)`; v1 Jev as default (two Choice questions, probabilities logged,
+   2 s timeout) with v0 rules as automatic fallback; `TALOS_DECIDER` switch; v2 adapter behind env.
 4. `src/bridge.mjs` — watch room write path → classify → decide → check → deliver → audit row.
 5. `src/rooms/dir.mjs` — directory adapter (`rooms/<room>/brain/**.md`); `src/rooms/qm.mjs` stub.
 6. `src/timeline.mjs` — render `data/audit.jsonl` as `demo/timeline.html`, two swimlanes.
@@ -22,7 +23,8 @@ Risks, and the one most likely to cost the afternoon:
   already making about something else. In the fallback, `run.sh b` wraps each tool call with
   `talos changes --since <seq>` and prints the block. If that wrapper looks like polling, the
   claim dies. Make the wrapped call visibly unrelated (the test command), and log one call.
-- Jev availability on the day. Rules first; Jev is a flag.
+- Jev access. It is early access behind a waitlist; get a key tonight, or an OpenRouter key that routes
+  to `jev-1.13`. Test one call Saturday. Rules is the automatic fallback, so the demo cannot die on this.
 - River training time. Start it at hour three, show the job page if it is not done.
 
 Cut order (from CLAUDE.md, adjusted for what is actually standing): as written there.
