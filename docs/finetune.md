@@ -44,8 +44,9 @@ traces = json.load(open(p))
 2. Stratified split by `kind`, 80/20. Hold the demo log out entirely as a second test set.
 3. Baseline: `src/decider.mjs` rules (`TALOS_DECIDER=rules`) on both test sets. Report a confusion matrix
    per label, not one accuracy number.
-4. Fine-tune on River: small instruction model, supervised, one epoch first, low learning rate, early stop
-   on held-out loss. Pin the model version in `RIVER_MODEL`. Start at hour three on event credits.
+4. Fine-tune on River: a LoRA on one of River's open-weight models (their floor is about 35B; the API is
+   preview v0.1 with a Python client, `pip install river-client`). Supervised, one epoch first, low learning
+   rate, early stop on held-out loss. Pin the model in `RIVER_MODEL`. Start at hour three on event credits.
 5. Evaluate the tuned model the same way. The bar is beating rules on held-out rows; if it does not,
    say so on stage and show the matrix.
 6. Wire it behind `TALOS_DECIDER=river` only if the eval is done; otherwise show the job page.

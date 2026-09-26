@@ -5,7 +5,8 @@ GBrain brain. Talos watches each room's write path with a file watcher. If `scri
 was completed and two QM rooms are up, the QM adapter replaces the watcher; the hook is the
 point where a QM tool call returns to the model, named here before it is edited:
 
-QM hook or file the bridge attaches to: (unknown until QM is standing; leave blank, use the watcher)
+QM hook or file the bridge attaches to: QM documents no tool-call or write hook. Its documented surface is
+routing a room's memory to an external provider; if QM is standing, Talos is that provider. Otherwise the watcher.
 
 Files to touch, in order:
 1. `src/audit.mjs` — the one table. Append, read, and `since(seq)`.

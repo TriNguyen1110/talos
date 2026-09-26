@@ -85,8 +85,8 @@ produce the same demo with Jev unplugged.
 `decide(change) -> { verdict, targets, confidence, version }`. v0 is rules (`private_note`
 to hold, `contract` to its declared crossers, `noise` to discard); it ships in hour one and
 the demo never depends on anything else. v1 is Jev behind `JEV_API_KEY`, pinned to one model
-version, option order logged. v2 is a River fine-tune on `data/audit.jsonl` exported as
-`data/train.jsonl`, started in hour three; whether it finishes does not matter. Confidence
+version, option order logged. v2 is a River LoRA on an open-weight model (River's floor is about 35B; preview API, Python
+client), trained on `data/train.jsonl`, started in hour three; whether it finishes does not matter. Confidence
 means something different per version and the row says which version produced it.
 
 `TALOS_DECIDER=off|rules|jev|river`. `off` is beat 1's control and the A/B baseline.
@@ -103,8 +103,9 @@ quoted here; this repo measures itself.
 - Two rooms: two directories under `rooms/`, each with its own GBrain brain
   (`rooms/<room>/brain/`, a directory of Markdown that `gbrain sync` indexes; agents write it
   with `gbrain remember` or by writing a page). The directory adapter watches that directory
-  for writes. Two QM rooms replace it only if `scripts/setup-qm.sh` was completed; the QM
-  adapter and the directory adapter expose the same write-path hook, and `plan.md` names which.
+  for writes. Two QM rooms replace it only if `scripts/setup-qm.sh` was completed. QM documents no hook on
+  tool calls or writes; its documented surface is routing a room's memory to an external provider,
+  so the QM adapter is Talos as that provider (`docs/sponsors.md`). `plan.md` names which adapter.
 - The product the rooms build is real and small: a CLI that summarizes a public repo's open
   PRs (`product/`). It is throwaway in importance, not in function: beat 6 runs it.
 - Talos: Node 24, TypeScript-free ESM (`.mjs`) so nothing needs a build step, `node --test`.

@@ -1,0 +1,18 @@
+# The hosts, from their own pages (checked Sep 26, 2026)
+
+What each host actually is, what we use it for, and which claims in the deck rest on it. Anything
+not on this page is not verified; say "we assume" on stage.
+
+| Host | Verified | We use it as | Not verified / do not claim |
+|---|---|---|---|
+| **QM** (`github.com/yc-software/qm`, MIT) | Multiplayer agent harness. TypeScript, Node, Fastify, Postgres, Vite + Lit. Each person and each room has its own scoped memory, files, keychain view, permissions, crons, web apps and durable sandbox. Memory mode per room: Isolated (default) or Open. Memory can be routed to an external provider while keeping the built-in notebook. Security postures: Strict, Auto, Dangerous. Full audit trail of agent actions. "Open does not mount a personal workspace into the shared computer, expose credentials, carry message history, cross organizations." | The rooms. Talos's honest attachment point is **the external memory provider route**: QM already lets a room's memory go to a provider; Talos sits on that path. | A plugin hook on tool calls or writes. None is documented. Do not say "write-path plugin"; say "as the room's memory provider, or a file watcher on the room's brain." |
+| **GBrain** (`github.com/garrytan/gbrain`) | A brain is a directory of Markdown; path-based types (people/, projects/); `gbrain sync` indexes into a database; CLI `search`, `think`, `remember`, `recall`; MCP via `gbrain serve` (stdio) or `--http`. Git-backed change detection. | One brain per room; the directory adapter watches the brain's Markdown for writes. | Nothing extra. |
+| **River AI** (riverai; $1.1B raised Aug 2026; Igor Babuschkin) | The River API, preview v0.1: LoRA fine-tuning and reinforcement learning for open-weight models roughly 35B to 1T parameters, token-metered, served back through the same API. Python client `pip install river-client`. Free training credits at the event (Igor's post). | v2 of the decider: a LoRA on an open-weight model, trained on `data/train.jsonl`. | A "small instruction model": River's floor is ~35B. No SLA, no published rate limits, Python only. Plan for the job not finishing. |
+| **Jev** (TypeSafe, launched Sep 15, 2026; not a host) | Decision model: classify, score, route; returns choices and probabilities, no generation. $0.042 per M input tokens. Limits: 64k context, 255 options; injection can move the verdict; option order matters; pin the version. | v1 of the decider: kind and verdict. | Anything generative. Any "safe by default" claim. |
+| **Memorable** (`memorable.sh`, YC) | Procedural memory: turns successful runs into reusable procedures (files touched, commands, order, exit codes). CLI `npx memorable-cli@latest`; integrations for Claude Code, Codex, Cursor, gbrain; any harness posts one JSON trace to `POST /v1/extract`; a read-only MCP server with five tools. Case study with QM: 40% fewer tool calls. | Not in the build. One sentence if asked: procedural memory is the "how", Talos governs the "what crosses". | That we integrate it. |
+| **Superset** (`github.com/superset-sh/superset`, open source, YC) | Terminal-first IDE for running multiple Claude Code or Codex sessions in parallel, workspaces and worktrees, PR review, remote workspaces. | The build loop: two coding agents in parallel workspaces. | Nothing extra. |
+| **UFO** | No public page, repo or launch found on Sep 26. | Ask at the venue in the first ten minutes. | Anything. |
+
+Sources: the QM README; the GBrain README; River coverage of the Aug 11 2026 raise and the River API docs
+summary (preview v0.1); TypeSafe's Jev docs and the Sep 2026 evaluations; memorable.sh; the Superset
+YC launch page; the YC event page for the host list.
