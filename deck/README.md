@@ -1,6 +1,6 @@
 # The deck
 
-Live, editable copy: https://claude.ai/artifact/8b6RPynk1FGA1SHDgUSWVp (shared by link; PDF and PPTX
+Repo: https://github.com/TriNguyen1110/talos (public). Live, editable deck: https://claude.ai/artifact/8b6RPynk1FGA1SHDgUSWVp (shared by link; PDF and PPTX
 from its Share > Export menu). This folder is the source of every slide as of the last sync, one
 HTML section per slide, order and fonts in `deck.json`. Re-sync from the live copy before Sunday;
 the live copy wins if they disagree.
