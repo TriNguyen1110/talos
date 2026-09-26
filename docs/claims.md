@@ -14,7 +14,7 @@ says "we assume" or the claim comes off. This ledger is re-checked before the de
 | Decider | Detection via the room's memory route or a watcher on its brain | QM README (external memory provider routing); GBrain README (Markdown brain, git-backed sync) | Verified |
 | Access | One token per role, scoped, revocable, audit row per read, sub-second revoke | Talos, ours to build | Our claim; measured on the day |
 | Training | River: LoRA on open-weight models via its API | River API preview v0.1, Python client; models ~35B to 1T | Verified via coverage of the API docs; not tested by us |
-| Training | Jev as v1 baseline | TypeSafe | Verified |
+| Training | Jev as v1 baseline; v2 is a separate River model, not a tuned Jev | TypeSafe docs: no fine-tuning endpoint, same weights for every account; customization is via state and criteria, or Jev probabilities as features for a classical model | Verified |
 | Datasets | MAST-Data: 1,642 traces, 14 binary labels, ~66 MB, files MAD_full_dataset.json and MAD_human_labelled_dataset.json | huggingface.co/datasets/mcemri/MAST-Data and mcemri/MAD; MAST GitHub | Verified |
 | Datasets | CommitSuite: 63,533 Conventional-Commits-compliant commits from 243 repos, AST-level info | arXiv 2605.02256 | Verified in abstract |
 | Datasets | Quad4 commit set: subject, body, style, type (13 types), scope, breaking flag; 292,269 rows from 15 repos; loads with `datasets` | Hugging Face dataset card | Verified |

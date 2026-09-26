@@ -37,6 +37,16 @@ p = hf_hub_download(repo_id="mcemri/MAD", filename="MAD_human_labelled_dataset.j
 traces = json.load(open(p))
 ```
 
+## Why not fine-tune Jev
+
+Jev cannot be fine-tuned: TypeSafe uses the same weights for every account and offers no
+fine-tuning endpoint or per-customer adapter. Two honest routes exist. Customize Jev through the
+request (reference material in the state, rules in each question's criteria), or, with labeled data,
+use Jev's per-option probabilities as features for a small classical model, which is what TypeSafe's
+own cookbook does with CatBoost. That second route is a cheap v1.5 if River's job is slow: log Jev's
+probabilities in every audit row, fit a gradient-boosted classifier on them plus the kind, and it
+runs in microseconds. v2 on River is a separate open-weight model, never a tuned Jev.
+
 ## Method
 
 1. Build `data/train.jsonl` from the public sources with `scripts/build-train.mjs` (to write on the day
