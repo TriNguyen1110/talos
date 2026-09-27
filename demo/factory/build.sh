@@ -44,11 +44,12 @@ step backend "publishing the profiles contract"
 write backend "contract: the profiles endpoint returns { items: [{ id, name, college, startup, bio, likesYou }] }; likes are POSTed to /likes"
 cat > "$APP/profiles.json" <<'EOF'
 {"items":[
- {"id":1,"name":"Maya","college":"Stanford","startup":"Loopwise","bio":"Building a scheduling agent for labs. Will trade a coffee for a code review.","likesYou":true},
- {"id":2,"name":"Dev","college":"Berkeley","startup":"Kelp","bio":"Carbon accounting for food trucks. Ships on Sundays.","likesYou":false},
- {"id":3,"name":"Ana","college":"Stanford","startup":"Nightjar","bio":"Sleep tracking without a wearable. Wants a cofounder who reads papers.","likesYou":true},
- {"id":4,"name":"Sam","college":"SJSU","startup":"Rewired","bio":"Repairs e-bikes with a marketplace on top. Knows every bike lane.","likesYou":true},
- {"id":5,"name":"Priya","college":"Berkeley","startup":"Stacky","bio":"Pancake robot. Yes, really. Seed round closing.","likesYou":false}
+ {"id":1,"name":"Maya","age":21,"college":"Stanford","startup":"Loopwise","bio":"Building a scheduling agent for labs. Will trade a coffee for a code review.","likesYou":true,"photo":"https://i.pravatar.cc/600?img=47"},
+ {"id":2,"name":"Dev","age":22,"college":"Berkeley","startup":"Kelp","bio":"Carbon accounting for food trucks. Ships on Sundays.","likesYou":false,"photo":"https://i.pravatar.cc/600?img=12"},
+ {"id":3,"name":"Ana","age":20,"college":"Stanford","startup":"Nightjar","bio":"Sleep tracking without a wearable. Wants a cofounder who reads papers.","likesYou":true,"photo":"https://i.pravatar.cc/600?img=32"},
+ {"id":4,"name":"Sam","age":23,"college":"SJSU","startup":"Rewired","bio":"Repairs e-bikes with a marketplace on top. Knows every bike lane.","likesYou":true,"photo":"https://i.pravatar.cc/600?img=59"},
+ {"id":5,"name":"Priya","age":21,"college":"Berkeley","startup":"Stacky","bio":"Pancake robot. Yes, really. Seed round closing.","likesYou":false,"photo":"https://i.pravatar.cc/600?img=25"},
+ {"id":6,"name":"Kai","age":22,"college":"Stanford","startup":"Glassline","bio":"AR try-on for thrift stores. Sends memes at 3am.","likesYou":true,"photo":"https://i.pravatar.cc/600?img=68"}
 ]}
 EOF
 receipt backend "profiles contract v1, items[]"
