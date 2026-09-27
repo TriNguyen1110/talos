@@ -6,6 +6,8 @@ import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { spawn } from "node:child_process";
+let building = null;
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "../..");
@@ -21,6 +23,14 @@ http.createServer((req, res) => {
     const since = Number(url.searchParams.get("since") || 0);
     return send(200, JSON.stringify(readJsonl(path.join(ROOT, "data/audit.jsonl")).filter((r) => r.seq > since)));
   }
+  if (url.pathname === "/build") {           // POST-free on purpose: a click from the page starts the rooms
+    if (building && building.exitCode === null) return send(409, JSON.stringify({ running: true }));
+    const args = ["demo/factory/build.sh"]; if (url.searchParams.get("fast")) args.push("--fast");
+    building = spawn("bash", args, { cwd: ROOT, env: { ...process.env, TALOS_DECIDER: url.searchParams.get("decider") || "rules" }, stdio: ["ignore", "pipe", "pipe"] });
+    building.stdout.on("data", (d) => process.stdout.write(d)); building.stderr.on("data", (d) => process.stderr.write(d));
+    return send(200, JSON.stringify({ started: true, pid: building.pid }));
+  }
+  if (url.pathname === "/status") return send(200, JSON.stringify({ running: !!(building && building.exitCode === null) }));
   if (url.pathname === "/steps") {
     const p = path.join(HERE, "steps.log");
     return send(200, JSON.stringify(fs.existsSync(p) ? fs.readFileSync(p, "utf8").split("\n").filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean) : []));
