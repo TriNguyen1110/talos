@@ -264,5 +264,28 @@ EOF
   done
   say "B: done. GraphQL client, nodes[], tests green. ($(elapsed_since "$T_START")s elapsed)"
   ;;
+# -------------------------------------------------------------------------------------------- factory
+# The rest of a software factory's week through the same path: a feature request, a CI verdict,
+# an internal bug fix, a breaking bug fix, a UI contract change. One line each: who wrote it,
+# what kind the decider called it, and which rooms it crossed to. Nothing here is pre-decided;
+# the rows come back from the decider and the scope check on every run.
+factory)
+  factory_line() {   # factory_line <label> <room> <text>
+    local label="$1" room="$2" text="$3" rows
+    rows="$(cli write "$room" "$text")" || { say "$label: write failed"; return; }
+    say "$(j '(()=>{const r=d;const k=r[0]?.kind, v=r[0]?.verdict, ver=r[0]?.decider_version;
+      const to=r.filter(x=>x.to_room&&x.allowed===true).map(x=>x.to_room);
+      const refused=r.filter(x=>x.to_room&&x.allowed===false).map(x=>x.to_room);
+      const col=v==="share"?"'"$G"'":v==="hold"?"'"$Y"'":"'"$D"'";
+      return "[factory] '"$label"': "+col+k+" · "+v+"'"$N"'"+(to.length?" → "+to.join(", "):v==="discard"?" → stays in the room":"")+(refused.length?" '"$R"'refused: "+refused.join(", ")+"'"$N"'":"")+"  · by "+ver;})()' "$rows")"
+  }
+  say "factory: five things that happen in a week, through the same path (decider=$DEC)"
+  factory_line "PM feature request " pm       "decision: assign the PR summary CLI a cursor-pagination flag; Frontend owns the flag, Backend the query"
+  factory_line "QA verdict from CI " qa       "verdict: client tests red after the GraphQL change, 3 failures in client.test.mjs; rejected until nodes[] is handled"
+  factory_line "Backend internal fix" backend "fix: off-by-one in the resolver cache key, no interface change"
+  factory_line "Backend breaking fix" backend "fix: the summary endpoint now returns 404 instead of an empty list when the repo has no PRs; status code is a breaking change"
+  factory_line "Frontend UI contract" frontend "the CLI flag is now --format json|table; the table header changed to Nodes"
+  say "$(dim "every line above is a row in data/audit.jsonl; npm run timeline draws them")"
+  ;;
 *) usage;;
 esac

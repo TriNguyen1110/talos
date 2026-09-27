@@ -13,7 +13,8 @@ export const VERSION = { off: "off", rules: "rules-v0" };
 
 /** Keyword signals per kind. Confidence is the fraction of a kind's signals that fired. */
 export const SIGNALS = {
-  contract:     [/switch to/i, /field is now/i, /\bschema\b/i, /\bendpoint\b/i, /\bAPI\b/, /\bbreaking\b/i, /\brenam(e|ed|ing)\b/i, /\bGraphQL\b/i, /\bREST\b/],
+  contract:     [/switch to/i, /field is now/i, /\bschema\b/i, /\bendpoint\b/i, /\bAPI\b/, /\bbreaking\b/i, /\brenam(e|ed|ing)\b/i, /\bGraphQL\b/i, /\bREST\b/,
+                 /\b(flag|option|header|column|argument|prop|route|status code)s? (is|are) now\b/i, /\bchanged to\b/i],
   decision:     [/we decided/i, /\bdecision\b/i, /\bassign(ed|ing)?\b/i],
   verdict:      [/\bverdict\b/i, /\bapproved\b/i, /\brejected\b/i, /\bLGTM\b/],
   private_note: [/\btrying\b/i, /\bapproach\b/i, /\bI will\b/i, /\bdraft\b/i, /\bscratch\b/i, /if it .* I will/i],
