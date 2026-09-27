@@ -87,12 +87,12 @@ footer b{color:var(--txt);font-weight:600}
 const $=id=>document.getElementById(id);let lr=0,rg=0;
 function st(id,cls,text,ms){const e=$(id);e.classList.remove('red','grn','yel');if(cls)e.classList.add(cls);if(text!=null){const s=e.querySelector('.s');if(s){s.textContent=text;s.className='s '+(cls=='red'?'cr':cls=='grn'?'cg':cls=='yel'?'cy':'')}}if(ms)setTimeout(()=>e.classList.remove(cls),ms)}
 const GRAD={'#FF7A70':'gR','#7EDC9B':'gG','#E5B96B':'gY'};
-function drawEdge(p,color,ms){if(!p)return;const svg=p.ownerSVGElement,L=p.getTotalLength(),a=p.getPointAtLength(0),b=p.getPointAtLength(L),bb=p.getBBox();
+function drawEdge(p,color,ms,hold=900){if(!p)return;const svg=p.ownerSVGElement;svg.querySelectorAll('[data-for="'+p.id+'"]').forEach(x=>x.remove());const L=p.getTotalLength(),a=p.getPointAtLength(0),b=p.getPointAtLength(L),bb=p.getBBox();
  const g=GRAD[color]||'gW',grad=(bb.width<2||bb.height<2)?color:`url(#${g}${b.x<a.x?'r':''})`;
- const d=p.cloneNode(false);d.removeAttribute('id');d.setAttribute('class','draw');d.style.stroke=grad;d.style.strokeDasharray=L;d.style.strokeDashoffset=L;d.style.opacity=1;svg.appendChild(d);
+ const d=p.cloneNode(false);d.removeAttribute('id');d.setAttribute('class','draw');d.dataset.for=p.id;d.style.stroke=grad;d.style.strokeDasharray=L;d.style.strokeDashoffset=L;d.style.opacity=1;svg.appendChild(d);
  requestAnimationFrame(()=>{d.style.transition=`stroke-dashoffset ${ms}ms cubic-bezier(.22,1,.36,1),opacity .6s`;d.style.strokeDashoffset=0});
- setTimeout(()=>{d.style.opacity=0;setTimeout(()=>d.remove(),650)},ms+900);
- const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('r','4.5');c.setAttribute('fill',color);c.setAttribute('filter','url(#glow)');
+ setTimeout(()=>{d.style.opacity=0;setTimeout(()=>d.remove(),650)},ms+hold);
+ const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('r','4.5');c.setAttribute('fill',color);c.setAttribute('filter','url(#glow)');c.dataset.for=p.id;
  const m=document.createElementNS('http://www.w3.org/2000/svg','animateMotion');m.setAttribute('dur',ms+'ms');m.setAttribute('fill','freeze');m.setAttribute('calcMode','spline');m.setAttribute('keySplines','.22 1 .36 1');m.setAttribute('keyTimes','0;1');
  const mp=document.createElementNS('http://www.w3.org/2000/svg','mpath');mp.setAttribute('href','#'+p.id);m.appendChild(mp);c.appendChild(m);svg.appendChild(c);m.beginElement();
  setTimeout(()=>{c.style.transition='opacity .4s';c.style.opacity=0;setTimeout(()=>c.remove(),420)},ms)}
@@ -102,12 +102,12 @@ function row(side,cls,t,k,txt){const box=$(side+'s');const d=document.createElem
 const RED='#FF7A70',GRN='#7EDC9B',YEL='#E5B96B',WHT='rgba(245,245,247,.7)';
 const S=[
  // 1 contract change
- [300,()=>{st('LA',null,'switch to GraphQL · field is nodes');st('RA',null,'switch to GraphQL · field is nodes');edge('L_am',WHT,700);edge('R_at',WHT,700)}],
+ [300,()=>{st('LA','yel','switch to GraphQL · field is nodes');st('RA','grn','switch to GraphQL · field is nodes');edge('L_am',YEL,700);edge('R_at',GRN,700)}],
  [1100,()=>{st('LM','yel','written · nobody is told',0);st('RT','grn','contract → share → frontend, qa');edge('R_tb',GRN,700)}],
  [1900,()=>{st('LB','yel','still building on D1 = REST');st('RB','grn','contract changed · stopping · switching');row('R','g','0:07','stale context','frontend got the change on its next call');}],
  [3600,()=>{st('LB','red','done · REST client · correct and wrong');row('L','r','0:40','stale context','frontend finished on a decision that changed at 0:04')}],
  // 2 wrong read
- [5600,()=>{st('LA',null,'private note · trying a resolver cache');st('RA',null,'private note · trying a resolver cache');edge('L_am',WHT,700);edge('R_at',WHT,700);st('LM','yel','note visible to everyone')}],
+ [5600,()=>{st('LA','yel','private note · trying a resolver cache');st('RA','grn','private note · trying a resolver cache');edge('L_am',YEL,700);edge('R_at',GRN,700);st('LM','yel','note visible to everyone')}],
  [6500,()=>{st('RT','grn','private note → hold');st('LB','red','read A\'s scratch · adding cache-aware client');edge('L_bm',RED,700);row('L','r','1:12','wrong read','frontend acted on backend\'s half-formed note')}],
  [7300,()=>{st('RB','grn','room A notes not visible · unaffected');row('R','g','1:12','read scoped','held in room A · frontend hears nothing')}],
  // 3 wrong write
@@ -122,7 +122,7 @@ const S=[
  [16900,()=>{st('LA','yel','picking up · pagination');st('LB','yel','picking up · pagination');st('RA',null,'picking up · pagination · room A task');st('RB','grn','pagination is room A · skipping')}],
  [17900,()=>{st('LA','red','duplicate');st('LB','red','duplicate');row('L','r','2:02','overlapping work','both agents built pagination');row('R','g','2:02','no overlap','rooms own tasks · one owner each')}],
  // 6 race
- [19900,()=>{st('LA','yel','writing src/client.ts');st('LB','yel','writing src/client.ts');edge('L_am',YEL,600);edge('L_bm',YEL,600);st('RA',null,'writing src/client.ts · worktree A');st('RB',null,'writing src/ui/client.ts · worktree B');edge('R_am',GRN,600);edge('R_bm',GRN,600)}],
+ [19900,()=>{st('LA','yel','writing src/client.ts');st('LB','yel','writing src/client.ts');edge('L_am',YEL,600);edge('L_bm',YEL,600);st('RA','grn','writing src/client.ts · worktree A');st('RB','grn','writing src/ui/client.ts · worktree B');edge('R_am',GRN,600);edge('R_bm',GRN,600)}],
  [21000,()=>{st('LM','red','client.ts clobbered · 40 lines lost · no error');st('LA','red','lost');st('LB','red','clobbered');row('L','r','2:19','race condition','two writers, one file, silent loss')}],
  [21700,()=>{st('RA','grn','merged');st('RB','grn','merged');row('R','g','2:19','no race','separate worktrees · both merged')}],
  [23400,()=>{$('Lf').innerHTML='<span><b>Six failures, zero errors raised.</b> You find each one hours later, if at all.</span>';$('Rf').innerHTML='<span><b>Six crossings handled.</b> Rooms stop overlap and races. The decider stops wrong reads and writes. All of it is one file.</span>'}],
