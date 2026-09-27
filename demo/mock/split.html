@@ -1,63 +1,74 @@
-<!doctype html><meta charset="utf-8">
-<title>Talos — the same minute, twice</title>
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Talos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
- :root{--bg:#0F1720;--panel:#141D28;--line:#22303F;--ink:#F4F1EA;--dim:#8595A5;--acc:#F2994A;--teal:#3FB6C9;--red:#E4572E;--grn:#6FCF7E}
- *{box-sizing:border-box;margin:0}
- body{background:var(--bg);color:var(--ink);font:16px/1.5 'JetBrains Mono',ui-monospace,Menlo,monospace;width:1280px;height:720px;overflow:hidden;padding:20px 24px;display:flex;flex-direction:column;gap:14px}
- header{display:flex;align-items:baseline;gap:16px}
- h1{font-size:22px;font-weight:600;letter-spacing:.5px}
- .phase{font-size:15px;color:var(--acc);text-transform:uppercase;letter-spacing:2px}
- .clock{margin-left:auto;font-size:26px;font-variant-numeric:tabular-nums;color:var(--dim)}
- .panes{flex:1;display:flex;gap:16px;min-height:0}
- .pane{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:10px;display:flex;flex-direction:column;overflow:hidden}
- .bar{padding:9px 14px;border-bottom:1px solid var(--line);font-size:14px;color:var(--dim);display:flex;gap:10px;align-items:center}
- .dot{width:9px;height:9px;border-radius:50%;background:var(--teal)}
- .pane.b .dot{background:var(--acc)}
- .log{flex:1;padding:12px 14px;display:flex;flex-direction:column;gap:7px;font-size:15px;overflow:hidden}
- .l{opacity:0;transform:translateY(4px);transition:opacity .18s,transform .18s;white-space:pre-wrap}
- .l.on{opacity:1;transform:none}
- .t{color:var(--dim);margin-right:8px}
- .ok{color:var(--grn)} .warn{color:var(--acc)} .bad{color:var(--red)} .mut{color:var(--dim)}
- footer{min-height:46px;display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--panel);border:1px solid var(--line);border-radius:10px;font-size:16px}
- footer.bad{border-color:var(--red)} footer.ok{border-color:var(--grn)}
- .tag{font-size:13px;padding:3px 9px;border-radius:99px;background:#1D2936;color:var(--dim)}
+:root{--bg:#0A0A0D;--txt:#F5F5F7;--mut:rgba(245,245,247,.56);--faint:rgba(245,245,247,.32);--hair:rgba(255,255,255,.08);--glass:rgba(255,255,255,.035);--blue:#8AB4FF;--amber:#E5B96B;--red:#FF7A70;--ease:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box;margin:0}
+html,body{width:1280px;height:720px;overflow:hidden}
+body{position:relative;color:var(--txt);font-family:Inter,-apple-system,'SF Pro Text',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:30px 36px;display:flex;flex-direction:column;gap:18px;
+ background:radial-gradient(1100px 600px at 18% -10%,rgba(138,180,255,.10),transparent 60%),radial-gradient(900px 500px at 85% 110%,rgba(229,185,107,.06),transparent 60%),var(--bg)}
+.mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+header{display:flex;align-items:center;gap:18px}
+h1{font-size:17px;font-weight:600;letter-spacing:-.01em}
+.seg{margin-left:auto;display:flex;padding:3px;border-radius:999px;background:var(--glass);border:1px solid var(--hair);position:relative}
+.seg span{position:relative;z-index:1;padding:6px 16px;font-size:12px;color:var(--faint);transition:color .5s var(--ease)}
+.seg span.on{color:var(--txt)}
+.seg i{position:absolute;top:3px;bottom:3px;left:3px;width:calc(50% - 3px);border-radius:999px;background:rgba(255,255,255,.09);transition:transform .7s var(--ease)}
+.seg.two i{transform:translateX(100%)}
+.clock{font-size:15px;color:var(--faint);min-width:52px;text-align:right}
+.panes{flex:1;display:flex;gap:18px;min-height:0}
+.pane{flex:1;display:flex;flex-direction:column;border-radius:20px;background:var(--glass);border:1px solid var(--hair);backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 24px 60px rgba(0,0,0,.45);overflow:hidden;transition:border-color .7s var(--ease),box-shadow .7s var(--ease)}
+.pane.act{border-color:rgba(138,180,255,.4);box-shadow:0 0 0 6px rgba(138,180,255,.05),0 0 48px rgba(138,180,255,.16)}
+.pane.den{border-color:rgba(255,122,112,.45);box-shadow:0 0 0 6px rgba(255,122,112,.05),0 0 48px rgba(255,122,112,.16)}
+.bar{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--hair)}
+.dots{display:flex;gap:6px}.dots b{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.12)}
+.bar .who{font-size:12.5px;font-weight:500}.bar .role{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.bar .st{margin-left:auto;font-size:11.5px;color:var(--mut);padding:4px 10px;border-radius:999px;border:1px solid var(--hair);background:rgba(255,255,255,.03);transition:color .4s}
+.log{flex:1;padding:14px 18px;display:flex;flex-direction:column;gap:8px;font-size:13px;line-height:1.55;overflow:hidden}
+.l{display:flex;gap:14px;opacity:0;transform:translateY(5px);transition:opacity .45s var(--ease),transform .45s var(--ease);color:var(--mut)}
+.l.on{opacity:1;transform:none}
+.l .t{color:var(--faint);min-width:38px}
+.l.me{color:var(--txt)}.l.ok{color:var(--blue)}.l.warn{color:var(--amber)}.l.bad{color:var(--red)}
+.l b{font-weight:600;color:var(--txt)}
+footer{display:flex;align-items:center;gap:14px;padding:14px 20px;border-radius:16px;background:var(--glass);border:1px solid var(--hair);font-size:14px;color:var(--mut);min-height:52px;transition:border-color .7s var(--ease)}
+footer i{width:7px;height:7px;border-radius:50%;background:var(--faint);flex:none;transition:all .5s}
+footer.bad i{background:var(--red);box-shadow:0 0 12px var(--red)}footer.ok i{background:var(--blue);box-shadow:0 0 12px var(--blue)}
+footer b{color:var(--txt);font-weight:600}
 </style>
-<header><h1>Talos</h1><span class="phase" id="phase">1 · without Talos</span><span class="clock" id="clock">0:00</span></header>
+<header><h1>Talos</h1><div class="seg" id="seg"><i></i><span class="on">Without</span><span>With Talos</span></div><span class="clock mono" id="clock">0:00</span></header>
 <div class="panes">
- <div class="pane a"><div class="bar"><span class="dot"></span>room A · backend-agent<span class="tag" id="ta">working</span></div><div class="log" id="A"></div></div>
- <div class="pane b"><div class="bar"><span class="dot"></span>room B · frontend-agent<span class="tag" id="tb">working</span></div><div class="log" id="B"></div></div>
+ <div class="pane" id="pA"><div class="bar"><span class="dots"><b></b><b></b><b></b></span><span class="who">backend-agent</span><span class="role">room a</span><span class="st" id="stA">idle</span></div><div class="log" id="A"></div></div>
+ <div class="pane" id="pB"><div class="bar"><span class="dots"><b></b><b></b><b></b></span><span class="who">frontend-agent</span><span class="role">room b</span><span class="st" id="stB">working</span></div><div class="log" id="B"></div></div>
 </div>
-<footer id="foot"><span class="mut">Same task, same words, twice. Watch what room B knows.</span></footer>
+<footer id="f"><i></i><span>The same minute, twice. Watch what room B knows.</span></footer>
 <script>
-const A=document.getElementById('A'),B=document.getElementById('B'),clock=document.getElementById('clock'),
- phase=document.getElementById('phase'),foot=document.getElementById('foot'),ta=document.getElementById('ta'),tb=document.getElementById('tb');
-function line(box,t,html,cls){const d=document.createElement('div');d.className='l '+(cls||'');
- d.innerHTML='<span class="t">'+t+'</span>'+html;box.appendChild(d);requestAnimationFrame(()=>d.classList.add('on'));
- while(box.children.length>11)box.removeChild(box.firstChild);}
+const $=id=>document.getElementById(id),A=$('A'),B=$('B'),f=$('f'),seg=$('seg');
+function line(box,t,html,cls){const d=document.createElement('div');d.className='l '+(cls||'');d.innerHTML=`<span class="t mono">${t}</span><span>${html}</span>`;box.appendChild(d);requestAnimationFrame(()=>d.classList.add('on'));while(box.children.length>10)box.removeChild(box.firstChild);}
+function foot(cls,html){f.className=cls;f.innerHTML='<i></i><span>'+html+'</span>';}
+function glow(id,cls,ms){const e=$(id);e.classList.add(cls);setTimeout(()=>e.classList.remove(cls),ms);}
+function reset(){A.innerHTML='';B.innerHTML='';$('stA').textContent='idle';$('stB').textContent='working';}
 const S=[
- [0,()=>{A.innerHTML='';B.innerHTML='';phase.textContent='1 · without Talos';foot.className='';foot.innerHTML='<span class="mut">Same task, same words. Watch what room B knows.</span>';}],
- [300,()=>line(B,'0:00','task = write the REST client for decision D1')],
- [1100,()=>line(B,'0:02','reading D1 … REST, field <b>items</b>','mut')],
- [1900,()=>line(A,'0:04','you: switch to GraphQL, REST rate limits too low. field is <b>nodes</b>')],
- [2600,()=>line(A,'0:05','recorded <span class="ok">✓</span>')],
- [3300,()=>line(B,'0:07','writing client …','mut')],
- [4000,()=>line(B,'0:19','writing client …','mut')],
- [4700,()=>line(B,'0:31','tests …','mut')],
- [5400,()=>{line(B,'0:40','done. 120 lines, REST client, tests green','ok');tb.textContent='finished';}],
- [6100,()=>{foot.className='bad';foot.innerHTML='<span class="bad">B is correct, careful, and wrong.</span> <span class="mut">Nothing crashed. Nobody was told. You find out hours later.</span>';}],
- [9500,()=>{A.innerHTML='';B.innerHTML='';ta.textContent='working';tb.textContent='working';phase.textContent='2 · with Talos';foot.className='';foot.innerHTML='<span class="mut">Reset. Same minute, same words.</span>';}],
- [10000,()=>line(B,'0:00','task = write the REST client for decision D1')],
- [10700,()=>line(B,'0:02','reading D1 … REST, field <b>items</b>','mut')],
- [11400,()=>line(A,'0:04','you: switch to GraphQL, REST rate limits too low. field is <b>nodes</b>')],
- [12000,()=>line(A,'0:05','recorded <span class="ok">✓</span> → talos: kind=<b>contract</b> verdict=<b>share</b> → frontend, qa')],
- [12800,()=>line(B,'0:07','calling memory_query("what is the test command?")','mut')],
- [13600,()=>{line(B,'0:07','⚠ while you were working, D1 changed 2.1s ago → GraphQL, field <b>nodes</b>','warn');tb.textContent='stopping';}],
- [14400,()=>line(B,'0:08','stopping the REST client. switching to GraphQL','ok')],
- [15200,()=>{foot.className='ok';foot.innerHTML='<span class="ok">B heard it on a call it was already making.</span> <span class="mut">It did not poll. Nobody told it to check.</span>';}],
- [19000,()=>{location.reload();}]
+ [0,()=>{reset();foot('','The same minute, twice. Watch what room B knows.')}],
+ [400,()=>line(B,'0:00','task · write the REST client for decision <b>D1</b>')],
+ [1200,()=>line(B,'0:02','reading D1 · REST · field <b>items</b>')],
+ [2100,()=>{line(A,'0:04','switch to GraphQL, rate limits are too low · field is <b>nodes</b>','me');$('stA').textContent='changed D1';glow('pA','act',1600)}],
+ [2800,()=>line(A,'0:05','recorded','ok')],
+ [3600,()=>line(B,'0:07','writing client …')],
+ [4400,()=>line(B,'0:19','writing client …')],
+ [5200,()=>line(B,'0:31','running tests …')],
+ [6000,()=>{line(B,'0:40','done · 120 lines · REST client · tests green','ok');$('stB').textContent='finished';glow('pB','den',2600)}],
+ [6800,()=>foot('bad','<b>Correct, careful, and wrong.</b> Nothing crashed. Nobody was told. You find out hours later.')],
+ [10400,()=>{reset();seg.classList.add('two');seg.children[1].classList.remove('on');seg.children[2].classList.add('on');foot('','Reset. Same minute, same words.')}],
+ [11000,()=>line(B,'0:00','task · write the REST client for decision <b>D1</b>')],
+ [11800,()=>line(B,'0:02','reading D1 · REST · field <b>items</b>')],
+ [12600,()=>{line(A,'0:04','switch to GraphQL, rate limits are too low · field is <b>nodes</b>','me');$('stA').textContent='changed D1';glow('pA','act',1600)}],
+ [13300,()=>line(A,'0:05','recorded · talos: <b>contract</b> → share → frontend, qa','ok')],
+ [14200,()=>line(B,'0:07','memory_query · "what is the test command?"')],
+ [15000,()=>{line(B,'0:07','while you were working, D1 changed 2.1 s ago → GraphQL · field <b>nodes</b>','warn');$('stB').textContent='stopping';glow('pB','act',2800)}],
+ [15900,()=>line(B,'0:08','stopping the REST client · switching to GraphQL','ok')],
+ [16800,()=>foot('ok','<b>B heard it on a call it was already making.</b> It did not poll. Nobody told it to check.')],
+ [21200,()=>location.reload()]
 ];
-let t0=performance.now();
-function tick(){const s=(performance.now()-t0)/1000;const m=Math.floor(s/60),sec=Math.floor(s%60);
- clock.textContent=m+':'+String(sec).padStart(2,'0');requestAnimationFrame(tick);}tick();
-S.forEach(([ms,fn])=>setTimeout(fn,ms));
-</script>
+let t0;(function tick(){if(t0){const s=(performance.now()-t0)/1000;$('clock').textContent=Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0')}requestAnimationFrame(tick)})();
+Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]).then(()=>{t0=performance.now();S.forEach(([ms,fn])=>setTimeout(fn,ms+300))});
+</script></html>

@@ -1,12 +1,11 @@
-<!doctype html><meta charset="utf-8"><title>Talos — visuals</title>
-<style>body{background:#0F1720;color:#F4F1EA;font:15px/1.6 'JetBrains Mono',ui-monospace,monospace;max-width:900px;margin:40px auto;padding:0 24px}
-a{color:#F2994A}h1{font-size:26px}h2{font-size:17px;margin-top:28px}p{color:#8595A5}
-.b{background:#141D28;border:1px solid #22303F;border-radius:10px;padding:16px 20px;margin:12px 0}</style>
-<h1>Talos — demo visuals</h1>
-<p><b>These are mockups.</b> Invented data, hand-written timings. They exist to align on what the real output should look like and to rehearse against. Never shown to judges as a live run.</p>
-<div class="b"><h2><a href="graph.html">graph.html</a> · node graph, 22 s loop</h2>
-<p>Two agent rooms, a GBrain per room, the decider between them, QA below. Pulses travel the edges. Share is green, hold goes nowhere, the injected note tilts the decider and the scope refuses it in red. Audit rows accumulate underneath. <a href="graph.webm">webm</a></p></div>
-<div class="b"><h2><a href="split.html">split.html</a> · two terminals, 19 s loop</h2>
-<p>The same minute run twice. First without: backend changes the contract, frontend never hears, finishes correct and wrong. Then with: frontend's next unrelated tool call carries the change and it stops. <a href="split.webm">webm</a></p></div>
-<div class="b"><h2><a href="trace.html">trace.html</a> · swimlanes + audit table, 17 s loop</h2>
-<p>Earlier, plainer version. Kept as a fallback if the graph is too busy on a projector. <a href="trace.webm">webm</a></p></div>
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Talos — visuals</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>body{background:#0A0A0D;color:#F5F5F7;font:15px/1.65 Inter,system-ui,sans-serif;max-width:760px;margin:64px auto;padding:0 28px;-webkit-font-smoothing:antialiased}
+h1{font-size:24px;font-weight:600;letter-spacing:-.01em}p{color:rgba(245,245,247,.56)}a{color:#8AB4FF;text-decoration:none}
+.c{margin:18px 0;padding:18px 22px;border-radius:18px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08)}
+.c h2{font-size:15px;font-weight:600;margin-bottom:4px}.n{font-size:12px;color:rgba(245,245,247,.32);letter-spacing:.12em;text-transform:uppercase}</style>
+<h1>Talos · demo visuals</h1>
+<p><b style="color:#F5F5F7">Mockups.</b> Invented data, hand-written timings, made to align on what the real output looks like and to rehearse against. The real pages read <code>data/audit.jsonl</code>. Never shown to judges as a live run.</p>
+<div class="c"><div class="n">node graph · 25 s loop</div><h2><a href="graph.html">graph.html</a></h2><p>Two agent rooms, a brain under each, the decider between them, QA below. A contract change crosses, a private note holds, an injected line tilts the decider and the scope refuses it, QA is denied, frontend is revoked. Audit rows below. <a href="graph.webm">recording</a></p></div>
+<div class="c"><div class="n">two terminals · 21 s loop</div><h2><a href="split.html">split.html</a></h2><p>The same minute, twice. Without: backend changes the contract, frontend never hears, finishes correct and wrong. With: frontend's next unrelated call carries the change and it stops. <a href="split.webm">recording</a></p></div>
+</html>
