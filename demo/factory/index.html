@@ -15,8 +15,8 @@ h1{font-size:22px;font-weight:600;letter-spacing:-.01em;margin:0}.sub{color:var(
 .c{border:1px solid var(--line);border-radius:18px;background:var(--card);padding:14px 16px}.n{font-size:11px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
 .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.tile{border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--card)}.tile b{display:block;font-size:24px;font-weight:600;line-height:1.1}.tile span{font-size:11px;color:var(--mute)}
 .g{color:var(--green)}.y{color:var(--yellow)}.r{color:var(--red)}.b{color:var(--blue)}
-svg{width:100%;height:190px;display:block}.node rect{fill:rgba(255,255,255,.05);stroke:rgba(255,255,255,.14)}.node text{fill:var(--fg);font-size:12px;font-weight:500}.node .sm{fill:var(--dim);font-size:10px;font-weight:400}
-.edge{stroke:rgba(255,255,255,.12);stroke-width:2;fill:none}.edge.on{stroke-width:3;filter:drop-shadow(0 0 6px currentColor);stroke:currentColor}
+svg{width:100%;height:190px;display:block}.node rect{fill:#141419;stroke:rgba(255,255,255,.14)}.node text{fill:var(--fg);font-size:12px;font-weight:500}.node .sm{fill:var(--dim);font-size:10px;font-weight:400}
+.edge{stroke:rgba(255,255,255,.10);stroke-width:1.5;fill:none;stroke-linecap:round;transition:stroke .3s}.edge.on{stroke-width:3;filter:drop-shadow(0 0 6px currentColor);stroke:currentColor}
 .procs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.proc{border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:12px}.proc .who{font-weight:600}.proc .what{color:var(--mute)}
 .log{flex:1;min-height:0;display:flex;flex-direction:column}.log pre{flex:1;min-height:0;margin:0;overflow:auto;font:12px/1.55 ui-monospace,Menlo,monospace;color:var(--mute)}.log pre div{white-space:pre-wrap}
 .log pre .ts{color:var(--dim)}.log pre .k{color:var(--fg)}
@@ -35,11 +35,11 @@ svg{width:100%;height:190px;display:block}.node rect{fill:rgba(255,255,255,.05);
     <div class="c"><div class="n">data flow · rooms and the path between</div>
       <svg viewBox="0 0 640 190" aria-label="rooms and crossings">
         <g id="edges"></g>
-        <g class="node" transform="translate(20,20)"><rect width="150" height="44" rx="10"/><text x="12" y="19">Program Manager</text><text x="12" y="34" class="sm" id="n-pm">idle</text></g>
-        <g class="node" transform="translate(470,20)"><rect width="150" height="44" rx="10"/><text x="12" y="19">Frontend</text><text x="12" y="34" class="sm" id="n-frontend">idle</text></g>
-        <g class="node" transform="translate(20,126)"><rect width="150" height="44" rx="10"/><text x="12" y="19">Backend</text><text x="12" y="34" class="sm" id="n-backend">idle</text></g>
-        <g class="node" transform="translate(470,126)"><rect width="150" height="44" rx="10"/><text x="12" y="19">QA</text><text x="12" y="34" class="sm" id="n-qa">idle</text></g>
-        <g class="node" transform="translate(250,73)"><rect width="140" height="44" rx="10" style="stroke:#E5B96B"/><text x="12" y="19">Talos</text><text x="12" y="34" class="sm" id="n-talos">decider · scope · audit</text></g>
+        <g class="node" transform="translate(16,18)"><rect width="176" height="48" rx="12"/><text x="14" y="21">Program Manager</text><text x="14" y="37" class="sm" id="n-pm">idle</text></g>
+        <g class="node" transform="translate(448,18)"><rect width="176" height="48" rx="12"/><text x="14" y="21">Frontend</text><text x="14" y="37" class="sm" id="n-frontend">idle</text></g>
+        <g class="node" transform="translate(16,124)"><rect width="176" height="48" rx="12"/><text x="14" y="21">Backend</text><text x="14" y="37" class="sm" id="n-backend">idle</text></g>
+        <g class="node" transform="translate(448,124)"><rect width="176" height="48" rx="12"/><text x="14" y="21">QA</text><text x="14" y="37" class="sm" id="n-qa">idle</text></g>
+        <g class="node" transform="translate(252,71)"><rect width="136" height="48" rx="12" style="stroke:#E5B96B"/><text x="14" y="21">Talos</text><text x="14" y="37" class="sm">decider · scope · audit</text></g>
       </svg>
     </div>
     <div class="c"><div class="n">processes · what each room is doing</div><div class="procs" id="procs"></div></div>
@@ -48,13 +48,20 @@ svg{width:100%;height:190px;display:block}.node rect{fill:rgba(255,255,255,.05);
   <div class="right"><span class="tag">the product · live</span><iframe id="app" src="app/" title="Startup College Dating"></iframe></div>
 </div>
 <script>
-const P = { pm:[95,64], frontend:[545,64], backend:[95,126], qa:[545,126], talos:[320,95] };
+// Anchors sit on box edges: rooms on the side facing Talos, Talos on its left or right side.
+const A = { pm:[192,42,"L"], frontend:[448,42,"R"], backend:[192,148,"L"], qa:[448,148,"R"] };
+const T = { L:[252,95], R:[388,95] };
 const edges = document.getElementById("edges");
 function edgeId(a,b){ return `e-${a}-${b}`; }
 function ensureEdge(a,b){
   let e = document.getElementById(edgeId(a,b)); if (e) return e;
-  const [x1,y1]=P[a],[x2,y2]=P[b]; e = document.createElementNS("http://www.w3.org/2000/svg","path");
-  e.setAttribute("d",`M${x1},${y1} Q${(x1+x2)/2},${(y1+y2)/2+(a==="talos"?18:-18)} ${x2},${y2}`); e.setAttribute("class","edge"); e.id = edgeId(a,b); edges.appendChild(e); return e;
+  const room = a === "talos" ? b : a, toTalos = b === "talos";
+  const [rx, ry, side] = A[room]; const [tx, ty] = T[side];
+  const off = toTalos ? -6 : 6;                       // one lane per direction, never overlapping
+  const [x1,y1,x2,y2] = toTalos ? [rx, ry+off, tx, ty+off] : [tx, ty+off, rx, ry+off];
+  const dx = (x2 - x1) * 0.45;
+  e = document.createElementNS("http://www.w3.org/2000/svg","path");
+  e.setAttribute("d",`M${x1},${y1} C${x1+dx},${y1} ${x2-dx},${y2} ${x2},${y2}`); e.setAttribute("class","edge"); e.id = edgeId(a,b); edges.appendChild(e); return e;
 }
 function pulse(a,b,color){ const e = ensureEdge(a,b); e.style.color = color; e.classList.add("on"); setTimeout(()=>e.classList.remove("on"), 1800); }
 let since = 0, counts = { cross:0, hold:0, refused:0, denied:0 };
@@ -84,10 +91,11 @@ async function poll(){
     document.getElementById("t-refused").textContent = counts.refused; document.getElementById("t-denied").textContent = counts.denied;
     const steps = await (await fetch("/steps")).json();
     const last = {}; for (const s of steps) last[s.room] = s;
-    document.getElementById("procs").innerHTML = ["pm","frontend","backend","qa"].map(r => { const s = last[r]; const n = document.getElementById("n-"+r); if (n) n.textContent = s ? s.what.slice(0,22) : "idle";
+    document.getElementById("procs").innerHTML = ["pm","frontend","backend","qa"].map(r => { const s = last[r]; const n = document.getElementById("n-"+r); if (n) n.textContent = s ? (s.what.length > 27 ? s.what.slice(0,26) + "…" : s.what) : "idle";
       return `<div class="proc"><div class="who">${{pm:"Program Manager",frontend:"Frontend",backend:"Backend",qa:"QA"}[r]}</div><div class="what">${s ? s.what : "idle"}</div></div>`; }).join("");
   } catch {}
 }
+for (const r of ["pm","frontend","backend","qa"]) { ensureEdge(r,"talos"); ensureEdge("talos",r); }
 poll(); setInterval(poll, 800);
 </script>
 </body>
