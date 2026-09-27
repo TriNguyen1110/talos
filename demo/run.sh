@@ -203,9 +203,9 @@ b)
   [ -f "$WORK/client.test.mjs" ] || printf 'import {test} from "node:test";test("placeholder",()=>{});\n' > "$WORK/client.test.mjs"
   [ -f "$WORK/client.mjs" ] || printf 'export const summary=()=>[];\n' > "$WORK/client.mjs"
 
-  # poll_changes: returns 0 and prints the beat line when something crossed; 2 when denied; 1 otherwise
+  # carry_changes: the change block rides the tool call B just made; 0 when something crossed, 2 when denied, 1 otherwise
   heard=0
-  poll_changes() {
+  carry_changes() {
     local rows n ts text cid ver maxseq chk allowed reason
     rows="$(cli changes "$TOKEN" frontend "$SINCE")" || rows='[]'
     n="$(j 'Array.isArray(d)?d.length:0' "$rows")"; [ -n "$n" ] || n=0
@@ -230,7 +230,7 @@ EOF
   while [ $i -lt "$STEPS" ]; do
     say "B: $(step_label $i)"
     step_run $i >> "$LOG" 2>&1 || true
-    poll_changes; rc=$?
+    carry_changes; rc=$?
     [ $rc -eq 2 ] && exit 0
     [ $rc -eq 0 ] && { heard=1; break; }
     i=$((i+1)); sleep_s "$STEP_SECS"
@@ -258,7 +258,7 @@ EOF
       0) grep -n 'nodes' demo/seed.md;; 1) printf 'export const summary=async()=>(await (await fetch(process.env.C1_URL||"http://localhost:0/graphql")).json()).nodes;\n' > "$WORK/client.mjs";;
       2) node --test "$WORK/client.test.mjs" 2>&1 | tail -3;; 3) git status --short | head -5;;
     esac >> "$LOG" 2>&1 || true
-    poll_changes; rc=$?
+    carry_changes; rc=$?
     [ $rc -eq 2 ] && exit 0
     i=$((i+1))
   done

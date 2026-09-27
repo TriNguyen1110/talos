@@ -31,7 +31,7 @@ spec; `demo/seed.md` is the fixture text; `tests/demo-path.test.mjs` is the acce
 - **The repo had to be created today.** Friday's repo was renamed to
   `github.com/TriNguyen1110/talos-prep` (git remote `prep`). A fresh public
   `github.com/TriNguyen1110/talos` was created 15:01 PDT (git remote `origin`). `gh` is logged
-  in as TriNguyen1110. Nothing was pushed to `origin` as of 15:10.
+  in as TriNguyen1110. `main` was pushed to `origin` at 15:10 PDT; push again after every verified commit.
 
 ## What is standing (committed locally, not pushed)
 
@@ -72,7 +72,7 @@ and must never be committed; `.gitignore` is not writable today, so simply never
 
 1. **Now.** Confirm the verifier's verdict as above. `git add BOARD.tsv demo/HANDOFF.md
    demo/README.draft.md && git commit -m "board: verifier verdicts, handoff"`.
-2. **As soon as 03, 04, 05, 10, 11 are `done`:** `git push -u origin main`. Confirm on
+2. **Already done at 15:10:** 03, 04, 05, 10, 11 are `done` and `main` is pushed. After each later commit: `git push`. Confirm on
    https://github.com/TriNguyen1110/talos. (Codex: pushing needs network; approve it when asked.)
 3. **16:15, PRESENT.** `git mv demo/README.draft.md README.md`. Edit README.md only to correct
    numbers against the verifier's `verify-20260927` fact row in the board and to add the

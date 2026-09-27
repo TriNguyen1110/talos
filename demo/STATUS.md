@@ -12,8 +12,10 @@ What is standing, measured by running it (not asserted):
     change at 14:56:49.8: **1.8 s** change to B knowing. Revoke 14:57:06.9, B's next call denied 14:57:10.2 (3.3 s;
     bounded by B's step cadence, not the CLI). Decider off, same words: B finished 20.6 s later, never heard it.
 - `demo/REHEARSE.md`: the two-terminal sequence and how to record the 60-second cut.
-- Jev (v1) decider: not exercised by the stage; the demo passes with `rules`.
-- Timeline page (`src/timeline.mjs`): bridge's, in progress. Cut to `tail -f data/audit.jsonl` if not standing at 16:00.
+- Decider: rules-only by decision at 14:50 PDT (no Jev, no River). `TALOS_DECIDER=off|rules`.
+- Timeline page (`src/timeline.mjs` → `demo/timeline.html`): standing (bridge commit ad62459; verified 15:08 PDT, 18 rows, red refusals and green shares).
 - Beat 6 (product CLI): cut in IMPLEMENT (`product/` not writable; board item 12 delayed).
 - Recording: not made yet; PRESENT phase (16:15).
 - QM running locally with two rooms: not done; not needed for the five beats.
+- Verifier, 15:04–15:09 PDT: items 03, 04, 05, 10, 11 `done`; five mutations went red; leaks 0; one weak beat-4 assertion strengthened (47a2a2b).
+- Pushed to https://github.com/TriNguyen1110/talos (created today) at 15:10 PDT.

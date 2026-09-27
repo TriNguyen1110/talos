@@ -39,12 +39,14 @@ Two terminals, the way it is demoed, with the change typed live: `demo/REHEARSE.
 
 | what | value | when | how |
 |---|---|---|---|
-| change written to B's next call carrying it | 1.8 s, 1.9 s | 2026-09-27 14:56 PDT | two runs of `run.sh`, timestamps from the clock, rules decider |
-| revoke to B denied | 3.3 s | 2026-09-27 14:57 PDT | bounded by B's 3 s step cadence, not by Talos |
-| decider off: B finished unaware after | 20.6 s | 2026-09-27 14:56 PDT | the control run |
+| change written to B's next call carrying it | 1.8 s, 1.9 s, 2.9 s | 2026-09-27 14:56 and 15:06 PDT | three runs of `run.sh`, timestamps from the clock, rules decider; the third by the verifier from a fresh shell |
+| revoke to B denied | 3.3 s, 1.6 s | 2026-09-27 14:57 and 15:07 PDT | bounded by B's step cadence, not by Talos |
+| revoke to denied on the same token, CLI | 0.105 s | 2026-09-27 15:08 PDT | two consecutive audit rows, allow then `revoked` |
+| decider off: B finished unaware after | 20.6 s, 35.3 s | 2026-09-27 14:56 and 15:06 PDT | the control runs |
 | decide() itself | 1.7 ms | 2026-09-27 14:57 PDT | rules-v0, in process |
-| leaks across the negative matrix | 0 | 2026-09-27 | `TALOS_IMPL=1 npm test`, six beats green |
-| audit rows per access check | 1 | 2026-09-27 | allow and deny both write a row |
+| leaks across the negative matrix | 0 | 2026-09-27 15:05 PDT | `TALOS_IMPL=1 npm test`, six beats green; five deliberate breaks each turned a beat red |
+| audit rows per access check | 1 | 2026-09-27 15:05 PDT | 13 checks, 13 rows; allow and deny both write one |
+| tokens in `demo/run.log` | 0 | 2026-09-27 15:07 PDT | redacted before logging |
 
 Single runs, not a p50. Say so if asked.
 

@@ -53,3 +53,5 @@ bash demo/run.sh reset; (TALOS_DECIDER=rules bash demo/run.sh b & sleep 2; \
    then `reset` and pass 2 straight through beats 2 to 5. Type the change live both times. One take with a stumble beats
    three clean takes; leave it in.
 4. Trim to 60 s in QuickTime (Edit > Trim), export 1080p, save under `demo/`. `.mp4` is gitignored; use `.mov` or `.webm`.
+
+If a judge asks "is this polling?": B makes one wrapped tool call per step it was doing anyway (write the client, run the tests, git status); the change block rides that call. `tail -f demo/run.log` shows the `changes` read after each step and one `check` when nothing arrived, which is how the revoke is noticed. Say exactly that; do not say "no polling at all".
