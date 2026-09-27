@@ -21,7 +21,12 @@ j() { node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const d=J
 step() { printf '{"ts":"%s","room":"%s","what":"%s"}\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$1" "$2" >> "$STEPS"; printf '%-9s %s\n' "$1:" "$2"; }
 say() { printf '          %s\n' "$*"; }
 write() { local out; out="$($CLI write "$1" "$2")"; printf '%s' "$out" | j 'd.map(x=>`  ${x.crossing_id} ${x.kind} ${x.verdict}${x.to_room?" -> "+x.to_room:""} allowed=${x.allowed}`).join("\n")'; }
-state() { printf '%s\n' "$1" > "$APP/state.json"; }
+state() { printf '%s\n' "$1" > "$APP/state.json"; printf '{"ts":"%s","room":"app","what":"state v%s","version":%s}\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$(printf '%s' "$1" | j 'd.version')" "$(printf '%s' "$1" | j 'd.version')" >> "$STEPS"; }
+archive() { mkdir -p demo/factory/runs; node -e '
+const fs=require("fs");const [product,steps,audit,out]=process.argv.slice(1);
+const L=(p)=>fs.existsSync(p)?fs.readFileSync(p,"utf8").split("\n").filter(Boolean).map(l=>{try{return JSON.parse(l)}catch{return null}}).filter(Boolean):[];
+fs.writeFileSync(out,JSON.stringify({product,finishedAt:new Date().toISOString(),steps:L(steps),rows:L(audit)}));
+' "$PRODUCT" "$STEPS" data/audit.jsonl "demo/factory/runs/$PRODUCT.json"; }
 receipt() { [ "$COMMIT" = "1" ] || return 0; GIT_AUTHOR_NAME="$1-agent" GIT_AUTHOR_EMAIL="$1@rooms.local" git add "$APP" >/dev/null 2>&1 && git commit -q -m "$1: $2" >/dev/null 2>&1 || true; }
 
 $CLI reset >/dev/null; : > "$STEPS"
@@ -35,3 +40,4 @@ frontend_hears() {  # the change block rides a call Frontend was already making
 }
 
 . "demo/factory/products/$PRODUCT.sh"
+archive

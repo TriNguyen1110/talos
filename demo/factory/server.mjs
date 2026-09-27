@@ -32,6 +32,7 @@ http.createServer((req, res) => {
     return send(200, JSON.stringify({ started: true, pid: building.pid }));
   }
   if (url.pathname === "/status") { let cur = {}; try { cur = JSON.parse(fs.readFileSync(path.join(HERE, "current.json"), "utf8")); } catch {} return send(200, JSON.stringify({ running: !!(building && building.exitCode === null), product: cur.product || "dating" })); }
+  if (url.pathname === "/runs") { const d = path.join(HERE, "runs"); return send(200, JSON.stringify(fs.existsSync(d) ? fs.readdirSync(d).filter((f) => f.endsWith(".json")).map((f) => f.replace(/\.json$/, "")) : [])); }
   if (url.pathname === "/products") return send(200, JSON.stringify(fs.readdirSync(path.join(HERE, "products")).filter((f) => f.endsWith(".sh")).map((f) => f.replace(/\.sh$/, ""))));
   if (url.pathname === "/steps") {
     const p = path.join(HERE, "steps.log");
