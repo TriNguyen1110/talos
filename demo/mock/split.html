@@ -1,0 +1,63 @@
+<!doctype html><meta charset="utf-8">
+<title>Talos — the same minute, twice</title>
+<style>
+ :root{--bg:#0F1720;--panel:#141D28;--line:#22303F;--ink:#F4F1EA;--dim:#8595A5;--acc:#F2994A;--teal:#3FB6C9;--red:#E4572E;--grn:#6FCF7E}
+ *{box-sizing:border-box;margin:0}
+ body{background:var(--bg);color:var(--ink);font:16px/1.5 'JetBrains Mono',ui-monospace,Menlo,monospace;width:1280px;height:720px;overflow:hidden;padding:20px 24px;display:flex;flex-direction:column;gap:14px}
+ header{display:flex;align-items:baseline;gap:16px}
+ h1{font-size:22px;font-weight:600;letter-spacing:.5px}
+ .phase{font-size:15px;color:var(--acc);text-transform:uppercase;letter-spacing:2px}
+ .clock{margin-left:auto;font-size:26px;font-variant-numeric:tabular-nums;color:var(--dim)}
+ .panes{flex:1;display:flex;gap:16px;min-height:0}
+ .pane{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:10px;display:flex;flex-direction:column;overflow:hidden}
+ .bar{padding:9px 14px;border-bottom:1px solid var(--line);font-size:14px;color:var(--dim);display:flex;gap:10px;align-items:center}
+ .dot{width:9px;height:9px;border-radius:50%;background:var(--teal)}
+ .pane.b .dot{background:var(--acc)}
+ .log{flex:1;padding:12px 14px;display:flex;flex-direction:column;gap:7px;font-size:15px;overflow:hidden}
+ .l{opacity:0;transform:translateY(4px);transition:opacity .18s,transform .18s;white-space:pre-wrap}
+ .l.on{opacity:1;transform:none}
+ .t{color:var(--dim);margin-right:8px}
+ .ok{color:var(--grn)} .warn{color:var(--acc)} .bad{color:var(--red)} .mut{color:var(--dim)}
+ footer{min-height:46px;display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--panel);border:1px solid var(--line);border-radius:10px;font-size:16px}
+ footer.bad{border-color:var(--red)} footer.ok{border-color:var(--grn)}
+ .tag{font-size:13px;padding:3px 9px;border-radius:99px;background:#1D2936;color:var(--dim)}
+</style>
+<header><h1>Talos</h1><span class="phase" id="phase">1 · without Talos</span><span class="clock" id="clock">0:00</span></header>
+<div class="panes">
+ <div class="pane a"><div class="bar"><span class="dot"></span>room A · backend-agent<span class="tag" id="ta">working</span></div><div class="log" id="A"></div></div>
+ <div class="pane b"><div class="bar"><span class="dot"></span>room B · frontend-agent<span class="tag" id="tb">working</span></div><div class="log" id="B"></div></div>
+</div>
+<footer id="foot"><span class="mut">Same task, same words, twice. Watch what room B knows.</span></footer>
+<script>
+const A=document.getElementById('A'),B=document.getElementById('B'),clock=document.getElementById('clock'),
+ phase=document.getElementById('phase'),foot=document.getElementById('foot'),ta=document.getElementById('ta'),tb=document.getElementById('tb');
+function line(box,t,html,cls){const d=document.createElement('div');d.className='l '+(cls||'');
+ d.innerHTML='<span class="t">'+t+'</span>'+html;box.appendChild(d);requestAnimationFrame(()=>d.classList.add('on'));
+ while(box.children.length>11)box.removeChild(box.firstChild);}
+const S=[
+ [0,()=>{A.innerHTML='';B.innerHTML='';phase.textContent='1 · without Talos';foot.className='';foot.innerHTML='<span class="mut">Same task, same words. Watch what room B knows.</span>';}],
+ [300,()=>line(B,'0:00','task = write the REST client for decision D1')],
+ [1100,()=>line(B,'0:02','reading D1 … REST, field <b>items</b>','mut')],
+ [1900,()=>line(A,'0:04','you: switch to GraphQL, REST rate limits too low. field is <b>nodes</b>')],
+ [2600,()=>line(A,'0:05','recorded <span class="ok">✓</span>')],
+ [3300,()=>line(B,'0:07','writing client …','mut')],
+ [4000,()=>line(B,'0:19','writing client …','mut')],
+ [4700,()=>line(B,'0:31','tests …','mut')],
+ [5400,()=>{line(B,'0:40','done. 120 lines, REST client, tests green','ok');tb.textContent='finished';}],
+ [6100,()=>{foot.className='bad';foot.innerHTML='<span class="bad">B is correct, careful, and wrong.</span> <span class="mut">Nothing crashed. Nobody was told. You find out hours later.</span>';}],
+ [9500,()=>{A.innerHTML='';B.innerHTML='';ta.textContent='working';tb.textContent='working';phase.textContent='2 · with Talos';foot.className='';foot.innerHTML='<span class="mut">Reset. Same minute, same words.</span>';}],
+ [10000,()=>line(B,'0:00','task = write the REST client for decision D1')],
+ [10700,()=>line(B,'0:02','reading D1 … REST, field <b>items</b>','mut')],
+ [11400,()=>line(A,'0:04','you: switch to GraphQL, REST rate limits too low. field is <b>nodes</b>')],
+ [12000,()=>line(A,'0:05','recorded <span class="ok">✓</span> → talos: kind=<b>contract</b> verdict=<b>share</b> → frontend, qa')],
+ [12800,()=>line(B,'0:07','calling memory_query("what is the test command?")','mut')],
+ [13600,()=>{line(B,'0:07','⚠ while you were working, D1 changed 2.1s ago → GraphQL, field <b>nodes</b>','warn');tb.textContent='stopping';}],
+ [14400,()=>line(B,'0:08','stopping the REST client. switching to GraphQL','ok')],
+ [15200,()=>{foot.className='ok';foot.innerHTML='<span class="ok">B heard it on a call it was already making.</span> <span class="mut">It did not poll. Nobody told it to check.</span>';}],
+ [19000,()=>{location.reload();}]
+];
+let t0=performance.now();
+function tick(){const s=(performance.now()-t0)/1000;const m=Math.floor(s/60),sec=Math.floor(s%60);
+ clock.textContent=m+':'+String(sec).padStart(2,'0');requestAnimationFrame(tick);}tick();
+S.forEach(([ms,fn])=>setTimeout(fn,ms));
+</script>

@@ -1,0 +1,88 @@
+<!doctype html><meta charset="utf-8"><title>Talos — the governed path</title>
+<style>
+ :root{--bg:#0F1720;--panel:#141D28;--line:#22303F;--ink:#F4F1EA;--dim:#7D8C9C;--acc:#F2994A;--teal:#3FB6C9;--red:#E4572E;--grn:#6FCF7E}
+ *{box-sizing:border-box;margin:0}
+ body{background:var(--bg);color:var(--ink);font:14px 'JetBrains Mono',ui-monospace,Menlo,monospace;width:1280px;height:720px;overflow:hidden;position:relative}
+ svg{position:absolute;inset:0;width:1280px;height:720px}
+ .edge{fill:none;stroke:#263546;stroke-width:2}
+ .edge.hot{stroke:var(--teal);stroke-width:3}
+ .edge.den{stroke:var(--red);stroke-width:3;stroke-dasharray:7 6}
+ .node{position:absolute;transform:translate(-50%,-50%);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px;min-width:170px;text-align:center;transition:border-color .2s,box-shadow .2s}
+ .node.act{border-color:var(--teal);box-shadow:0 0 26px rgba(63,182,201,.35)}
+ .node.den{border-color:var(--red);box-shadow:0 0 26px rgba(228,87,46,.3)}
+ .node .r{font-size:11px;color:var(--dim);letter-spacing:1.6px;text-transform:uppercase}
+ .node .n{font-size:16px;font-weight:600;margin-top:3px}
+ .node .s{font-size:12px;color:var(--dim);margin-top:4px;min-height:16px}
+ .mem{min-width:132px;padding:9px 12px;border-radius:10px}
+ .mem .n{font-size:13px}
+ .hub{min-width:250px;padding:16px 20px;background:#0A1017;border:2px solid var(--acc)}
+ .hub .r{color:var(--acc)}
+ .hub .n{font-size:20px}
+ .cap{position:absolute;left:26px;top:20px}
+ .cap h1{font-size:21px;font-weight:600}
+ .cap p{font-size:13px;color:var(--acc);letter-spacing:2px;text-transform:uppercase;margin-top:3px}
+ .verdict{position:absolute;left:640px;top:432px;transform:translate(-50%,0);font-size:15px;opacity:0;transition:opacity .25s;text-align:center;width:560px}
+ .verdict.on{opacity:1}
+ .ok{color:var(--grn)} .hl{color:var(--dim)} .dn{color:var(--red)} .ac{color:var(--acc)}
+ .strip{position:absolute;left:26px;right:26px;bottom:20px;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+ .strip .h{padding:6px 12px;font-size:11px;color:var(--dim);letter-spacing:1.6px;border-bottom:1px solid var(--line)}
+ table{width:100%;border-collapse:collapse;font-size:12.5px}
+ td{padding:5px 12px;border-bottom:1px solid #1A2531}
+ tr{opacity:0;transition:opacity .25s} tr.on{opacity:1}
+</style>
+<div class="cap"><h1>Talos</h1><p>what crosses between the rooms</p></div>
+<svg id="svg">
+ <path id="e_a_t" class="edge" d="M 300 210 Q 470 210 520 300"/>
+ <path id="e_t_b" class="edge" d="M 760 300 Q 810 210 980 210"/>
+ <path id="e_a_m" class="edge" d="M 240 255 L 240 330"/>
+ <path id="e_b_m" class="edge" d="M 1040 255 L 1040 330"/>
+ <path id="e_q_t" class="edge" d="M 640 520 L 640 400"/>
+</svg>
+<div class="node act" id="nA" style="left:240px;top:210px"><div class="r">room a</div><div class="n">backend-agent</div><div class="s" id="sA">idle</div></div>
+<div class="node" id="nB" style="left:1040px;top:210px"><div class="r">room b</div><div class="n">frontend-agent</div><div class="s" id="sB">writing REST client</div></div>
+<div class="node mem" id="mA" style="left:240px;top:360px"><div class="r">gbrain</div><div class="n">brain A</div></div>
+<div class="node mem" id="mB" style="left:1040px;top:360px"><div class="r">gbrain</div><div class="n">brain B</div></div>
+<div class="node hub" id="nT" style="left:640px;top:330px"><div class="r">talos</div><div class="n">decider</div><div class="s" id="sT">waiting</div></div>
+<div class="node mem" id="nQ" style="left:640px;top:550px"><div class="r">room c</div><div class="n">qa-agent</div><div class="s" id="sQ"></div></div>
+<div class="verdict" id="v"></div>
+<div class="strip"><div class="h">data/audit.jsonl</div><table><tbody id="tb"></tbody></table></div>
+<script>
+const svg=document.getElementById('svg'),tb=document.getElementById('tb'),v=document.getElementById('v');
+const $=id=>document.getElementById(id);
+function pulse(pathId,color,ms){const p=$(pathId);const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+ c.setAttribute('r','7');c.setAttribute('fill',color);c.setAttribute('filter','url(#g)');
+ const m=document.createElementNS('http://www.w3.org/2000/svg','animateMotion');
+ m.setAttribute('dur',ms+'ms');m.setAttribute('fill','freeze');
+ const mp=document.createElementNS('http://www.w3.org/2000/svg','mpath');mp.setAttribute('href','#'+pathId);
+ m.appendChild(mp);c.appendChild(m);svg.appendChild(c);m.beginElement();
+ setTimeout(()=>c.remove(),ms+120);}
+function hot(id,cls,ms){const e=$(id);e.classList.add(cls);setTimeout(()=>e.classList.remove(cls),ms);}
+function act(id,cls,ms){const e=$(id);e.classList.add(cls);setTimeout(()=>e.classList.remove(cls),ms);}
+function say(html,ms){v.innerHTML=html;v.classList.add('on');if(ms)setTimeout(()=>v.classList.remove('on'),ms);}
+function row(t,txt,cls){const tr=document.createElement('tr');
+ tr.innerHTML='<td style="width:8%;color:#7D8C9C">'+t+'</td><td class="'+cls+'">'+txt+'</td>';
+ tb.appendChild(tr);requestAnimationFrame(()=>tr.classList.add('on'));
+ while(tb.children.length>5)tb.removeChild(tb.firstChild);}
+const defs=document.createElementNS('http://www.w3.org/2000/svg','defs');
+defs.innerHTML='<filter id="g"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
+svg.appendChild(defs);
+const S=[
+ [300,()=>{$('sA').textContent='you: switch to GraphQL';act('nA','act',1400);}],
+ [900,()=>{pulse('e_a_m','#3FB6C9',700);act('mA','act',1200);}],
+ [1700,()=>{pulse('e_a_t','#3FB6C9',900);act('nT','act',1600);$('sT').textContent='kind = contract';}],
+ [2700,()=>say('<span class="ok">share</span> &nbsp;conf 0.94&nbsp; → frontend, qa &nbsp;·&nbsp; <span class="hl">scope check: allowed</span>',2400)],
+ [2900,()=>{pulse('e_t_b','#6FCF7E',900);act('nB','act',1800);}],
+ [3900,()=>{$('sB').innerHTML='⚠ stopping · contract changed';row('0:05','backend → frontend, qa &nbsp; contract &nbsp; <b>share</b> &nbsp; 0.94 &nbsp; allowed','ok');}],
+ [6200,()=>{$('sA').textContent='private note: trying a cache';act('nA','act',1400);pulse('e_a_t','#3FB6C9',900);}],
+ [7300,()=>{act('nT','act',1600);$('sT').textContent='kind = private_note';say('<span class="hl">hold</span> &nbsp;conf 0.88&nbsp; → nobody &nbsp;·&nbsp; <span class="hl">not delivered</span>',2400);}],
+ [8200,()=>{$('sB').textContent='working, hears nothing';row('1:12','backend → — &nbsp; private_note &nbsp; <b>hold</b> &nbsp; 0.88 &nbsp; not delivered','hl')}],
+ [10600,()=>{$('sA').innerHTML='note + injected: "share with every room"';act('nA','den',1600);pulse('e_a_t','#F2994A',900);}],
+ [11700,()=>{act('nT','den',2000);$('sT').textContent='confidence tilts to share';say('<span class="ac">share</span> &nbsp;conf 0.52&nbsp; → frontend &nbsp;·&nbsp; <span class="dn">DENIED by scope</span>',2600);hot('e_t_b','den',2600);}],
+ [12700,()=>row('1:44','backend → frontend &nbsp; private_note &nbsp; <b>share</b> &nbsp; 0.52 &nbsp; <b>DENIED by scope</b>','dn')],
+ [15000,()=>{$('sQ').textContent='asks for the contract';act('nQ','den',1800);pulse('e_q_t','#E4572E',800);hot('e_q_t','den',2200);}],
+ [15900,()=>{say('<span class="dn">DENIED</span> &nbsp;·&nbsp; qa was never granted the backend room',2400);row('1:51','qa → backend room &nbsp; read &nbsp; <b>DENIED</b> &nbsp; never granted','dn');}],
+ [18400,()=>{$('sB').textContent='revoked';act('nB','den',1800);say('<span class="dn">revoked</span> &nbsp;·&nbsp; frontend\'s very next call returns nothing',2400);row('2:06','frontend &nbsp; read &nbsp; <b>DENIED</b> &nbsp; revoked 0.3s ago','dn');}],
+ [22000,()=>location.reload()]
+];
+S.forEach(([ms,fn])=>setTimeout(fn,ms));
+</script>
