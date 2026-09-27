@@ -7,3 +7,5 @@ To apply to the live deck (https://claude.ai/artifact/8b6RPynk1FGA1SHDgUSWVp): o
 Or present from these files directly: each is one slide, 1920x1080, inline styles.
 
 Update 15:58 PDT: the stack slide now carries a "next adapters" strip (GitHub, Linear, Slack, Supabase) and the close slide names them; both marked not built.
+
+Update 16:16 PDT: demo slide now describes the factory page and both products; proof and decider slides carry the training export; stack strip adds Memorable.
