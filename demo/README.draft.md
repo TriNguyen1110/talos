@@ -47,8 +47,10 @@ Two terminals, the way it is demoed, with the change typed live: `demo/REHEARSE.
 | leaks across the negative matrix | 0 | 2026-09-27 15:05 PDT | `TALOS_IMPL=1 npm test`, six beats green; five deliberate breaks each turned a beat red |
 | audit rows per access check | 1 | 2026-09-27 15:05 PDT | 13 checks, 13 rows; allow and deny both write one |
 | tokens in `demo/run.log` | 0 | 2026-09-27 15:07 PDT | redacted before logging |
+| change to B knowing, p50 of five runs | 2.9 s (2.8 to 2.9) | 2026-09-27 15:14 to 15:20 PDT | `run.sh`, rules decider, B stepping every 4 s |
+| decider off, five runs | B finished unaware every time, 21.9 to 22.5 s | 2026-09-27 15:14 to 15:20 PDT | the control; heard the change 0 of 5 |
 
-Single runs, not a p50. Say so if asked.
+The propagation number is the gap until B's next step, so it measures B's cadence more than Talos. `decide()` itself is milliseconds.
 
 ## How it works
 
@@ -78,6 +80,18 @@ text is kept; nothing verified against is truncated.
 
 The test is `tests/demo-path.test.mjs`, the six beats as assertions, written before the
 implementation: `TALOS_IMPL=1 npm test`.
+
+## With and without the hosts' tools
+
+Same five beats, three ways in, measured 2026-09-27 15:18 to 15:21 PDT:
+
+| the change enters through | Frontend's read carries it after | what it proves |
+|---|---|---|
+| `scripts/talos.mjs write` (the demo) | milliseconds to decide, seconds to B's next step | the path itself |
+| a Markdown page written into `rooms/backend/brain/`, `talos.mjs watch backend` running | 0.44 s | no CLI in the loop; the room's write path is the trigger |
+| `gbrain put --source-id talos-backend`, both room brains registered as GBrain sources | 2.3 s, most of it GBrain's own startup | a GBrain-backed agent's normal write crosses with nothing added to the agent |
+
+The walls held: `gbrain get c1-change --source-id talos-backend` returns the page, the same read against `talos-frontend` returns page not found. The only copy Frontend has is the crossing row. QM was not standing on the day, so the QM adapter is a named stub. Superset, Memorable and UFO are not in the build.
 
 ## Not true yet
 

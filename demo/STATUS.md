@@ -19,3 +19,4 @@ What is standing, measured by running it (not asserted):
 - QM running locally with two rooms: not done; not needed for the five beats.
 - Verifier, 15:04–15:09 PDT: items 03, 04, 05, 10, 11 `done`; five mutations went red; leaks 0; one weak beat-4 assertion strengthened (47a2a2b).
 - Pushed to https://github.com/TriNguyen1110/talos (created today) at 15:10 PDT.
+- With the hosts' tools, 15:18–15:21 PDT: both room brains registered as GBrain sources; `gbrain put` into the backend source wrote the page through to `rooms/backend/brain/` and Talos crossed it to Frontend in 2.3 s with no CLI call (`scripts/talos.mjs watch backend`). Plain file write through the same watcher: 0.44 s. QM: not standing, not tested. Superset, Memorable, UFO: not in the build.
