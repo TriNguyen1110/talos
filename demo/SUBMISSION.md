@@ -2,11 +2,11 @@
 
 ## One line
 
-Talos is the governed path between rooms in a software factory: when one agent changes something, a decider says what crosses, the other agent has it on its next tool call, and every crossing and every refusal is an audit row.
+Talos is a software factory: rooms of agents that build, manage and extend software, with a decider that says what crosses between them and a record of every crossing.
 
 ## Short (about 100 words)
 
-Multi-agent teams fail on coordination, not on models. An agent reads the world once, works for an hour, and finishes correct and wrong because a decision changed while it was working. Rooms with isolated memory are the right design, and they stop at the wall: there is no governed way for a contract change, a decision or a verdict to reach the one agent that needs it. Talos is that path. One decider classifies each change and returns share, hold or discard; a scope check the decider cannot widen decides who may hear it; one audit table records every crossing, every refusal and every denied read. Built today, tested with and without the hosts' tools, demoed by four rooms building two products live.
+Talos is a software factory: rooms of agents, one per role, that build, manage and extend software. Multi-agent teams fail on coordination, not on models. An agent reads the world once, works for an hour, and finishes correct and wrong because a decision changed while it was working. Rooms with isolated memory are the right design, and they stop at the wall: there is no governed way for a contract change, a decision or a verdict to reach the one agent that needs it. Talos runs that path inside the factory. One decider classifies each change and returns share, hold or discard; a scope check the decider cannot widen decides who may hear it; one audit table records every crossing, every refusal and every denied read. Built today, tested with and without the hosts' tools, demoed by four rooms building two products live.
 
 ## Long (about 300 words)
 
