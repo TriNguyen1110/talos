@@ -81,6 +81,22 @@ text is kept; nothing verified against is truncated.
 The test is `tests/demo-path.test.mjs`, the six beats as assertions, written before the
 implementation: `TALOS_IMPL=1 npm test`.
 
+## The rest of the week through the same path
+
+`bash demo/run.sh factory` writes five ordinary things into the rooms and prints what the decider
+and the scope check did with each. Output on 2026-09-27 15:36 PDT, rules decider:
+
+```
+PM feature request  : decision · share → frontend, backend, qa
+QA verdict from CI  : verdict  · share → pm, frontend, backend
+Backend internal fix: noise    · discard → stays in the room
+Backend breaking fix: contract · share → frontend, qa
+Frontend UI contract: contract · share → backend, qa
+```
+
+Targets come from the matrix, never from the text. The verdict line is what a CI result looks
+like when the QA room writes it; no pipeline is wired to write it in this build.
+
 ## With and without the hosts' tools
 
 Same five beats, three ways in, measured 2026-09-27 15:18 to 15:21 PDT:

@@ -57,7 +57,7 @@ process.stdout.write(r==null?"":(typeof r==="object"?JSON.stringify(r):String(r)
 elapsed_since() { node -e 'console.log(((Date.now()-Date.parse(process.argv[1]))/1000).toFixed(1))' "$1"; }
 sleep_s() { sleep "$1"; }
 
-usage() { say "usage: run.sh a [--now] [--beats 345] [--pause S] [\"<change text>\"] | run.sh b | run.sh reset"; exit 2; }
+usage() { say "usage: run.sh a [--now] [--beats 345] [--pause S] [\"<change text>\"] | run.sh b | run.sh factory | run.sh reset"; exit 2; }
 
 # ---- fixture text (demo/seed.md). The change is typed live; these two notes are the beat 3/4 lines. ----
 DEFAULT_CHANGE='switch to GraphQL, REST rate limits are too low; the field is now nodes, not items'
