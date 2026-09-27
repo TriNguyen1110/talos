@@ -6,9 +6,9 @@
 <title>Talos — workflow</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0A0A0D;--fg:#F5F5F7;--mute:rgba(245,245,247,.56);--dim:rgba(245,245,247,.32);--card:rgba(255,255,255,.035);--line:rgba(255,255,255,.08);--green:#7EDC9B;--yellow:#E5B96B;--red:#FF7A70;--blue:#8AB4FF}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:22px 24px 60px}
-h1{font-size:22px;font-weight:600;margin:0;letter-spacing:-.01em}.sub{color:var(--mute);font-size:12px;margin:2px 0 16px}
+:root{--pm:#8AB4FF;--fe:#F2994A;--be:#3FB6C9;--qa:#C39BFF;--bg:#09090C;--fg:#F5F5F7;--mute:rgba(245,245,247,.56);--dim:rgba(245,245,247,.32);--card:rgba(255,255,255,.035);--line:rgba(255,255,255,.08);--green:#7EDC9B;--yellow:#E5B96B;--red:#FF7A70;--blue:#8AB4FF}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(1200px 600px at 70% -10%,rgba(138,180,255,.07),transparent 60%),var(--bg);color:var(--fg);font:14px/1.5 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:22px 24px 60px}
+h1{font-size:22px;font-weight:600;margin:0;letter-spacing:-.01em}.brand{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--yellow);font-weight:600;margin-bottom:4px}.sub{color:var(--mute);font-size:12px;margin:2px 0 16px}
 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}.top a,.top button{font:inherit;font-size:12px;color:var(--mute);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:7px 12px;background:none;cursor:pointer}.top a.on,.top button.on{color:var(--fg);background:rgba(255,255,255,.08)}
 .tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}.tile{border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--card)}.tile b{display:block;font-size:22px;font-weight:600}.tile span{font-size:11px;color:var(--mute)}
 .g{color:var(--green)}.y{color:var(--yellow)}.r{color:var(--red)}.b{color:var(--blue)}
@@ -16,7 +16,8 @@ h1{font-size:22px;font-weight:600;margin:0;letter-spacing:-.01em}.sub{color:var(
 .lanes>div{padding:10px 12px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);min-height:44px;font-size:12px}.lanes>div:nth-child(6n){border-right:0}
 .hd{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);background:rgba(255,255,255,.03)}
 .t{color:var(--dim);font-family:ui-monospace,Menlo,monospace;font-size:11px}
-.step{background:rgba(255,255,255,.04);border-radius:10px;padding:8px 10px;border:1px solid var(--line)}.step .what{font-weight:500}.step .rows{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px}
+.step{background:rgba(255,255,255,.04);border-radius:10px;padding:8px 10px;border:1px solid var(--line);border-left:3px solid var(--dim)}.step.pm{border-left-color:var(--pm)}.step.frontend{border-left-color:var(--fe)}.step.backend{border-left-color:var(--be)}.step.qa{border-left-color:var(--qa)}
+.hd.pm{color:var(--pm)}.hd.backend{color:var(--be)}.hd.frontend{color:var(--fe)}.hd.qa{color:var(--qa)}.step .what{font-weight:500}.step .rows{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px}
 .pill{font-size:10px;border-radius:999px;padding:2px 8px;border:1px solid currentColor;opacity:.9;font-family:ui-monospace,Menlo,monospace}
 .ver{background:rgba(229,185,107,.08);border:1px solid rgba(229,185,107,.35);border-radius:10px;padding:8px 10px;color:var(--yellow);font-weight:600;text-align:center}.ver small{display:block;color:var(--mute);font-weight:400;font-size:11px}
 .empty{color:var(--mute);padding:40px;text-align:center;border:1px dashed var(--line);border-radius:18px}
@@ -24,7 +25,7 @@ h1{font-size:22px;font-weight:600;margin:0;letter-spacing:-.01em}.sub{color:var(
 </style>
 </head>
 <body>
-<div class="top"><div><h1 id="h1">Workflow</h1><div class="sub" id="sub">How the four rooms built it, step by step. Every pill is an audit row.</div></div><div id="picks" style="display:flex;gap:6px;flex-wrap:wrap"></div></div>
+<div class="top"><div><div class="brand">Talos · software factory</div><h1 id="h1">Workflow</h1><div class="sub" id="sub">How the four rooms built it, step by step. Every pill is an audit row.</div></div><div id="picks" style="display:flex;gap:6px;flex-wrap:wrap"></div></div>
 <div class="tiles" id="tiles"></div>
 <div id="board"></div>
 <div class="foot">Steps are what each room was doing; rows are what Talos recorded while it did it. Yellow markers are the app versions Frontend shipped, and each one follows a crossing that reached it. Reads from <code>demo/factory/runs/&lt;product&gt;.json</code>, saved at the end of every build.</div>
@@ -57,12 +58,12 @@ async function load(){
   document.getElementById("sub").textContent = `Finished ${run.finishedAt.replace("T"," ").slice(0,19)} UTC · ${rows.length} audit rows · app reached v${Math.max(0,...steps.filter(s=>s.version!=null).map(s=>s.version))}`;
   // join: rows whose ts falls between this step's ts and the next step's ts belong to this step
   const ordered = steps.slice().sort((a,b) => a.ts.localeCompare(b.ts));
-  const cells = [`<div class="hd">time</div>`, ...ROOMS.map(r => `<div class="hd">${LABEL[r]}</div>`), `<div class="hd">app</div>`];
+  const cells = [`<div class="hd">time</div>`, ...ROOMS.map(r => `<div class="hd ${r}">${LABEL[r]}</div>`), `<div class="hd">app</div>`];
   ordered.forEach((s, i) => {
     const next = ordered[i+1]?.ts || "9999";
     const mine = rows.filter(r => r.ts >= s.ts && r.ts < next);
     cells.push(`<div class="t">${s.ts.slice(11,19)}</div>`);
-    for (const r of ROOMS) cells.push(`<div>${s.room === r ? `<div class="step"><div class="what">${s.what}</div>${mine.length ? `<div class="rows">${mine.map(pill).join("")}</div>` : ""}</div>` : ""}</div>`);
+    for (const r of ROOMS) cells.push(`<div>${s.room === r ? `<div class="step ${r}"><div class="what">${s.what}</div>${mine.length ? `<div class="rows">${mine.map(pill).join("")}</div>` : ""}</div>` : ""}</div>`);
     cells.push(`<div>${s.room === "app" ? `<div class="ver">v${s.version}<small>shipped</small></div>` : ""}</div>`);
   });
   board.innerHTML = `<div class="lanes">${cells.join("")}</div>`;

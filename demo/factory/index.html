@@ -6,27 +6,30 @@
 <title>Talos — the factory</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0A0A0D;--fg:#F5F5F7;--mute:rgba(245,245,247,.56);--dim:rgba(245,245,247,.32);--card:rgba(255,255,255,.035);--line:rgba(255,255,255,.08);--green:#7EDC9B;--yellow:#E5B96B;--red:#FF7A70;--blue:#8AB4FF}
+:root{--bg:#09090C;--fg:#F5F5F7;--mute:rgba(245,245,247,.58);--dim:rgba(245,245,247,.34);--card:rgba(255,255,255,.03);--line:rgba(255,255,255,.08);--green:#7EDC9B;--yellow:#E5B96B;--red:#FF7A70;--blue:#8AB4FF;--pm:#8AB4FF;--fe:#F2994A;--be:#3FB6C9;--qa:#C39BFF}
+body{background:radial-gradient(1200px 600px at 70% -10%,rgba(138,180,255,.07),transparent 60%),radial-gradient(900px 500px at 0% 100%,rgba(242,153,74,.06),transparent 60%),var(--bg)}
 *{box-sizing:border-box}html,body{height:100%}body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-.wrap{display:grid;grid-template-columns:minmax(420px,44%) 1fr;gap:18px;height:100vh;padding:18px}
-.left{display:flex;flex-direction:column;gap:14px;min-height:0}.right{border:1px solid var(--line);border-radius:22px;background:var(--card);overflow:hidden;position:relative}
-.right iframe{width:100%;height:100%;border:0;background:#0A0A0D}.right .tag{position:absolute;top:12px;right:14px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
-h1{font-size:22px;font-weight:600;letter-spacing:-.01em;margin:0}.sub{color:var(--mute);font-size:12px;margin-top:2px}
+.wrap{display:grid;grid-template-columns:minmax(440px,44%) 1fr;gap:18px;height:100vh;padding:16px 18px 18px}
+.left{display:flex;flex-direction:column;gap:14px;min-height:0}.right{border:1px solid var(--line);border-radius:22px;background:#0E0E13;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.chrome{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}.chrome i{width:11px;height:11px;border-radius:50%;display:inline-block;background:#FF5F57}.chrome i+i{background:#FEBC2E}.chrome i+i+i{background:#28C840}.chrome .url{flex:1;margin:0 8px;font-size:12px;color:var(--mute);background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-family:ui-monospace,Menlo,monospace}.chrome .tag{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.right iframe{flex:1;width:100%;border:0;background:#0A0A0D}
+.bar{position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--green),var(--blue),var(--yellow));background-size:200% 100%;opacity:0;transition:opacity .3s}.bar.on{opacity:1;animation:slide 1.2s linear infinite}@keyframes slide{to{background-position:-200% 0}}
+h1{font-size:20px;font-weight:600;letter-spacing:-.01em;margin:0}.sub{color:var(--mute);font-size:12px;margin-top:2px}.brand{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--yellow);font-weight:600;margin-bottom:4px}
 .c{border:1px solid var(--line);border-radius:18px;background:var(--card);padding:14px 16px}.n{font-size:11px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
-.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.tile{border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--card)}.tile b{display:block;font-size:24px;font-weight:600;line-height:1.1}.tile span{font-size:11px;color:var(--mute)}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.tile{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015))}.tile b{display:block;font-size:26px;font-weight:600;line-height:1.05;font-variant-numeric:tabular-nums}.tile span{font-size:11px;color:var(--mute)}
 button{font:inherit;font-size:12px;font-weight:600;color:var(--fg);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer}button:hover{background:rgba(255,255,255,.1)}button:disabled{opacity:.5;cursor:default}button.pick{background:transparent;color:var(--mute)}button.pick.on{color:var(--fg);border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.08)}
 .g{color:var(--green)}.y{color:var(--yellow)}.r{color:var(--red)}.b{color:var(--blue)}
 svg{width:100%;height:190px;display:block}.node rect{fill:#141419;stroke:rgba(255,255,255,.14)}.node text{fill:var(--fg);font-size:12px;font-weight:500}.node .sm{fill:var(--dim);font-size:10px;font-weight:400}
 .edge{stroke:rgba(255,255,255,.10);stroke-width:1.5;fill:none;stroke-linecap:round;transition:stroke .3s}.edge.on{stroke-width:3;filter:drop-shadow(0 0 6px currentColor);stroke:currentColor}
-.procs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.proc{border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:12px}.proc .who{font-weight:600}.proc .what{color:var(--mute)}
-.log{flex:1;min-height:0;display:flex;flex-direction:column}.log pre{flex:1;min-height:0;margin:0;overflow:auto;font:12px/1.55 ui-monospace,Menlo,monospace;color:var(--mute)}.log pre div{white-space:pre-wrap}
+.procs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.proc{border:1px solid var(--line);border-left:3px solid var(--dim);border-radius:12px;padding:8px 10px;font-size:12px;background:rgba(255,255,255,.02)}.proc.pm{border-left-color:var(--pm)}.proc.frontend{border-left-color:var(--fe)}.proc.backend{border-left-color:var(--be)}.proc.qa{border-left-color:var(--qa)}.proc .who{font-weight:600}.proc .what{color:var(--mute)}
+.log{flex:1;min-height:0;display:flex;flex-direction:column}.log pre{flex:1;min-height:0;margin:0;overflow:auto;font:11.5px/1.6 ui-monospace,Menlo,monospace;color:var(--mute)}.log pre div{white-space:pre-wrap;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04)}
 .log pre .ts{color:var(--dim)}.log pre .k{color:var(--fg)}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="left">
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px"><div><h1 id="h1">Startup College Dating · built by four rooms through Talos</h1><div class="sub">Every line below is a row in <code>data/audit.jsonl</code>. The app on the right renders only what has crossed.</div></div><div style="display:flex;gap:8px;flex:none;align-items:center"><span id="products" style="display:flex;gap:6px"></span><a id="wf" href="workflow.html?product=dating" target="_blank" style="font-size:12px;color:var(--mute);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:8px 12px">workflow ↗</a><button id="run" onclick="run(false)">▶ run the factory</button><button onclick="run(true)" title="40 seconds">fast</button></div></div>
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px"><div><div class="brand">Talos · software factory</div><h1 id="h1">Startup College Dating · built by four rooms through Talos</h1><div class="sub">Every line below is a row in <code>data/audit.jsonl</code>. The app on the right renders only what has crossed.</div></div><div style="display:flex;gap:8px;flex:none;align-items:center"><span id="products" style="display:flex;gap:6px"></span><a id="wf" href="workflow.html?product=dating" target="_blank" style="font-size:12px;color:var(--mute);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:8px 12px">workflow ↗</a><button id="run" onclick="run(false)">▶ run the factory</button><button onclick="run(true)" title="40 seconds">fast</button></div></div>
     <div class="tiles">
       <div class="tile"><b id="t-cross" class="g">0</b><span>crossings delivered</span></div>
       <div class="tile"><b id="t-hold" class="y">0</b><span>held in the room</span></div>
@@ -36,17 +39,17 @@ svg{width:100%;height:190px;display:block}.node rect{fill:#141419;stroke:rgba(25
     <div class="c"><div class="n">data flow · rooms and the path between</div>
       <svg viewBox="0 0 640 190" aria-label="rooms and crossings">
         <g id="edges"></g>
-        <g class="node" transform="translate(16,18)"><rect width="176" height="48" rx="12"/><text x="14" y="21">Program Manager</text><text x="14" y="37" class="sm" id="n-pm">idle</text></g>
-        <g class="node" transform="translate(448,18)"><rect width="176" height="48" rx="12"/><text x="14" y="21">Frontend</text><text x="14" y="37" class="sm" id="n-frontend">idle</text></g>
-        <g class="node" transform="translate(16,124)"><rect width="176" height="48" rx="12"/><text x="14" y="21">Backend</text><text x="14" y="37" class="sm" id="n-backend">idle</text></g>
-        <g class="node" transform="translate(448,124)"><rect width="176" height="48" rx="12"/><text x="14" y="21">QA</text><text x="14" y="37" class="sm" id="n-qa">idle</text></g>
+        <g class="node" transform="translate(16,18)"><rect width="176" height="48" rx="12" style="stroke:rgba(138,180,255,.45)"/><text x="14" y="21">Program Manager</text><text x="14" y="37" class="sm" id="n-pm">idle</text></g>
+        <g class="node" transform="translate(448,18)"><rect width="176" height="48" rx="12" style="stroke:rgba(242,153,74,.45)"/><text x="14" y="21">Frontend</text><text x="14" y="37" class="sm" id="n-frontend">idle</text></g>
+        <g class="node" transform="translate(16,124)"><rect width="176" height="48" rx="12" style="stroke:rgba(63,182,201,.45)"/><text x="14" y="21">Backend</text><text x="14" y="37" class="sm" id="n-backend">idle</text></g>
+        <g class="node" transform="translate(448,124)"><rect width="176" height="48" rx="12" style="stroke:rgba(195,155,255,.45)"/><text x="14" y="21">QA</text><text x="14" y="37" class="sm" id="n-qa">idle</text></g>
         <g class="node" transform="translate(252,71)"><rect width="136" height="48" rx="12" style="stroke:#E5B96B"/><text x="14" y="21">Talos</text><text x="14" y="37" class="sm">decider · scope · audit</text></g>
       </svg>
     </div>
     <div class="c"><div class="n">processes · what each room is doing</div><div class="procs" id="procs"></div></div>
     <div class="c log"><div class="n">audit log · live</div><pre id="log"></pre></div>
   </div>
-  <div class="right"><span class="tag">the product · live</span><iframe id="app" src="app/dating/" title="the product"></iframe></div>
+  <div class="right"><div class="bar" id="bar"></div><div class="chrome"><i></i><i></i><i></i><span class="url" id="url">localhost:4242/app/dating/</span><span class="tag">the product · live</span></div><iframe id="app" src="app/dating/" title="the product"></iframe></div>
 </div>
 <script>
 // Anchors sit on box edges: rooms on the side facing Talos, Talos on its left or right side.
@@ -74,7 +77,7 @@ window.pick = (p) => { product = p; document.getElementById("wf").href = `workfl
 window.run = async (fast) => { const r = await fetch(`/build?product=${product}${fast ? "&fast=1" : ""}`); if (r.status === 409) return; resetView(); };
 async function loadProducts(){ const ps = await (await fetch("/products")).json(); document.getElementById("products").innerHTML = ps.map(p => `<button class="pick${p===product?" on":""}" data-p="${p}" onclick="pick('${p}')">${NAMES[p] ? NAMES[p].split(" (")[0] : p}</button>`).join(""); }
 let shown = "";
-function showProduct(p){ if (p === shown) return; shown = p; const f = document.getElementById("app"); f.src = `app/${p}/`; document.getElementById("h1").textContent = `${NAMES[p] || p} · built by four rooms through Talos`; }
+function showProduct(p){ if (p === shown) return; shown = p; const f = document.getElementById("app"); f.src = `app/${p}/`; document.getElementById("url").textContent = `localhost:4242/app/${p}/`; document.getElementById("h1").textContent = `${NAMES[p] || p} · built by four rooms through Talos`; }
 const fmt = (r) => {
   const t = (r.ts||"").slice(11,23);
   if (r.kind === "access") return `<div><span class="ts">${t}</span> <span class="${r.allowed?'g':'r'}">${r.allowed?'allow':'DENY '}</span> <span class="k">${r.from_room}</span> read ${r.to_room} · ${r.reason}</div>`;
@@ -88,7 +91,7 @@ async function poll(){
     const all = await (await fetch(`/audit`)).json();
     if (all.length < seen) resetView();                       // the table was reset: start the view over
     const rows = all.slice(seen); seen = all.length;
-    const st = await (await fetch("/status")).json(); showProduct(st.product); const btn = document.getElementById("run"); btn.disabled = st.running; btn.textContent = st.running ? "● rooms are building…" : "▶ run the factory";
+    const st = await (await fetch("/status")).json(); showProduct(st.product); const btn = document.getElementById("run"); btn.disabled = st.running; document.getElementById("bar").classList.toggle("on", st.running); btn.textContent = st.running ? "● rooms are building…" : "▶ run the factory";
     for (const r of rows) {
       log.insertAdjacentHTML("beforeend", fmt(r)); log.scrollTop = log.scrollHeight;
       if (r.kind === "access") { if (!r.allowed) { counts.denied++; pulse(r.from_room,"talos","#FF7A70"); } continue; }
@@ -103,7 +106,7 @@ async function poll(){
     const steps = await (await fetch("/steps")).json();
     const last = {}; for (const s of steps) last[s.room] = s;
     document.getElementById("procs").innerHTML = ["pm","frontend","backend","qa"].map(r => { const s = last[r]; const n = document.getElementById("n-"+r); if (n) n.textContent = s ? (s.what.length > 27 ? s.what.slice(0,26) + "…" : s.what) : "idle";
-      return `<div class="proc"><div class="who">${{pm:"Program Manager",frontend:"Frontend",backend:"Backend",qa:"QA"}[r]}</div><div class="what">${s ? s.what : "idle"}</div></div>`; }).join("");
+      return `<div class="proc ${r}"><div class="who">${{pm:"Program Manager",frontend:"Frontend",backend:"Backend",qa:"QA"}[r]}</div><div class="what">${s ? s.what : "idle"}</div></div>`; }).join("");
   } catch {}
 }
 for (const r of ["pm","frontend","backend","qa"]) { ensureEdge(r,"talos"); ensureEdge("talos",r); }
