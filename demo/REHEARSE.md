@@ -72,7 +72,7 @@ Left half: logs, the flow graph, counters, what each room is doing. Right half: 
 
 ```
 
-node demo/factory/server.mjs &        # http://localhost:4242 ; open it full screen
+node demo/factory/server.mjs &        # http://localhost:4242/?product=dating and /?product=feed, one page per product
 
 bash demo/factory/build.sh            # ~2 min; --fast for 40 s
 

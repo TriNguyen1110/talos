@@ -55,7 +55,8 @@ async function load(){
     [`<b class="r">${n(r=>r.to_room&&r.allowed===false)}</b><span>refused by scope</span>`],
     [`<b class="r">${n(r=>r.kind==="access"&&!r.allowed)}</b><span>reads denied</span>`],
   ].map(x => `<div class="tile">${x}</div>`).join("");
-  document.getElementById("sub").textContent = `Finished ${run.finishedAt.replace("T"," ").slice(0,19)} UTC · ${rows.length} audit rows · app reached v${Math.max(0,...steps.filter(s=>s.version!=null).map(s=>s.version))}`;
+  const t0 = Date.parse(run.steps[0]?.ts || run.finishedAt), sec = Math.max(0, Math.round((Date.parse(run.finishedAt) - t0) / 1000));
+  document.getElementById("sub").textContent = `Built in ${Math.floor(sec/60)}m ${String(sec%60).padStart(2,"0")}s · finished ${run.finishedAt.replace("T"," ").slice(0,19)} UTC · ${rows.length} audit rows · app reached v${Math.max(0,...steps.filter(s=>s.version!=null).map(s=>s.version))}`;
   // join: rows whose ts falls between this step's ts and the next step's ts belong to this step
   const ordered = steps.slice().sort((a,b) => a.ts.localeCompare(b.ts));
   const cells = [`<div class="hd">time</div>`, ...ROOMS.map(r => `<div class="hd ${r}">${LABEL[r]}</div>`), `<div class="hd">app</div>`];

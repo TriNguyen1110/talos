@@ -14,7 +14,7 @@ body{background:radial-gradient(1200px 600px at 70% -10%,rgba(138,180,255,.07),t
 .chrome{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}.chrome i{width:11px;height:11px;border-radius:50%;display:inline-block;background:#FF5F57}.chrome i+i{background:#FEBC2E}.chrome i+i+i{background:#28C840}.chrome .url{flex:1;margin:0 8px;font-size:12px;color:var(--mute);background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-family:ui-monospace,Menlo,monospace}.chrome .tag{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
 .right iframe{flex:1;width:100%;border:0;background:#0A0A0D}
 .bar{position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--green),var(--blue),var(--yellow));background-size:200% 100%;opacity:0;transition:opacity .3s}.bar.on{opacity:1;animation:slide 1.2s linear infinite}@keyframes slide{to{background-position:-200% 0}}
-.head{display:flex;flex-direction:column;gap:4px}.head .row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.ctl{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.ctl #products{display:flex;gap:6px}.ctl a{font-size:12px;color:var(--mute);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:8px 12px}
+.head{display:flex;flex-direction:column;gap:4px}.head .row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.ctl{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.ctl #products{display:flex;gap:6px}.ctl a.pick{background:transparent;color:var(--mute)}.ctl a.pick.on{color:var(--fg);border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.08)}.ctl a{font-size:12px;color:var(--mute);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:8px 12px}
 h1{font-size:19px;font-weight:600;letter-spacing:-.01em;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sub{color:var(--mute);font-size:12px;margin-top:2px}.brand{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--yellow);font-weight:600}
 .c{border:1px solid var(--line);border-radius:18px;background:var(--card);padding:14px 16px}.n{font-size:11px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
 .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.tile{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015))}.tile b{display:block;font-size:26px;font-weight:600;line-height:1.05;font-variant-numeric:tabular-nums}.tile span{font-size:11px;color:var(--mute)}
@@ -33,7 +33,7 @@ svg{width:100%;height:190px;display:block}.node rect{fill:#141419;stroke:rgba(25
     <div class="head">
       <div class="row"><div class="brand">Talos · software factory</div><div class="ctl"><span id="products"></span><a id="wf" href="workflow.html?product=dating" target="_blank">workflow ↗</a><button id="run" onclick="run(false)">▶ run the factory</button><button onclick="run(true)" title="40 seconds">fast</button></div></div>
       <h1 id="h1">Startup College Dating · built by four rooms through Talos</h1>
-      <div class="sub">Every line below is a row in <code>data/audit.jsonl</code>. The app on the right renders only what has crossed.</div>
+      <div class="sub">Every line below is a row in <code>data/audit.jsonl</code>. The app on the right renders only what has crossed. <span id="took" style="color:var(--yellow)"></span></div>
     </div>
     <div class="tiles">
       <div class="tile"><b id="t-cross" class="g">0</b><span>crossings delivered</span></div>
@@ -76,13 +76,34 @@ function pulse(a,b,color){ const e = ensureEdge(a,b); e.style.color = color; e.c
 let seen = 0, counts = { cross:0, hold:0, refused:0, denied:0 };
 const log = document.getElementById("log");
 function resetView(){ seen = 0; counts = { cross:0, hold:0, refused:0, denied:0 }; log.innerHTML = ""; document.querySelectorAll(".edge").forEach(e => e.classList.remove("on")); }
-const NAMES = { dating: "Startup College Dating", feed: "Campus Feed (a Twitter clone)" };
-let product = "dating";
-window.pick = (p) => { product = p; document.getElementById("wf").href = `workflow.html?product=${p}`; document.querySelectorAll("#products button").forEach(b => b.classList.toggle("on", b.dataset.p === p)); };
-window.run = async (fast) => { const r = await fetch(`/build?product=${product}${fast ? "&fast=1" : ""}`); if (r.status === 409) return; resetView(); };
-async function loadProducts(){ const ps = await (await fetch("/products")).json(); document.getElementById("products").innerHTML = ps.map(p => `<button class="pick${p===product?" on":""}" data-p="${p}" onclick="pick('${p}')">${NAMES[p] ? NAMES[p].split(" (")[0] : p}</button>`).join(""); }
-let shown = "";
-function showProduct(p){ if (p === shown) return; shown = p; const f = document.getElementById("app"); f.src = `app/${p}/`; document.getElementById("url").textContent = `localhost:4242/app/${p}/`; document.getElementById("h1").textContent = `${NAMES[p] || p} · built by four rooms through Talos`; }
+const NAMES = { dating: "Startup College Dating", feed: "Campus Feed (a Twitter clone)", market: "Campus Marketplace" };
+const product = (new URLSearchParams(location.search).get("product") || "dating").replace(/[^a-z]/g, "") || "dating";
+let mode = "";   // "live" while this product's build is the current one; "saved" otherwise
+window.run = async (fast) => { const r = await fetch(`/build?product=${product}${fast ? "&fast=1" : ""}`); if (r.status === 409) return; resetView(); mode = ""; };
+async function loadProducts(){ const ps = await (await fetch("/products")).json(); document.getElementById("products").innerHTML = ps.map(p => `<a class="pick${p===product?" on":""}" href="?product=${p}">${NAMES[p] ? NAMES[p].split(" (")[0] : p}</a>`).join(""); }
+document.getElementById("wf").href = `workflow.html?product=${product}`;
+document.getElementById("app").src = `app/${product}/`; document.getElementById("url").textContent = `localhost:4242/app/${product}/`;
+document.getElementById("h1").textContent = `${NAMES[product] || product} · built by four rooms through Talos`;
+document.title = `Talos — ${NAMES[product] || product}`;
+function ingest(rows){
+  for (const r of rows) {
+    log.insertAdjacentHTML("beforeend", fmt(r)); log.scrollTop = log.scrollHeight;
+    if (r.kind === "access") { if (!r.allowed) { counts.denied++; pulse(r.from_room,"talos","#FF7A70"); } continue; }
+    if (r.override) continue;
+    if (r.to_room && r.allowed === true && r.verdict === "share") { counts.cross++; pulse(r.from_room,"talos","#7EDC9B"); pulse("talos",r.to_room,"#7EDC9B"); }
+    else if (r.to_room && r.allowed === false) { counts.refused++; pulse(r.from_room,"talos","#E5B96B"); pulse("talos",r.to_room,"#FF7A70"); }
+    else if (r.verdict === "hold") { counts.hold++; pulse(r.from_room,"talos","#E5B96B"); }
+    else pulse(r.from_room,"talos","rgba(245,245,247,.4)");
+  }
+  document.getElementById("t-cross").textContent = counts.cross; document.getElementById("t-hold").textContent = counts.hold;
+  document.getElementById("t-refused").textContent = counts.refused; document.getElementById("t-denied").textContent = counts.denied;
+}
+const dur = (run) => { const t0 = Date.parse(run.steps[0]?.ts || run.finishedAt), t1 = Date.parse(run.finishedAt); const sec = Math.max(0, Math.round((t1 - t0) / 1000)); return `${Math.floor(sec / 60)}m ${String(sec % 60).padStart(2, "0")}s`; };
+function procs(steps){
+  const last = {}; for (const s of steps) if (s.room !== "app") last[s.room] = s;
+  document.getElementById("procs").innerHTML = ["pm","frontend","backend","qa"].map(r => { const s = last[r]; const n = document.getElementById("n-"+r); if (n) n.textContent = s ? (s.what.length > 27 ? s.what.slice(0,26) + "…" : s.what) : "idle";
+    return `<div class="proc ${r}"><div class="who">${{pm:"Program Manager",frontend:"Frontend",backend:"Backend",qa:"QA"}[r]}</div><div class="what">${s ? s.what : "idle"}</div></div>`; }).join("");
+}
 const fmt = (r) => {
   const t = (r.ts||"").slice(11,23);
   if (r.kind === "access") return `<div><span class="ts">${t}</span> <span class="${r.allowed?'g':'r'}">${r.allowed?'allow':'DENY '}</span> <span class="k">${r.from_room}</span> read ${r.to_room} · ${r.reason}</div>`;
@@ -93,25 +114,22 @@ const fmt = (r) => {
 };
 async function poll(){
   try {
-    const all = await (await fetch(`/audit`)).json();
-    if (all.length < seen) resetView();                       // the table was reset: start the view over
-    const rows = all.slice(seen); seen = all.length;
-    const st = await (await fetch("/status")).json(); showProduct(st.product); const btn = document.getElementById("run"); btn.disabled = st.running; document.getElementById("bar").classList.toggle("on", st.running); btn.textContent = st.running ? "● rooms are building…" : "▶ run the factory";
-    for (const r of rows) {
-      log.insertAdjacentHTML("beforeend", fmt(r)); log.scrollTop = log.scrollHeight;
-      if (r.kind === "access") { if (!r.allowed) { counts.denied++; pulse(r.from_room,"talos","#FF7A70"); } continue; }
-      if (r.override) continue;
-      if (r.to_room && r.allowed === true && r.verdict === "share") { counts.cross++; pulse(r.from_room,"talos","#7EDC9B"); pulse("talos",r.to_room,"#7EDC9B"); }
-      else if (r.to_room && r.allowed === false) { counts.refused++; pulse(r.from_room,"talos","#E5B96B"); pulse("talos",r.to_room,"#FF7A70"); }
-      else if (r.verdict === "hold") { counts.hold++; pulse(r.from_room,"talos","#E5B96B"); }
-      else pulse(r.from_room,"talos","rgba(245,245,247,.4)");
+    const st = await (await fetch("/status")).json();
+    const btn = document.getElementById("run"); btn.disabled = st.running; btn.textContent = st.running ? (st.product === product ? "● rooms are building…" : `● building ${NAMES[st.product]?.split(" (")[0] || st.product}…`) : "▶ run the factory";
+    document.getElementById("bar").classList.toggle("on", st.running && st.product === product);
+    if (st.product === product) {                      // this product's table is the live one
+      if (mode !== "live") { resetView(); mode = "live"; }
+      const all = await (await fetch(`/audit`)).json();
+      if (all.length < seen) resetView();
+      ingest(all.slice(seen)); seen = all.length;
+      const steps = await (await fetch("/steps")).json(); procs(steps);
+      if (steps.length) { const sec = Math.round((Date.now() - Date.parse(steps[0].ts)) / 1000); document.getElementById("took").textContent = st.running ? `building · ${Math.floor(sec/60)}m ${String(sec%60).padStart(2,"0")}s` : `built in ${Math.floor(sec/60)}m ${String(sec%60).padStart(2,"0")}s`; if (!st.running && !poll.frozen) { poll.frozen = true; } } else document.getElementById("took").textContent = "";
+    } else if (mode !== "saved") {                     // another product owns the live table: show this one's last run
+      resetView(); mode = "saved";
+      let run = null; try { run = await (await fetch(`runs/${product}.json?t=${Date.now()}`)).json(); } catch {}
+      if (run) { ingest(run.rows); seen = run.rows.length; procs(run.steps); log.insertAdjacentHTML("afterbegin", `<div class="ts">saved run · built in ${dur(run)} · finished ${run.finishedAt.replace("T"," ").slice(0,19)} UTC · press run for a live one</div>`); document.getElementById("took").textContent = `last build: ${dur(run)}`; }
+      else { log.innerHTML = `<div class="ts">no run yet for this product · press ▶ run the factory</div>`; procs([]); }
     }
-    document.getElementById("t-cross").textContent = counts.cross; document.getElementById("t-hold").textContent = counts.hold;
-    document.getElementById("t-refused").textContent = counts.refused; document.getElementById("t-denied").textContent = counts.denied;
-    const steps = await (await fetch("/steps")).json();
-    const last = {}; for (const s of steps) last[s.room] = s;
-    document.getElementById("procs").innerHTML = ["pm","frontend","backend","qa"].map(r => { const s = last[r]; const n = document.getElementById("n-"+r); if (n) n.textContent = s ? (s.what.length > 27 ? s.what.slice(0,26) + "…" : s.what) : "idle";
-      return `<div class="proc ${r}"><div class="who">${{pm:"Program Manager",frontend:"Frontend",backend:"Backend",qa:"QA"}[r]}</div><div class="what">${s ? s.what : "idle"}</div></div>`; }).join("");
   } catch {}
 }
 for (const r of ["pm","frontend","backend","qa"]) { ensureEdge(r,"talos"); ensureEdge("talos",r); }
