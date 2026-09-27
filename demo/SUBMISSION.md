@@ -2,7 +2,7 @@
 
 ## One line
 
-Talos is a software factory: rooms of agents that build, manage and extend software, with a decider that says what crosses between them and a record of every crossing.
+Talos: a software factory for building, managing and extending software. Rooms of agents on GBrain memory, with precise access control over what crosses between them, every crossing on the record, and runs exported to Memorable.
 
 ## Short (about 100 words)
 
