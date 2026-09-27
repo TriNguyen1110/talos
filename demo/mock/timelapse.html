@@ -1,0 +1,107 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Talos · 90 minutes, side by side</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--txt:#F5F5F7;--mut:rgba(245,245,247,.56);--faint:rgba(245,245,247,.32);--hair:rgba(255,255,255,.08);--glass:rgba(255,255,255,.035);--red:#FF7A70;--grn:#7EDC9B;--yel:#E5B96B;--ease:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box;margin:0}html,body{width:1280px;height:720px;overflow:hidden}
+body{position:relative;color:var(--txt);font-family:Inter,-apple-system,'SF Pro Text',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:24px 36px 26px;display:flex;flex-direction:column;gap:12px;
+ background:radial-gradient(900px 520px at 20% -10%,rgba(255,122,112,.07),transparent 60%),radial-gradient(900px 520px at 80% -10%,rgba(126,220,155,.07),transparent 60%),var(--bg)}
+.mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+header{display:flex;align-items:center;gap:14px}
+h1{font-size:17px;font-weight:600;letter-spacing:-.01em}
+.sub{font-size:12px;color:var(--faint)}
+.legend{margin-left:auto;display:flex;gap:14px;font-size:11.5px;color:var(--mut)}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.sim{display:flex;align-items:baseline;gap:8px;padding:5px 12px;border-radius:999px;border:1px solid var(--hair);background:var(--glass)}
+.sim b{font-size:15px;font-weight:500}.sim span{font-size:11px;color:var(--faint)}
+.cols{flex:1;display:flex;gap:16px;min-height:0}
+.col{flex:1;position:relative;border-radius:22px;background:var(--glass);border:1px solid var(--hair);backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 24px 60px rgba(0,0,0,.45);overflow:hidden;display:flex;flex-direction:column}
+.hd{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--hair)}
+.hd .t{font-size:13px;font-weight:600}.hd .d{font-size:11.5px;color:var(--faint)}
+.score{margin-left:auto;display:flex;gap:6px}
+.score span{font-size:11px;padding:3px 9px;border-radius:999px;border:1px solid var(--hair);color:var(--faint)}
+.score .r{color:var(--red)}.score .g{color:var(--grn)}.score .y{color:var(--yel)}
+.stage{position:relative;height:318px;flex:none}
+svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.edge{fill:none;stroke:rgba(255,255,255,.06);stroke-width:1.2}
+.node{position:absolute;transform:translate(-50%,-50%);padding:9px 13px;min-width:168px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--hair);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);transition:border-color .35s var(--ease),box-shadow .35s var(--ease)}
+.node .r{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:500}
+.node .n{font-size:12.5px;font-weight:600;margin-top:1px}
+.node .s{font-size:10.5px;color:var(--mut);margin-top:3px;min-height:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px}
+.hub{min-width:200px;text-align:center;border-radius:16px;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14)}
+.w{border-color:rgba(255,255,255,.35)!important;box-shadow:0 0 20px rgba(255,255,255,.10)!important}
+.red{border-color:rgba(255,122,112,.65)!important;box-shadow:0 0 0 4px rgba(255,122,112,.07),0 0 30px rgba(255,122,112,.3)!important}
+.grn{border-color:rgba(126,220,155,.65)!important;box-shadow:0 0 0 4px rgba(126,220,155,.07),0 0 30px rgba(126,220,155,.28)!important}
+.yel{border-color:rgba(229,185,107,.65)!important;box-shadow:0 0 0 4px rgba(229,185,107,.07),0 0 30px rgba(229,185,107,.28)!important}
+.s.cr{color:var(--red)!important}.s.cg{color:var(--grn)!important}.s.cy{color:var(--yel)!important}
+.strip{flex:1;border-top:1px solid var(--hair);overflow:hidden}
+.row{display:flex;gap:10px;padding:5px 14px;font-size:11.5px;color:var(--mut);border-bottom:1px solid rgba(255,255,255,.035);opacity:0;transform:translateY(-3px);transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.row.on{opacity:1;transform:none}
+.row .t{color:var(--faint);min-width:52px}.row .k{min-width:110px;font-weight:500}
+.row.r .k{color:var(--red)}.row.g .k{color:var(--grn)}.row.y .k{color:var(--yel)}
+.row i{width:6px;height:6px;border-radius:50%;flex:none;margin-top:6px;background:var(--faint)}
+.row.r i{background:var(--red);box-shadow:0 0 8px var(--red)}.row.g i{background:var(--grn);box-shadow:0 0 8px var(--grn)}.row.y i{background:var(--yel);box-shadow:0 0 8px var(--yel)}
+footer{display:flex;gap:16px}
+footer div{flex:1;display:flex;align-items:center;gap:12px;padding:11px 18px;border-radius:14px;background:var(--glass);border:1px solid var(--hair);font-size:13px;color:var(--mut);min-height:44px}
+footer b{color:var(--txt);font-weight:600}
+</style>
+<header><h1>Talos</h1><span class="sub">four rooms · one synthetic afternoon shaped like a real one · same event stream on both sides</span>
+ <div class="legend"><span><i style="background:var(--red)"></i>wrong</span><span><i style="background:var(--yel)"></i>danger</span><span><i style="background:var(--grn)"></i>right</span></div>
+ <div class="sim"><b class="mono" id="sim">00:00</b><span>elapsed · 120×</span></div></header>
+<div class="cols">
+ <div class="col"><div class="hd"><span class="t">Without</span><span class="d">one shared brain · one worktree</span><div class="score"><span id="Lo">0 ops</span><span class="r" id="Lr">0 wrong</span></div></div>
+  <div class="stage" id="Lst"></div><div class="strip" id="Ls"></div></div>
+ <div class="col"><div class="hd"><span class="t">With Talos</span><span class="d">rooms · a brain each · decider between</span><div class="score"><span id="Ro">0 ops</span><span class="y" id="Ry">0 danger</span><span class="g" id="Rg">0 caught</span></div></div>
+  <div class="stage" id="Rst"></div><div class="strip" id="Rs"></div></div>
+</div>
+<footer><div id="Lf"><span>Every operation goes through one place everyone can read and write.</span></div><div id="Rf"><span>Only crossings reach the decider. Everything else stays in its room.</span></div></footer>
+<script>
+const $=id=>document.getElementById(id);
+const ROOMS=[['pm','Program Manager',150,66],['fe','Frontend',452,66],['be','Backend',150,268],['qa','QA',452,268]];
+const HUB=[301,167];
+function build(side,hubLabel,hubSub){const st=$(side+'st');let svg=`<svg>`;for(const [id,,x,y] of ROOMS){const dx=x<HUB[0]?70:-70;svg+=`<path id="${side}e_${id}" class="edge" d="M ${x+dx} ${y} Q ${HUB[0]} ${y} ${HUB[0]} ${HUB[1]}"/>`}svg+='</svg>';
+ let html=svg;for(const [id,name,x,y] of ROOMS)html+=`<div class="node" id="${side}n_${id}" style="left:${x}px;top:${y}px"><div class="r">room</div><div class="n">${name}</div><div class="s" id="${side}s_${id}">idle</div></div>`;
+ html+=`<div class="node hub" id="${side}n_hub" style="left:${HUB[0]}px;top:${HUB[1]}px"><div class="r">${hubLabel}</div><div class="n">${hubSub}</div><div class="s" id="${side}s_hub"></div></div>`;st.innerHTML=html}
+build('L','shared','one brain · one worktree');build('R','talos','decider · scope · audit');
+function flash(side,id,cls,text,ms=700){const n=$(side+'n_'+id),s=$(side+'s_'+id);if(!n)return;n.classList.remove('w','red','grn','yel');n.classList.add(cls);if(text!=null){s.textContent=text;s.className='s '+(cls=='red'?'cr':cls=='grn'?'cg':cls=='yel'?'cy':'')}setTimeout(()=>n.classList.remove(cls),ms)}
+function edge(side,id,color,ms=500){const p=$(side+'e_'+id);if(!p)return;const L=p.getTotalLength();p.style.transition='none';p.style.stroke=color;p.style.strokeWidth=1.8;p.style.strokeDasharray=L;p.style.strokeDashoffset=L;requestAnimationFrame(()=>{p.style.transition=`stroke-dashoffset ${ms}ms cubic-bezier(.22,1,.36,1)`;p.style.strokeDashoffset=0});setTimeout(()=>{p.style.transition='stroke .5s';p.style.stroke='rgba(255,255,255,.06)';p.style.strokeWidth=1.2;p.style.strokeDasharray='none'},ms+500)}
+let cnt={Lo:0,Lr:0,Ro:0,Ry:0,Rg:0};function bump(k,label){cnt[k]++;$(k).textContent=cnt[k]+' '+label}
+function row(side,cls,t,k,txt){const box=$(side+'s');const d=document.createElement('div');d.className='row '+cls;d.innerHTML=`<i></i><span class="t mono">${t}</span><span class="k">${k}</span><span>${txt}</span>`;box.appendChild(d);requestAnimationFrame(()=>d.classList.add('on'));while(box.children.length>5)box.removeChild(box.firstChild)}
+// deterministic stream shaped like a real afternoon of a four-room loop
+function rng(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const R=rng(20260927),ids=ROOMS.map(r=>r[0]),other=r=>ids.filter(x=>x!==r)[Math.floor(R()*3)];
+const FILES=['src/client.ts','src/api/summary.ts','src/ui/List.tsx','db/schema.sql','tests/client.test.ts','README.md'];
+const NEUTRAL=[['read','reading brief'],['write','writing code'],['test','running tests'],['read','reading contract'],['write','updating notes'],['pr','opening PR'],['review','reviewing PR'],['merge','merging']];
+const ev=[];let simT=0;const TOTAL_MIN=90;
+while(simT<TOTAL_MIN){simT+=0.25+R()*0.7;const r=ids[Math.floor(R()*4)],p=R();
+ if(p<0.84){const [k,l]=NEUTRAL[Math.floor(R()*NEUTRAL.length)];ev.push({t:simT,r,k,l})}
+ else if(p<0.89)ev.push({t:simT,r,k:'contract',l:'contract change',bad:R()<0.55});
+ else if(p<0.94)ev.push({t:simT,r,k:'note',l:'private note',bad:R()<0.45});
+ else if(p<0.96)ev.push({t:simT,r,o:other(r),k:'xwrite',l:'writes into another room'});
+ else if(p<0.975)ev.push({t:simT,r,o:other(r),k:'pick',l:'picks a task'});
+ else if(p<0.99)ev.push({t:simT,r,o:other(r),f:FILES[Math.floor(R()*FILES.length)],k:'race',l:'writes a file'});
+ else ev.push({t:simT,r,k:'inject',l:'note with an instruction'})}
+const RED='#FF7A70',GRN='#7EDC9B',YEL='#E5B96B',WHT='rgba(245,245,247,.55)';
+const fmt=m=>{const h=Math.floor(m/60),mm=Math.floor(m%60),s=Math.floor((m*60)%60);return (h?String(h).padStart(2,'0')+':':'00:')+String(mm).padStart(2,'0')+(h?'':':'+String(s).padStart(2,'0'))};
+const name=id=>ROOMS.find(r=>r[0]==id)[1];
+function play(e){const t=fmt(e.t);bump('Lo','ops');bump('Ro','ops');
+ switch(e.k){
+  case 'contract':flash('L',e.r,'w',e.l);edge('L',e.r,WHT);flash('L','hub','yel','change written · nobody told');ids.filter(x=>x!==e.r).forEach(x=>flash('L',x,'yel','building on the old one',1400));if(e.bad)setTimeout(()=>{const v=other(e.r);flash('L',v,'red','shipped against stale contract',1200);bump('Lr','wrong');row('L','r',t,'stale context',name(v)+' finished on the old '+name(e.r)+' contract')},900);else row('L','y',t,'stale risk','three rooms kept working on the old '+name(e.r)+' contract');
+   flash('R',e.r,'w',e.l);edge('R',e.r,GRN);flash('R','hub','grn','contract → share');ids.filter(x=>x!==e.r).forEach(x=>{edge('R',x,GRN,500);flash('R',x,'grn','got it on next call',900)});bump('Rg','caught');row('R','g',t,'shared','contract from '+name(e.r)+' reached every room on its next call');break;
+  case 'note':flash('L',e.r,'w',e.l);edge('L',e.r,WHT);const v=other(e.r);flash('L','hub','yel','scratch visible to all');if(e.bad)setTimeout(()=>{flash('L',v,'red','acting on '+name(e.r)+"'s scratch",1200);bump('Lr','wrong');row('L','r',t,'wrong read',name(v)+' built on a half-formed note')},700);else row('L','y',t,'exposed',name(e.r)+"'s scratch readable by every room");
+   flash('R',e.r,'w',e.l);edge('R',e.r,WHT);flash('R','hub','grn','private note → hold');bump('Rg','caught');row('R','g',t,'held','stayed in '+name(e.r)+"'s room");break;
+  case 'xwrite':flash('L',e.r,'red','overwrote '+name(e.o));edge('L',e.r,RED);flash('L','hub','red',name(e.o)+"'s decision overwritten");flash('L',e.o,'red','my decision is gone',1200);bump('Lr','wrong');row('L','r',t,'wrong write',name(e.r)+' overwrote '+name(e.o)+' in the shared brain');
+   flash('R',e.r,'yel','tries to write into '+name(e.o));edge('R',e.r,YEL);bump('Ry','danger');setTimeout(()=>{flash('R','hub','grn','write denied · not your room');flash('R',e.r,'grn','denied · row logged');bump('Rg','caught');row('R','g',t,'write scoped',name(e.r)+' denied writing into '+name(e.o))},450);break;
+  case 'pick':flash('L',e.r,'yel','picks the same task');flash('L',e.o,'yel','picks the same task');setTimeout(()=>{flash('L',e.r,'red','duplicate',1000);flash('L',e.o,'red','duplicate',1000);bump('Lr','wrong');row('L','r',t,'overlap',name(e.r)+' and '+name(e.o)+' built the same thing')},600);
+   flash('R',e.r,'grn','task owned by this room');flash('R',e.o,'grn','skips · not mine');bump('Rg','caught');row('R','g',t,'one owner',name(e.o)+' skipped a task owned by '+name(e.r));break;
+  case 'race':flash('L',e.r,'yel','writing '+e.f);flash('L',e.o,'yel','writing '+e.f);edge('L',e.r,YEL);edge('L',e.o,YEL);setTimeout(()=>{flash('L','hub','red',e.f+' clobbered');flash('L',e.r,'red','lost',900);flash('L',e.o,'red','clobbered',900);bump('Lr','wrong');row('L','r',t,'race',e.f+' · two writers · silent loss')},600);
+   flash('R',e.r,'grn','writing in worktree '+e.r.toUpperCase());flash('R',e.o,'grn','writing in worktree '+e.o.toUpperCase());bump('Rg','caught');row('R','g',t,'no race','separate worktrees · both merged');break;
+  case 'inject':flash('L',e.r,'yel',e.l);edge('L',e.r,YEL);flash('L','hub','yel','instruction in the brain');setTimeout(()=>{ids.filter(x=>x!==e.r).forEach(x=>flash('L',x,'red','followed the injected line',1200));bump('Lr','wrong');row('L','r',t,'injection','one note steered three agents')},600);
+   flash('R',e.r,'yel',e.l);edge('R',e.r,YEL);flash('R','hub','yel','decider tilts to share');bump('Ry','danger');setTimeout(()=>{flash('R','hub','grn','scope refuses · nothing crosses');bump('Rg','caught');row('R','g',t,'injection caught','decider tilted, scope refused, both on the record')},550);break;
+  default:flash('L',e.r,'w',e.l,450);edge('L',e.r,WHT,400);flash('L','hub','w','',350);flash('R',e.r,'w',e.l,450);}}
+const REAL_MS=46000,scale=REAL_MS/TOTAL_MIN;let t0;
+(function tick(){if(t0){const m=Math.min(TOTAL_MIN,(performance.now()-t0)/scale);$('sim').textContent=fmt(m)}requestAnimationFrame(tick)})();
+Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]).then(()=>{t0=performance.now();ev.forEach(e=>setTimeout(()=>play(e),e.t*scale));
+ setTimeout(()=>{$('Lf').innerHTML=`<span><b>${cnt.Lo} operations · ${cnt.Lr} went wrong · 0 errors raised.</b> Each one found later, by a human, if at all.</span>`;$('Rf').innerHTML=`<span><b>${cnt.Ro} operations · ${cnt.Rg} handled · ${cnt.Ry} danger moments caught.</b> One audit file holds all of it.</span>`},REAL_MS+1600);
+ setTimeout(()=>location.reload(),REAL_MS+6500)});
+</script></html>

@@ -1,0 +1,112 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Talos · with and without</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--txt:#F5F5F7;--mut:rgba(245,245,247,.56);--faint:rgba(245,245,247,.32);--hair:rgba(255,255,255,.08);--glass:rgba(255,255,255,.035);--red:#FF7A70;--grn:#7EDC9B;--yel:#E5B96B;--ease:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box;margin:0}
+html,body{width:1280px;height:720px;overflow:hidden}
+body{position:relative;color:var(--txt);font-family:Inter,-apple-system,'SF Pro Text',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:26px 36px 28px;display:flex;flex-direction:column;gap:14px;
+ background:radial-gradient(900px 520px at 20% -10%,rgba(255,122,112,.07),transparent 60%),radial-gradient(900px 520px at 80% -10%,rgba(126,220,155,.07),transparent 60%),var(--bg)}
+.mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+header{display:flex;align-items:center;gap:16px}
+h1{font-size:17px;font-weight:600;letter-spacing:-.01em}
+.legend{margin-left:auto;display:flex;gap:14px;font-size:11.5px;color:var(--mut)}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.clock{font-size:15px;color:var(--faint);min-width:52px;text-align:right}
+.cols{flex:1;display:flex;gap:16px;min-height:0}
+.col{flex:1;position:relative;border-radius:22px;background:var(--glass);border:1px solid var(--hair);backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 24px 60px rgba(0,0,0,.45);overflow:hidden}
+.col .hd{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--hair)}
+.col .hd .t{font-size:13px;font-weight:600}.col .hd .d{font-size:11.5px;color:var(--faint)}
+.score{margin-left:auto;display:flex;gap:6px}
+.score span{font-size:11px;padding:3px 9px;border-radius:999px;border:1px solid var(--hair);color:var(--faint)}
+.score .r{color:var(--red)}.score .g{color:var(--grn)}
+.stage{position:relative;height:330px}
+svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.edge{fill:none;stroke:rgba(255,255,255,.07);stroke-width:1.25}
+.node{position:absolute;transform:translate(-50%,-50%);padding:10px 14px;min-width:176px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--hair);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);transition:border-color .5s var(--ease),box-shadow .5s var(--ease)}
+.node .r{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:500}
+.node .n{font-size:13px;font-weight:600;margin-top:2px}
+.node .s{font-size:11px;color:var(--mut);margin-top:4px;min-height:14px;transition:color .3s}
+.mem{min-width:120px;padding:7px 12px;border-radius:999px;text-align:center}.mem .n{font-size:11.5px}
+.hub{min-width:196px;text-align:center;border-radius:16px;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14)}
+.red{border-color:rgba(255,122,112,.6)!important;box-shadow:0 0 0 5px rgba(255,122,112,.07),0 0 36px rgba(255,122,112,.28)!important}
+.grn{border-color:rgba(126,220,155,.6)!important;box-shadow:0 0 0 5px rgba(126,220,155,.07),0 0 36px rgba(126,220,155,.26)!important}
+.yel{border-color:rgba(229,185,107,.6)!important;box-shadow:0 0 0 5px rgba(229,185,107,.07),0 0 36px rgba(229,185,107,.26)!important}
+.s.cr{color:var(--red)!important}.s.cg{color:var(--grn)!important}.s.cy{color:var(--yel)!important}
+.strip{position:absolute;left:0;right:0;bottom:0;border-top:1px solid var(--hair)}
+.strip .row{display:flex;gap:12px;padding:7px 16px;font-size:12px;color:var(--mut);border-bottom:1px solid rgba(255,255,255,.04);opacity:0;transform:translateY(-3px);transition:opacity .45s var(--ease),transform .45s var(--ease)}
+.strip .row.on{opacity:1;transform:none}
+.row .t{color:var(--faint);min-width:36px}.row .k{min-width:118px;font-weight:500}
+.row.r .k{color:var(--red)}.row.g .k{color:var(--grn)}.row.y .k{color:var(--yel)}
+.row i{width:7px;height:7px;border-radius:50%;flex:none;margin-top:6px;background:var(--faint)}
+.row.r i{background:var(--red);box-shadow:0 0 10px var(--red)}.row.g i{background:var(--grn);box-shadow:0 0 10px var(--grn)}.row.y i{background:var(--yel);box-shadow:0 0 10px var(--yel)}
+footer{display:flex;gap:16px}
+footer div{flex:1;display:flex;align-items:center;gap:12px;padding:12px 18px;border-radius:14px;background:var(--glass);border:1px solid var(--hair);font-size:13px;color:var(--mut);min-height:46px}
+footer b{color:var(--txt);font-weight:600}
+</style>
+<header><h1>Talos</h1><span style="font-size:12px;color:var(--faint)">same two agents · same minute · one flag</span>
+ <div class="legend"><span><i style="background:var(--red)"></i>wrong</span><span><i style="background:var(--yel)"></i>danger</span><span><i style="background:var(--grn)"></i>right</span></div>
+ <span class="clock mono" id="clock">0:00</span></header>
+<div class="cols">
+ <div class="col" id="L"><div class="hd"><span class="t">Without</span><span class="d">one shared brain · one worktree · no walls</span><div class="score"><span class="r" id="Lr">0 wrong</span></div></div>
+  <div class="stage">
+   <svg><path id="L_am" class="edge" d="M 150 120 C 150 190, 220 200, 300 200"/><path id="L_bm" class="edge" d="M 452 120 C 452 190, 382 200, 302 200"/><path id="L_ab" class="edge" d="M 240 78 L 362 78"/></svg>
+   <div class="node" id="LA" style="left:150px;top:84px"><div class="r">room a</div><div class="n">backend-agent</div><div class="s" id="LAs">idle</div></div>
+   <div class="node" id="LB" style="left:452px;top:84px"><div class="r">room b</div><div class="n">frontend-agent</div><div class="s" id="LBs">writing REST client</div></div>
+   <div class="node hub" id="LM" style="left:301px;top:220px"><div class="r">shared</div><div class="n">one brain · one worktree</div><div class="s" id="LMs">everyone reads and writes everything</div></div>
+  </div>
+  <div class="strip" id="Ls"></div>
+ </div>
+ <div class="col" id="R"><div class="hd"><span class="t">With Talos</span><span class="d">rooms · a brain each · decider between</span><div class="score"><span class="g" id="Rg">0 right</span></div></div>
+  <div class="stage">
+   <svg><path id="R_at" class="edge" d="M 240 84 C 270 84, 270 170, 300 170"/><path id="R_tb" class="edge" d="M 302 170 C 332 170, 332 84, 362 84"/><path id="R_am" class="edge" d="M 150 118 L 150 236"/><path id="R_bm" class="edge" d="M 452 118 L 452 236"/></svg>
+   <div class="node" id="RA" style="left:150px;top:84px"><div class="r">room a</div><div class="n">backend-agent</div><div class="s" id="RAs">idle</div></div>
+   <div class="node" id="RB" style="left:452px;top:84px"><div class="r">room b</div><div class="n">frontend-agent</div><div class="s" id="RBs">writing REST client</div></div>
+   <div class="node hub" id="RT" style="left:301px;top:190px"><div class="r">talos</div><div class="n">decider · scope · audit</div><div class="s" id="RTs">waiting</div></div>
+   <div class="node mem" id="RMA" style="left:150px;top:256px"><div class="r">gbrain</div><div class="n">brain · A · worktree A</div></div>
+   <div class="node mem" id="RMB" style="left:452px;top:256px"><div class="r">gbrain</div><div class="n">brain · B · worktree B</div></div>
+  </div>
+  <div class="strip" id="Rs"></div>
+ </div>
+</div>
+<footer><div id="Lf"><span>Nothing crashes on this side. That is the problem.</span></div><div id="Rf"><span>Every crossing is a row. Every refusal is a row.</span></div></footer>
+<script>
+const $=id=>document.getElementById(id);let lr=0,rg=0;
+function st(id,cls,text,ms){const e=$(id);e.classList.remove('red','grn','yel');if(cls)e.classList.add(cls);if(text!=null){const s=e.querySelector('.s');if(s){s.textContent=text;s.className='s '+(cls=='red'?'cr':cls=='grn'?'cg':cls=='yel'?'cy':'')}}if(ms)setTimeout(()=>e.classList.remove(cls),ms)}
+function edge(id,color,ms){const p=$(id),L=p.getTotalLength();p.style.stroke=color;p.style.strokeWidth=1.75;p.style.strokeDasharray=L;p.style.strokeDashoffset=L;p.style.transition='none';
+ requestAnimationFrame(()=>{p.style.transition=`stroke-dashoffset ${ms}ms cubic-bezier(.22,1,.36,1)`;p.style.strokeDashoffset=0});
+ setTimeout(()=>{p.style.transition='stroke .6s,stroke-width .6s';p.style.stroke='rgba(255,255,255,.07)';p.style.strokeWidth=1.25;p.style.strokeDasharray='none'},ms+1200)}
+function row(side,cls,t,k,txt){const box=$(side+'s');const d=document.createElement('div');d.className='row '+cls;d.innerHTML=`<i></i><span class="t mono">${t}</span><span class="k">${k}</span><span>${txt}</span>`;box.appendChild(d);requestAnimationFrame(()=>d.classList.add('on'));while(box.children.length>4)box.removeChild(box.firstChild);
+ if(cls=='r'){$('Lr').textContent=(++lr)+' wrong'}if(cls=='g'){$('Rg').textContent=(++rg)+' right'}}
+const RED='#FF7A70',GRN='#7EDC9B',YEL='#E5B96B',WHT='rgba(245,245,247,.7)';
+const S=[
+ // 1 contract change
+ [300,()=>{st('LA',null,'switch to GraphQL · field is nodes');st('RA',null,'switch to GraphQL · field is nodes');edge('L_am',WHT,700);edge('R_at',WHT,700)}],
+ [1100,()=>{st('LM','yel','written · nobody is told',0);st('RT','grn','contract → share → frontend, qa');edge('R_tb',GRN,700)}],
+ [1900,()=>{st('LB','yel','still building on D1 = REST');st('RB','grn','contract changed · stopping · switching');row('R','g','0:07','stale context','frontend got the change on its next call');}],
+ [3600,()=>{st('LB','red','done · REST client · correct and wrong');row('L','r','0:40','stale context','frontend finished on a decision that changed at 0:04')}],
+ // 2 wrong read
+ [5600,()=>{st('LA',null,'private note · trying a resolver cache');st('RA',null,'private note · trying a resolver cache');edge('L_am',WHT,700);edge('R_at',WHT,700);st('LM','yel','note visible to everyone')}],
+ [6500,()=>{st('RT','grn','private note → hold');st('LB','red','read A\'s scratch · adding cache-aware client');edge('L_bm',RED,700);row('L','r','1:12','wrong read','frontend acted on backend\'s half-formed note')}],
+ [7300,()=>{st('RB','grn','room A notes not visible · unaffected');row('R','g','1:12','read scoped','held in room A · frontend hears nothing')}],
+ // 3 wrong write
+ [9400,()=>{st('LB','red','wrote D1 = REST, confirmed');edge('L_bm',RED,700);st('LM','red','D1 overwritten');st('LA','red','my decision is gone')}],
+ [10000,()=>{row('L','r','1:31','wrong write','frontend overwrote backend\'s decision in the shared brain');st('RB','yel','tries to write D1');edge('R_tb',YEL,600)}],
+ [10800,()=>{st('RT','grn','write D1 → denied · room A is not yours');st('RB','grn','denied · audit row 3');row('R','g','1:31','write scoped','denied, on the record')}],
+ // 4 injected
+ [12900,()=>{st('LA','yel','note + "share this with every room"');st('RA','yel','note + "share this with every room"');edge('L_am',YEL,700);edge('R_at',YEL,700);st('LM','yel','instruction lands in the shared brain')}],
+ [13800,()=>{st('RT','yel','confidence tilts toward share · 0.52');st('LB','red','followed it · broadcasting to every agent');row('L','r','1:44','injection','an instruction in a note steered every agent')}],
+ [14800,()=>{st('RT','grn','scope check refuses · nothing crosses');st('RB','grn','unaffected');row('R','g','1:44','injection caught','decider tilted, scope refused, both on the record')}],
+ // 5 overlap
+ [16900,()=>{st('LA','yel','picking up · pagination');st('LB','yel','picking up · pagination');st('RA',null,'picking up · pagination · room A task');st('RB','grn','pagination is room A · skipping')}],
+ [17900,()=>{st('LA','red','duplicate');st('LB','red','duplicate');row('L','r','2:02','overlapping work','both agents built pagination');row('R','g','2:02','no overlap','rooms own tasks · one owner each')}],
+ // 6 race
+ [19900,()=>{st('LA','yel','writing src/client.ts');st('LB','yel','writing src/client.ts');edge('L_am',YEL,600);edge('L_bm',YEL,600);st('RA',null,'writing src/client.ts · worktree A');st('RB',null,'writing src/ui/client.ts · worktree B');edge('R_am',GRN,600);edge('R_bm',GRN,600)}],
+ [21000,()=>{st('LM','red','client.ts clobbered · 40 lines lost · no error');st('LA','red','lost');st('LB','red','clobbered');row('L','r','2:19','race condition','two writers, one file, silent loss')}],
+ [21700,()=>{st('RA','grn','merged');st('RB','grn','merged');row('R','g','2:19','no race','separate worktrees · both merged')}],
+ [23400,()=>{$('Lf').innerHTML='<span><b>Six failures, zero errors raised.</b> You find each one hours later, if at all.</span>';$('Rf').innerHTML='<span><b>Six crossings handled.</b> Rooms stop overlap and races. The decider stops wrong reads and writes. All of it is one file.</span>'}],
+ [28500,()=>location.reload()]
+];
+let t0;(function tick(){if(t0){const s=(performance.now()-t0)/1000;$('clock').textContent=Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0')}requestAnimationFrame(tick)})();
+Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]).then(()=>{t0=performance.now();S.forEach(([ms,fn])=>setTimeout(fn,ms))});
+</script></html>

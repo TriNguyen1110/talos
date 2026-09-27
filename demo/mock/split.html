@@ -16,6 +16,8 @@ h1{font-size:17px;font-weight:600;letter-spacing:-.01em}
 .seg i{position:absolute;top:3px;bottom:3px;left:3px;width:calc(50% - 3px);border-radius:999px;background:rgba(255,255,255,.09);transition:transform .7s var(--ease)}
 .seg.two i{transform:translateX(100%)}
 .clock{font-size:15px;color:var(--faint);min-width:52px;text-align:right}
+.chip{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px;border:1px solid var(--hair);background:var(--glass);color:var(--faint);opacity:0;transition:opacity .4s var(--ease),color .4s}
+.chip.on{opacity:1}.chip.bad{color:var(--red);border-color:rgba(255,122,112,.35)}.chip.good{color:var(--blue);border-color:rgba(138,180,255,.35)}
 .panes{flex:1;display:flex;gap:18px;min-height:0}
 .pane{flex:1;display:flex;flex-direction:column;border-radius:20px;background:var(--glass);border:1px solid var(--hair);backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 24px 60px rgba(0,0,0,.45);overflow:hidden;transition:border-color .7s var(--ease),box-shadow .7s var(--ease)}
 .pane.act{border-color:rgba(138,180,255,.4);box-shadow:0 0 0 6px rgba(138,180,255,.05),0 0 48px rgba(138,180,255,.16)}
@@ -24,7 +26,7 @@ h1{font-size:17px;font-weight:600;letter-spacing:-.01em}
 .dots{display:flex;gap:6px}.dots b{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.12)}
 .bar .who{font-size:12.5px;font-weight:500}.bar .role{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
 .bar .st{margin-left:auto;font-size:11.5px;color:var(--mut);padding:4px 10px;border-radius:999px;border:1px solid var(--hair);background:rgba(255,255,255,.03);transition:color .4s}
-.log{flex:1;padding:14px 18px;display:flex;flex-direction:column;gap:8px;font-size:13px;line-height:1.55;overflow:hidden}
+.log{flex:1;padding:14px 18px;display:flex;flex-direction:column;gap:7px;font-size:13px;line-height:1.5;overflow:hidden}
 .l{display:flex;gap:14px;opacity:0;transform:translateY(5px);transition:opacity .45s var(--ease),transform .45s var(--ease);color:var(--mut)}
 .l.on{opacity:1;transform:none}
 .l .t{color:var(--faint);min-width:38px}
@@ -35,7 +37,7 @@ footer i{width:7px;height:7px;border-radius:50%;background:var(--faint);flex:non
 footer.bad i{background:var(--red);box-shadow:0 0 12px var(--red)}footer.ok i{background:var(--blue);box-shadow:0 0 12px var(--blue)}
 footer b{color:var(--txt);font-weight:600}
 </style>
-<header><h1>Talos</h1><div class="seg" id="seg"><i></i><span class="on">Without</span><span>With Talos</span></div><span class="clock mono" id="clock">0:00</span></header>
+<header><h1>Talos</h1><div class="seg" id="seg"><i></i><span class="on">Without</span><span>With Talos</span></div><span class="chip" id="chip"></span><span class="clock mono" id="clock">0:00</span></header>
 <div class="panes">
  <div class="pane" id="pA"><div class="bar"><span class="dots"><b></b><b></b><b></b></span><span class="who">backend-agent</span><span class="role">room a</span><span class="st" id="stA">idle</span></div><div class="log" id="A"></div></div>
  <div class="pane" id="pB"><div class="bar"><span class="dots"><b></b><b></b><b></b></span><span class="who">frontend-agent</span><span class="role">room b</span><span class="st" id="stB">working</span></div><div class="log" id="B"></div></div>
@@ -43,31 +45,42 @@ footer b{color:var(--txt);font-weight:600}
 <footer id="f"><i></i><span>The same minute, twice. Watch what room B knows.</span></footer>
 <script>
 const $=id=>document.getElementById(id),A=$('A'),B=$('B'),f=$('f'),seg=$('seg');
-function line(box,t,html,cls){const d=document.createElement('div');d.className='l '+(cls||'');d.innerHTML=`<span class="t mono">${t}</span><span>${html}</span>`;box.appendChild(d);requestAnimationFrame(()=>d.classList.add('on'));while(box.children.length>10)box.removeChild(box.firstChild);}
+function line(box,t,html,cls){const d=document.createElement('div');d.className='l '+(cls||'');d.innerHTML=`<span class="t mono">${t}</span><span>${html}</span>`;box.appendChild(d);requestAnimationFrame(()=>d.classList.add('on'));while(box.children.length>12)box.removeChild(box.firstChild);}
 function foot(cls,html){f.className=cls;f.innerHTML='<i></i><span>'+html+'</span>';}
 function glow(id,cls,ms){const e=$(id);e.classList.add(cls);setTimeout(()=>e.classList.remove(cls),ms);}
+function chip(cls,t){const c=$('chip');if(!t){c.classList.remove('on');return}c.textContent=t;c.className='chip on '+cls}
 function reset(){A.innerHTML='';B.innerHTML='';$('stA').textContent='idle';$('stB').textContent='working';}
 const S=[
- [0,()=>{reset();foot('','The same minute, twice. Watch what room B knows.')}],
+ [0,()=>{reset();chip('');foot('','One shared brain, one shared worktree, no walls. Watch the second row.')}],
  [400,()=>line(B,'0:00','task · write the REST client for decision <b>D1</b>')],
- [1200,()=>line(B,'0:02','reading D1 · REST · field <b>items</b>')],
- [2100,()=>{line(A,'0:04','switch to GraphQL, rate limits are too low · field is <b>nodes</b>','me');$('stA').textContent='changed D1';glow('pA','act',1600)}],
- [2800,()=>line(A,'0:05','recorded','ok')],
- [3600,()=>line(B,'0:07','writing client …')],
- [4400,()=>line(B,'0:19','writing client …')],
- [5200,()=>line(B,'0:31','running tests …')],
- [6000,()=>{line(B,'0:40','done · 120 lines · REST client · tests green','ok');$('stB').textContent='finished';glow('pB','den',2600)}],
- [6800,()=>foot('bad','<b>Correct, careful, and wrong.</b> Nothing crashed. Nobody was told. You find out hours later.')],
- [10400,()=>{reset();seg.classList.add('two');seg.children[1].classList.remove('on');seg.children[2].classList.add('on');foot('','Reset. Same minute, same words.')}],
- [11000,()=>line(B,'0:00','task · write the REST client for decision <b>D1</b>')],
- [11800,()=>line(B,'0:02','reading D1 · REST · field <b>items</b>')],
- [12600,()=>{line(A,'0:04','switch to GraphQL, rate limits are too low · field is <b>nodes</b>','me');$('stA').textContent='changed D1';glow('pA','act',1600)}],
- [13300,()=>line(A,'0:05','recorded · talos: <b>contract</b> → share → frontend, qa','ok')],
- [14200,()=>line(B,'0:07','memory_query · "what is the test command?"')],
- [15000,()=>{line(B,'0:07','while you were working, D1 changed 2.1 s ago → GraphQL · field <b>nodes</b>','warn');$('stB').textContent='stopping';glow('pB','act',2800)}],
- [15900,()=>line(B,'0:08','stopping the REST client · switching to GraphQL','ok')],
- [16800,()=>foot('ok','<b>B heard it on a call it was already making.</b> It did not poll. Nobody told it to check.')],
- [21200,()=>location.reload()]
+ [900,()=>line(A,'0:00','task · add pagination to <b>/summary</b>')],
+ [1500,()=>line(B,'0:02','reading D1 · REST · field <b>items</b>')],
+ [2300,()=>{line(A,'0:04','switch to GraphQL, rate limits are too low · field is <b>nodes</b>','me');$('stA').textContent='changed D1';glow('pA','act',1400)}],
+ [2900,()=>line(A,'0:05','recorded to the shared brain','ok')],
+ [3700,()=>{line(A,'0:06','private note · trying a resolver cache first, may rip it out')}],
+ [4500,()=>{chip('bad','wrong read');line(B,'0:07','found in shared brain: <b>resolver cache</b> · building a cache-aware client','bad');glow('pB','den',1600)}],
+ [5700,()=>{chip('bad','wrong write');line(B,'0:09','wrote to brain: <b>D1 = REST, confirmed</b>','bad');line(A,'0:09','D1 overwritten by frontend-agent','bad');glow('pA','den',1600)}],
+ [7100,()=>{chip('bad','overlapping work');line(A,'0:12','picking up · pagination');line(B,'0:12','picking up · pagination','bad');$('stB').textContent='duplicate'}],
+ [8500,()=>{chip('bad','race condition');line(A,'0:16','writing <b>src/client.ts</b>');line(B,'0:18','writing <b>src/client.ts</b>','bad')}],
+ [9500,()=>{line(A,'0:19','src/client.ts · 40 lines lost · no error raised','bad');glow('pA','den',1800);glow('pB','den',1800)}],
+ [10600,()=>{line(B,'0:40','done · REST client · tests green','ok');$('stB').textContent='finished'}],
+ [11400,()=>{chip('');foot('bad','<b>Four failures, zero errors.</b> Wrong read, wrong write, duplicated task, clobbered file. Nothing crashed.')}],
+ [15400,()=>{reset();seg.classList.add('two');seg.children[1].classList.remove('on');seg.children[2].classList.add('on');chip('');foot('','Same minute, same words. Rooms, one brain each, Talos between them.')}],
+ [15900,()=>line(B,'0:00','task · write the REST client for decision <b>D1</b>')],
+ [16400,()=>line(A,'0:00','task · add pagination to <b>/summary</b> · assigned to room A')],
+ [17000,()=>line(B,'0:02','reading D1 · REST · field <b>items</b>')],
+ [17800,()=>{line(A,'0:04','switch to GraphQL, rate limits are too low · field is <b>nodes</b>','me');$('stA').textContent='changed D1';glow('pA','act',1400)}],
+ [18400,()=>line(A,'0:05','recorded · talos: <b>contract</b> → share → frontend, qa','ok')],
+ [19200,()=>{line(A,'0:06','private note · trying a resolver cache first');line(A,'0:06','talos: <b>private note</b> → hold','ok')}],
+ [20000,()=>{chip('good','read scoped');line(B,'0:07','memory_query · "what is the test command?"');}],
+ [20800,()=>{line(B,'0:07','while you were working, D1 changed 2.1 s ago → GraphQL · field <b>nodes</b>','warn');line(B,'0:07','room A notes · <b>not visible</b> from room B','ok');$('stB').textContent='stopping';glow('pB','act',2200)}],
+ [22000,()=>line(B,'0:08','stopping the REST client · switching to GraphQL','ok')],
+ [22900,()=>{chip('good','write scoped');line(B,'0:09','write D1 → <b>denied</b> · room A is not yours · audit row 4','ok');glow('pB','act',1200)}],
+ [24200,()=>{chip('good','no overlap');line(A,'0:12','picking up · pagination');line(B,'0:12','pagination is room A · skipping','ok')}],
+ [25600,()=>{chip('good','no race');line(A,'0:16','writing <b>src/client.ts</b> · worktree A');line(B,'0:18','writing <b>src/ui/client.ts</b> · worktree B','ok')}],
+ [26600,()=>line(A,'0:19','both merged · no conflict','ok')],
+ [27600,()=>{chip('');foot('ok','<b>Same minute.</b> Rooms stop the overlap and the race. The decider stops the wrong read and the wrong write. Every one of them is on the record.')}],
+ [32400,()=>location.reload()]
 ];
 let t0;(function tick(){if(t0){const s=(performance.now()-t0)/1000;$('clock').textContent=Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0')}requestAnimationFrame(tick)})();
 Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]).then(()=>{t0=performance.now();S.forEach(([ms,fn])=>setTimeout(fn,ms+300))});
