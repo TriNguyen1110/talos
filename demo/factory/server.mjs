@@ -25,12 +25,14 @@ http.createServer((req, res) => {
   }
   if (url.pathname === "/build") {           // POST-free on purpose: a click from the page starts the rooms
     if (building && building.exitCode === null) return send(409, JSON.stringify({ running: true }));
-    const args = ["demo/factory/build.sh"]; if (url.searchParams.get("fast")) args.push("--fast");
+    const product = (url.searchParams.get("product") || "dating").replace(/[^a-z]/g, "");
+    const args = ["demo/factory/build.sh", product]; if (url.searchParams.get("fast")) args.push("--fast");
     building = spawn("bash", args, { cwd: ROOT, env: { ...process.env, TALOS_DECIDER: url.searchParams.get("decider") || "rules" }, stdio: ["ignore", "pipe", "pipe"] });
     building.stdout.on("data", (d) => process.stdout.write(d)); building.stderr.on("data", (d) => process.stderr.write(d));
     return send(200, JSON.stringify({ started: true, pid: building.pid }));
   }
-  if (url.pathname === "/status") return send(200, JSON.stringify({ running: !!(building && building.exitCode === null) }));
+  if (url.pathname === "/status") { let cur = {}; try { cur = JSON.parse(fs.readFileSync(path.join(HERE, "current.json"), "utf8")); } catch {} return send(200, JSON.stringify({ running: !!(building && building.exitCode === null), product: cur.product || "dating" })); }
+  if (url.pathname === "/products") return send(200, JSON.stringify(fs.readdirSync(path.join(HERE, "products")).filter((f) => f.endsWith(".sh")).map((f) => f.replace(/\.sh$/, ""))));
   if (url.pathname === "/steps") {
     const p = path.join(HERE, "steps.log");
     return send(200, JSON.stringify(fs.existsSync(p) ? fs.readFileSync(p, "utf8").split("\n").filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean) : []));

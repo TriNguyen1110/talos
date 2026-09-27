@@ -1,0 +1,64 @@
+{
+ "posts": [
+  {
+   "id": 1,
+   "user": "Maya Chen",
+   "handle": "maya",
+   "avatar": "https://i.pravatar.cc/120?img=47",
+   "text": "our lab scheduling agent booked the same microscope for three people. it was very confident about it.",
+   "likes": 42,
+   "reposts": 6,
+   "time": "2m"
+  },
+  {
+   "id": 2,
+   "user": "Dev Okafor",
+   "handle": "devo",
+   "avatar": "https://i.pravatar.cc/120?img=12",
+   "text": "food truck carbon accounting update: the taco truck is net negative if you count the bike commute.",
+   "likes": 118,
+   "reposts": 21,
+   "time": "9m"
+  },
+  {
+   "id": 3,
+   "user": "Ana Ruiz",
+   "handle": "anar",
+   "avatar": "https://i.pravatar.cc/120?img=32",
+   "text": "sleep tracker says i slept 11 hours. i was in a 6-hour lecture. the model has opinions.",
+   "likes": 301,
+   "reposts": 58,
+   "time": "14m"
+  },
+  {
+   "id": 4,
+   "user": "Sam Park",
+   "handle": "samp",
+   "avatar": "https://i.pravatar.cc/120?img=59",
+   "text": "fixed 14 e-bikes today. the marketplace shipped 0 features. priorities.",
+   "likes": 77,
+   "reposts": 9,
+   "time": "31m"
+  },
+  {
+   "id": 5,
+   "user": "Priya Nair",
+   "handle": "priya",
+   "avatar": "https://i.pravatar.cc/120?img=25",
+   "text": "pancake robot demo at 5. bring syrup. seriously we forgot syrup last time.",
+   "likes": 512,
+   "reposts": 140,
+   "time": "1h"
+  },
+  {
+   "id": 6,
+   "user": "Kai Tanaka",
+   "handle": "kai",
+   "avatar": "https://i.pravatar.cc/120?img=68",
+   "text": "AR try-on for thrift stores now works on the bus. the bus did not consent.",
+   "likes": 96,
+   "reposts": 12,
+   "time": "2h"
+  }
+ ]
+}

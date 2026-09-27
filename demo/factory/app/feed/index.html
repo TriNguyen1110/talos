@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campus Feed</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--fg:#F5F5F7;--mute:rgba(245,245,247,.56);--dim:rgba(245,245,247,.32);--card:rgba(255,255,255,.035);--line:rgba(255,255,255,.09);--blue:#1D9BF0;--green:#7EDC9B;--yellow:#E5B96B;--red:#FF7A70;--pink:#F91880}
+:root[data-theme=light]{--bg:#FFFFFF;--fg:#0F1419;--mute:#536471;--dim:#8B98A5;--card:#F7F9F9;--line:#EFF3F4}
+*{box-sizing:border-box}html,body{height:100%}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:980px;margin:0 auto;display:grid;grid-template-columns:72px minmax(0,600px) 1fr;min-height:100vh}
+.side{border-right:1px solid var(--line);padding:14px 0;display:flex;flex-direction:column;align-items:center;gap:6px;position:sticky;top:0;height:100vh}
+.side button{width:48px;height:48px;border-radius:50%;border:0;background:none;color:var(--fg);font-size:20px;cursor:pointer}.side button:hover,.side button.on{background:var(--card)}.side .logo{font-size:22px;color:var(--blue)}
+.main{border-right:1px solid var(--line);min-height:100vh}.top{position:sticky;top:0;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:12px 16px;font-weight:700;font-size:18px;z-index:2;display:flex;justify-content:space-between;align-items:center}.top span{font-size:12px;color:var(--mute);font-weight:400}
+.compose{display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line)}.compose .av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#1D9BF0,#7EDC9B);flex:none;display:grid;place-items:center;font-weight:700;color:#111}
+.compose textarea{flex:1;background:none;border:0;color:var(--fg);font:inherit;font-size:18px;resize:none;outline:none;min-height:56px}.compose .bar{display:flex;justify-content:flex-end;align-items:center;gap:12px}
+.compose .count{font-size:12px;color:var(--mute)}.count.warn{color:var(--yellow)}.count.over{color:var(--red)}
+.post-btn{background:var(--blue);color:#fff;border:0;border-radius:999px;padding:8px 18px;font:inherit;font-weight:700;cursor:pointer}.post-btn:disabled{opacity:.5;cursor:default}
+.post{display:flex;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line)}.post:hover{background:var(--card)}.post .av{width:44px;height:44px;border-radius:50%;background:#333 center/cover;flex:none}
+.post .b{flex:1;min-width:0}.post .h{display:flex;gap:6px;align-items:baseline;font-size:15px}.post .h b{font-weight:700}.post .h span{color:var(--mute)}.post .t{margin:2px 0 8px;white-space:pre-wrap;word-wrap:break-word}
+.acts{display:flex;justify-content:space-between;max-width:420px;color:var(--mute);font-size:13px}.acts button{background:none;border:0;color:inherit;font:inherit;cursor:pointer;display:flex;gap:6px;align-items:center;padding:4px 8px;border-radius:999px}
+.acts button:hover{background:var(--card)}.acts .liked{color:var(--pink)}.acts .rp{color:var(--green)}.acts button:disabled{opacity:.4;cursor:default}
+.thread{margin-left:56px;border-left:2px solid var(--line);padding-left:12px}.reply{display:flex;gap:8px;padding:8px 16px 8px 0;font-size:14px}.reply .av{width:28px;height:28px}.replybox{display:flex;gap:8px;padding:6px 0 10px}.replybox input{flex:1;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--fg);font:inherit;outline:none}
+.right{padding:14px 18px;display:flex;flex-direction:column;gap:14px}.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 16px}.panel h3{margin:0 0 8px;font-size:18px}.trend{padding:8px 0;border-top:1px solid var(--line)}.trend:first-of-type{border-top:0}.trend small{color:var(--mute);display:block;font-size:12px}.trend b{display:block}
+.empty{color:var(--mute);padding:40px 16px;text-align:center}
+.profile{padding:16px}.profile .cover{height:120px;border-radius:16px;background:linear-gradient(135deg,#1D9BF0,#7EDC9B)}.profile .av{width:84px;height:84px;border-radius:50%;background:var(--bg);margin:-42px 0 0 16px;display:grid;place-items:center;font-size:32px;font-weight:700;border:4px solid var(--bg);color:var(--fg)}.profile h2{margin:8px 0 0}.profile .stats{display:flex;gap:18px;color:var(--mute);margin-top:8px}.profile .stats b{color:var(--fg)}
+.build{position:fixed;left:12px;bottom:6px;font-size:10px;color:var(--dim);font-family:ui-monospace,Menlo,monospace}.build b{color:var(--yellow);font-weight:600}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;border-radius:6px;padding:8px 14px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none}.toast.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap" id="wrap"><div class="side" id="side"></div><div class="main" id="main"></div><div class="right" id="right"></div></div>
+<div class="toast" id="toast"></div><div class="build" id="build"></div>
+<script>
+// The app the rooms build. It renders only what the build state says exists. posts.json and state.json are
+// written by the rooms' steps; the field name and the character limit come from the contract that crossed.
+let state = {}, posts = [], tab = "home", draft = "", liked = new Set(), reposted = new Set(), replies = {}, openThread = null, theme = "dark";
+const $ = (s) => document.querySelector(s);
+const F = () => new Set(state.features || []);
+const LIMIT = () => state.limit || 140;
+async function j(u){ try { const r = await fetch(u + "?t=" + Date.now()); return r.ok ? r.json() : null; } catch { return null; } }
+const list = (d) => !d ? [] : ((state.contract === "v2" ? d.posts : d.tweets) || []);
+const toast = (m) => { const t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("on"), 1400); };
+const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+const tags = (t) => esc(t).replace(/#(\w+)/g, '<span style="color:var(--blue)">#$1</span>').replace(/@(\w+)/g, '<span style="color:var(--blue)">@$1</span>');
+
+function post(p){
+  const f = F(), n = p.likes + (liked.has(p.id) ? 1 : 0), rp = p.reposts + (reposted.has(p.id) ? 1 : 0), rs = replies[p.id] || [];
+  return `<div class="post"><div class="av" style="background-image:url(${p.avatar||""})"></div><div class="b">
+    <div class="h"><b>${esc(p.user)}</b><span>@${esc(p.handle)} · ${esc(p.time)}</span></div>
+    <div class="t">${tags(p.text)}</div>
+    <div class="acts">
+      <button ${f.has("replies") ? `onclick="thread(${p.id})"` : "disabled"}>💬 ${rs.length || ""}</button>
+      <button class="${reposted.has(p.id) ? "rp" : ""}" ${f.has("reposts") ? `onclick="repost(${p.id})"` : "disabled"}>🔁 ${rp}</button>
+      <button class="${liked.has(p.id) ? "liked" : ""}" ${f.has("likes") ? `onclick="like(${p.id})"` : "disabled"}>${liked.has(p.id) ? "♥" : "♡"} ${n}</button>
+      <button disabled>↗</button>
+    </div>
+    ${f.has("replies") && openThread === p.id ? `<div class="thread">${rs.map(r => `<div class="reply"><div class="av" style="background:linear-gradient(135deg,#1D9BF0,#7EDC9B)"></div><div><b>You</b> <span style="color:var(--mute)">@you · now</span><div>${tags(r)}</div></div></div>`).join("")}<div class="replybox"><input id="rb-${p.id}" placeholder="Post your reply" onkeydown="if(event.key==='Enter')reply(${p.id})"><button class="post-btn" onclick="reply(${p.id})">Reply</button></div></div>` : ""}
+  </div></div>`;
+}
+function render(){
+  const f = F(); document.documentElement.dataset.theme = f.has("theme") ? theme : "dark";
+  $("#build").innerHTML = state.version ? `build <b>v${state.version}</b> · contract <b>${state.contract || "-"}</b> · limit <b>${LIMIT()}</b> · ${(state.features||[]).join(" · ")}` : "";
+  $("#side").innerHTML = f.has("shell") ? `<button class="logo">◉</button><button class="${tab==="home"?"on":""}" onclick="go('home')" title="Home">⌂</button>${f.has("trending") ? `<button onclick="go('home')" title="Explore">#</button>` : ""}${f.has("profile") ? `<button class="${tab==="me"?"on":""}" onclick="go('me')" title="Profile">👤</button>` : ""}${f.has("theme") ? `<button onclick="toggleTheme()" title="Theme">◐</button>` : ""}` : "";
+  const main = $("#main");
+  if (!f.has("shell")) { main.innerHTML = `<div class="empty">PM has not scoped the product yet.</div>`; $("#right").innerHTML = ""; return; }
+  if (tab === "me" && f.has("profile")) {
+    main.innerHTML = `<div class="top">Profile</div><div class="profile"><div class="cover"></div><div class="av">T</div><h2>Tri</h2><div style="color:var(--mute)">@tri · Stanford · building the path between rooms</div><div class="stats"><span><b>${posts.filter(p=>p.handle==="you").length}</b> posts</span><span><b>${liked.size}</b> likes</span><span><b>${reposted.size}</b> reposts</span></div></div>${posts.filter(p=>p.handle==="you").map(post).join("")}`;
+  } else {
+    const over = draft.length > LIMIT();
+    main.innerHTML = `<div class="top">Home <span>${state.tagline || ""}</span></div>
+      ${f.has("compose") ? `<div class="compose"><div class="av">T</div><div style="flex:1;display:flex;flex-direction:column"><textarea id="ta" placeholder="What's happening at ${state.college || "Stanford"}?" oninput="draft=this.value;counter()">${esc(draft)}</textarea><div class="bar"><span class="count ${f.has("counter") ? (over ? "over" : draft.length > LIMIT()*0.85 ? "warn" : "") : ""}" id="count">${f.has("counter") ? `${draft.length} / ${LIMIT()}` : `${LIMIT()} max`}</span><button class="post-btn" id="pb" onclick="send()" ${!draft.trim() || over ? "disabled" : ""}>Post</button></div></div></div>` : ""}
+      ${f.has("timeline") ? (posts.length ? posts.map(post).join("") : `<div class="empty">The timeline arrives when Backend's contract crosses.</div>`) : `<div class="empty">The timeline arrives when Backend's contract crosses.</div>`}`;
+  }
+  const trends = {}; for (const p of posts) for (const m of String(p.text).match(/#\w+/g) || []) trends[m] = (trends[m] || 0) + 1;
+  const tl = Object.entries(trends).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  $("#right").innerHTML = f.has("trending") ? `<div class="panel"><h3>Trending at Stanford</h3>${(tl.length ? tl : [["#demoday", 1], ["#pancakerobot", 1], ["#officehours", 1]]).map(([t, n]) => `<div class="trend"><small>Trending · Campus</small><b>${t}</b><small>${n} post${n === 1 ? "" : "s"}</small></div>`).join("")}</div><div class="panel"><h3>Who to follow</h3>${posts.slice(0, 3).map(p => `<div class="trend"><b>${esc(p.user)}</b><small>@${esc(p.handle)}</small></div>`).join("")}</div>` : (f.has("timeline") ? `<div class="panel" style="color:var(--mute);font-size:13px">Trending and profile arrive in sprint two.</div>` : "");
+}
+window.counter = () => { const c = $("#count"), over = draft.length > LIMIT(); if (F().has("counter")) { c.textContent = `${draft.length} / ${LIMIT()}`; c.className = "count " + (over ? "over" : draft.length > LIMIT() * 0.85 ? "warn" : ""); } $("#pb").disabled = !draft.trim() || over; };
+window.send = () => { if (!draft.trim() || draft.length > LIMIT()) return; posts.unshift({ id: Date.now(), user: "Tri", handle: "you", avatar: "", text: draft, likes: 0, reposts: 0, time: "now" }); draft = ""; render(); toast("Your post was sent."); };
+window.like = (id) => { liked.has(id) ? liked.delete(id) : liked.add(id); render(); };
+window.repost = (id) => { if (reposted.has(id)) reposted.delete(id); else { reposted.add(id); toast("Reposted"); } render(); };
+window.thread = (id) => { openThread = openThread === id ? null : id; render(); setTimeout(() => $(`#rb-${id}`)?.focus(), 0); };
+window.reply = (id) => { const i = $(`#rb-${id}`); if (!i || !i.value.trim()) return; (replies[id] ||= []).push(i.value.trim()); render(); };
+window.go = (t) => { tab = t; render(); };
+window.toggleTheme = () => { theme = theme === "dark" ? "light" : "dark"; render(); };
+async function tick(){
+  const s = await j("state.json");
+  if (s && JSON.stringify(s) !== JSON.stringify(state)) {
+    const contractChanged = s.contract !== state.contract;
+    state = s; const mine = posts.filter(p => p.handle === "you"); posts = [...mine, ...list(await j("posts.json"))];
+    if (contractChanged) toast(`Contract ${s.contract}: ${s.limit} characters`);
+    if (!F().has("profile")) tab = "home";
+    render();
+  }
+}
+tick(); setInterval(tick, 1000);
+</script>
+</body>
+</html>
