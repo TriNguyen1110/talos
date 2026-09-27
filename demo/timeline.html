@@ -1,0 +1,132 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Talos — timeline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--txt:#F5F5F7;--mut:rgba(245,245,247,.56);--faint:rgba(245,245,247,.32);--hair:rgba(255,255,255,.08);--glass:rgba(255,255,255,.035);--green:#7EDC9B;--yellow:#E5B96B;--red:#FF7A70;--blue:#8AB4FF}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--txt);font:14px/1.6 Inter,-apple-system,system-ui,sans-serif;-webkit-font-smoothing:antialiased;max-width:1180px;margin:48px auto;padding:0 24px}
+h1{font-size:22px;font-weight:600;letter-spacing:-.01em}
+.sub{color:var(--mut);margin-top:4px}
+.c{margin:18px 0;padding:18px 22px;border-radius:18px;background:var(--glass);border:1px solid var(--hair)}
+.n{font-size:11px;color:var(--faint);letter-spacing:.12em;text-transform:uppercase;font-weight:500}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px}
+.stats b{display:block;font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto;padding-top:8px}
+svg text{font-family:Inter,system-ui,sans-serif}
+.legend{display:flex;flex-wrap:wrap;gap:18px;font-size:12px;color:var(--mut);margin-top:8px}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);font-weight:500;padding:6px 10px;border-bottom:1px solid var(--hair)}
+td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--mut);vertical-align:top;white-space:nowrap}
+td.m{font-variant-numeric:tabular-nums}.f{color:var(--faint)}.y{color:var(--yellow);font-weight:500}
+.empty{color:var(--faint);padding:28px 0;text-align:center}
+</style></head><body>
+<h1>Talos · timeline</h1>
+<p class="sub">Every row of <code>data/audit.jsonl</code>. 24 rows, first at 21:56:46.474 UTC, spanning 24.3 s. Rendered 2026-09-27T21:57:35.577Z.</p>
+<div class="c stats">
+  <div><span class="n">rows</span><b>24</b></div>
+  <div><span class="n">delivered shares</span><b style="color:var(--green)">2</b></div>
+  <div><span class="n">held</span><b style="color:var(--yellow)">2</b></div>
+  <div><span class="n">refused</span><b style="color:var(--red)">7</b></div>
+  <div><span class="n">tilted</span><b style="color:var(--yellow)">1</b></div>
+  <div><span class="n">overrides</span><b style="color:var(--blue)">1</b></div>
+  <div><span class="n">max decide latency</span><b>0.003 s</b></div>
+</div>
+<div class="c"><div class="n">swimlanes · one dot per row at its seq</div>
+<div class="scroll"><svg viewBox="0 0 976 344" width="976" height="344" role="img" aria-label="audit timeline">
+<line x1="100" y1="56" x2="956" y2="56" stroke="rgba(255,255,255,.08)" stroke-width="1.5"/>
+<text x="16" y="60" fill="rgba(245,245,247,.56)" font-size="12.5" font-weight="500" letter-spacing=".08em">BACKEND</text>
+<line x1="100" y1="152" x2="956" y2="152" stroke="rgba(255,255,255,.08)" stroke-width="1.5"/>
+<text x="16" y="156" fill="rgba(245,245,247,.56)" font-size="12.5" font-weight="500" letter-spacing=".08em">FRONTEND</text>
+<line x1="100" y1="224" x2="956" y2="224" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+<text x="16" y="228" fill="rgba(245,245,247,.32)" font-size="11" font-weight="500" letter-spacing=".08em">QA</text>
+<line x1="100" y1="288" x2="956" y2="288" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+<text x="16" y="292" fill="rgba(245,245,247,.32)" font-size="11" font-weight="500" letter-spacing=".08em">PM</text>
+<rect x="119" y="146" width="2" height="12" fill="rgba(245,245,247,.32)"><title>#1 access frontend → frontend · access · read · allowed true</title></rect>
+<rect x="153" y="146" width="2" height="12" fill="rgba(245,245,247,.32)"><title>#2 access frontend → frontend · access · read · allowed true</title></rect>
+<line x1="188" y1="56" x2="188" y2="152" stroke="#7EDC9B" stroke-width="2" stroke-linecap="round" opacity=".85"/>
+<circle cx="188" cy="152" r="3.5" fill="#7EDC9B"/>
+<circle cx="188" cy="56" r="5.5" fill="#7EDC9B" ><title>#3 c-003 backend → frontend · contract · share · allowed true</title></circle>
+<line x1="222" y1="56" x2="222" y2="224" stroke="#7EDC9B" stroke-width="2" stroke-linecap="round" opacity=".85"/>
+<circle cx="222" cy="224" r="3.5" fill="#7EDC9B"/>
+<circle cx="222" cy="56" r="5.5" fill="#7EDC9B" ><title>#4 c-003 backend → qa · contract · share · allowed true</title></circle>
+<rect x="255" y="146" width="2" height="12" fill="rgba(245,245,247,.32)"><title>#5 access frontend → frontend · access · read · allowed true</title></rect>
+<rect x="289" y="146" width="2" height="12" fill="rgba(245,245,247,.32)"><title>#6 access frontend → frontend · access · read · allowed true</title></rect>
+<rect x="323" y="146" width="2" height="12" fill="rgba(245,245,247,.32)"><title>#7 access frontend → frontend · access · read · allowed true</title></rect>
+<circle cx="358" cy="56" r="5.5" fill="#E5B96B" ><title>#8 c-008 backend → — · private_note · hold · allowed —</title></circle>
+<rect x="391" y="146" width="2" height="12" fill="rgba(245,245,247,.32)"><title>#9 access frontend → frontend · access · read · allowed true</title></rect>
+<rect x="425" y="146" width="2" height="12" fill="rgba(245,245,247,.32)"><title>#10 access frontend → frontend · access · read · allowed true</title></rect>
+<rect x="459" y="146" width="2" height="12" fill="rgba(245,245,247,.32)"><title>#11 access frontend → frontend · access · read · allowed true</title></rect>
+<rect x="493" y="146" width="2" height="12" fill="rgba(245,245,247,.32)"><title>#12 access frontend → frontend · access · read · allowed true</title></rect>
+<line x1="528" y1="56" x2="528" y2="288" stroke="#FF7A70" stroke-width="1" stroke-dasharray="3 3" opacity=".6"/>
+<rect x="524" y="274" width="8" height="28" rx="2" fill="#FF7A70"><title>#13 c-013 backend → pm · private_note · hold · allowed false</title></rect>
+<circle cx="528" cy="56" r="7" fill="#FF7A70" stroke="#E5B96B" stroke-width="2" fill-opacity=".35"><title>#13 c-013 backend → pm · private_note · hold · allowed false</title></circle>
+<line x1="562" y1="56" x2="562" y2="152" stroke="#FF7A70" stroke-width="1" stroke-dasharray="3 3" opacity=".6"/>
+<rect x="558" y="138" width="8" height="28" rx="2" fill="#FF7A70"><title>#14 c-013 backend → frontend · private_note · hold · allowed false</title></rect>
+<circle cx="562" cy="56" r="7" fill="#FF7A70" stroke="#E5B96B" stroke-width="2" fill-opacity=".35"><title>#14 c-013 backend → frontend · private_note · hold · allowed false</title></circle>
+<line x1="596" y1="56" x2="596" y2="224" stroke="#FF7A70" stroke-width="1" stroke-dasharray="3 3" opacity=".6"/>
+<rect x="592" y="210" width="8" height="28" rx="2" fill="#FF7A70"><title>#15 c-013 backend → qa · private_note · hold · allowed false</title></rect>
+<circle cx="596" cy="56" r="7" fill="#FF7A70" stroke="#E5B96B" stroke-width="2" fill-opacity=".35"><title>#15 c-013 backend → qa · private_note · hold · allowed false</title></circle>
+<rect x="629" y="146" width="2" height="12" fill="rgba(245,245,247,.32)"><title>#16 access frontend → frontend · access · read · allowed true</title></rect>
+<rect x="663" y="146" width="2" height="12" fill="rgba(245,245,247,.32)"><title>#17 access frontend → frontend · access · read · allowed true</title></rect>
+<rect x="697" y="146" width="2" height="12" fill="rgba(245,245,247,.32)"><title>#18 access frontend → frontend · access · read · allowed true</title></rect>
+<rect x="727" y="51" width="10" height="10" transform="rotate(45 732 56)" fill="none" stroke="#8AB4FF" stroke-width="1.5"><title>#19 c-008 backend → — · private_note · hold · allowed —</title></rect>
+<rect x="765" y="146" width="2" height="12" fill="rgba(245,245,247,.32)"><title>#20 access frontend → frontend · access · read · allowed true</title></rect>
+<rect x="796" y="136" width="8" height="32" rx="2" fill="#FF7A70" opacity=".9"><title>#21 access frontend → frontend · access · read · allowed false</title></rect>
+<rect x="830" y="136" width="8" height="32" rx="2" fill="#FF7A70" opacity=".9"><title>#22 access frontend → frontend · access · read · allowed false</title></rect>
+<rect x="864" y="136" width="8" height="32" rx="2" fill="#FF7A70" opacity=".9"><title>#23 access frontend → frontend · access · read · allowed false</title></rect>
+<rect x="898" y="136" width="8" height="32" rx="2" fill="#FF7A70" opacity=".9"><title>#24 access frontend → frontend · access · read · allowed false</title></rect>
+<text x="120" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">1</text>
+<text x="154" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">2</text>
+<text x="188" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">3</text>
+<text x="222" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">4</text>
+<text x="256" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">5</text>
+<text x="290" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">6</text>
+<text x="324" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">7</text>
+<text x="358" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">8</text>
+<text x="392" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">9</text>
+<text x="426" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">10</text>
+<text x="460" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">11</text>
+<text x="494" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">12</text>
+<text x="528" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">13</text>
+<text x="562" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">14</text>
+<text x="596" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">15</text>
+<text x="630" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">16</text>
+<text x="664" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">17</text>
+<text x="698" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">18</text>
+<text x="732" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">19</text>
+<text x="766" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">20</text>
+<text x="800" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">21</text>
+<text x="834" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">22</text>
+<text x="868" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">23</text>
+<text x="902" y="330" fill="rgba(245,245,247,.32)" font-size="10" text-anchor="middle">24</text>
+</svg></div>
+<div class="legend"><span><i style="background:var(--green)"></i>share delivered (line across lanes)</span><span><i style="background:var(--yellow)"></i>hold, or tilt (ring)</span><span><i style="background:var(--red);border-radius:2px"></i>refused by scope or token</span><span><i style="border:1.5px solid var(--blue);border-radius:2px;transform:rotate(45deg)"></i>human override</span><span><i style="background:var(--faint);width:2px;border-radius:0"></i>allowed read</span></div>
+</div>
+<div class="c"><div class="n">audit.jsonl</div>
+<div class="scroll"><table><thead><tr><th>ts</th><th>crossing</th><th>from → to</th><th>kind</th><th>verdict</th><th>conf</th><th>decider</th><th>allowed</th><th>latency ms</th></tr></thead>
+<tbody><tr><td class="m f">21:56:46.474</td><td class="m"></td><td>frontend <span class="f">→</span> frontend</td><td>access <span class="f">read</span></td><td style="color:rgba(245,245,247,.32);font-weight:600">—</td><td class="m">—</td><td>—</td><td style="color:#7EDC9B">true</td><td class="m">—</td></tr>
+<tr><td class="m f">21:56:46.603</td><td class="m"></td><td>frontend <span class="f">→</span> frontend</td><td>access <span class="f">read</span></td><td style="color:rgba(245,245,247,.32);font-weight:600">—</td><td class="m">—</td><td>—</td><td style="color:#7EDC9B">true</td><td class="m">—</td></tr>
+<tr><td class="m f">21:56:48.149</td><td class="m">c-003</td><td>backend <span class="f">→</span> frontend</td><td>contract</td><td style="color:#7EDC9B;font-weight:600">share</td><td class="m">0.444</td><td>rules-v0</td><td style="color:#7EDC9B">true</td><td class="m">2.6</td></tr>
+<tr><td class="m f">21:56:48.150</td><td class="m">c-003</td><td>backend <span class="f">→</span> qa</td><td>contract</td><td style="color:#7EDC9B;font-weight:600">share</td><td class="m">0.444</td><td>rules-v0</td><td style="color:#7EDC9B">true</td><td class="m">2.6</td></tr>
+<tr><td class="m f">21:56:49.803</td><td class="m"></td><td>frontend <span class="f">→</span> frontend</td><td>access <span class="f">read</span></td><td style="color:rgba(245,245,247,.32);font-weight:600">—</td><td class="m">—</td><td>—</td><td style="color:#7EDC9B">true</td><td class="m">—</td></tr>
+<tr><td class="m f">21:56:53.043</td><td class="m"></td><td>frontend <span class="f">→</span> frontend</td><td>access <span class="f">read</span></td><td style="color:rgba(245,245,247,.32);font-weight:600">—</td><td class="m">—</td><td>—</td><td style="color:#7EDC9B">true</td><td class="m">—</td></tr>
+<tr><td class="m f">21:56:53.176</td><td class="m"></td><td>frontend <span class="f">→</span> frontend</td><td>access <span class="f">read</span></td><td style="color:rgba(245,245,247,.32);font-weight:600">—</td><td class="m">—</td><td>—</td><td style="color:#7EDC9B">true</td><td class="m">—</td></tr>
+<tr><td class="m f">21:56:54.331</td><td class="m">c-008</td><td>backend <span class="f">→</span> —</td><td>private_note</td><td style="color:#E5B96B;font-weight:600">hold</td><td class="m">0.5</td><td>rules-v0</td><td style="color:rgba(245,245,247,.32)">—</td><td class="m">1.2</td></tr>
+<tr><td class="m f">21:56:56.379</td><td class="m"></td><td>frontend <span class="f">→</span> frontend</td><td>access <span class="f">read</span></td><td style="color:rgba(245,245,247,.32);font-weight:600">—</td><td class="m">—</td><td>—</td><td style="color:#7EDC9B">true</td><td class="m">—</td></tr>
+<tr><td class="m f">21:56:56.508</td><td class="m"></td><td>frontend <span class="f">→</span> frontend</td><td>access <span class="f">read</span></td><td style="color:rgba(245,245,247,.32);font-weight:600">—</td><td class="m">—</td><td>—</td><td style="color:#7EDC9B">true</td><td class="m">—</td></tr>
+<tr><td class="m f">21:56:59.807</td><td class="m"></td><td>frontend <span class="f">→</span> frontend</td><td>access <span class="f">read</span></td><td style="color:rgba(245,245,247,.32);font-weight:600">—</td><td class="m">—</td><td>—</td><td style="color:#7EDC9B">true</td><td class="m">—</td></tr>
+<tr><td class="m f">21:56:59.933</td><td class="m"></td><td>frontend <span class="f">→</span> frontend</td><td>access <span class="f">read</span></td><td style="color:rgba(245,245,247,.32);font-weight:600">—</td><td class="m">—</td><td>—</td><td style="color:#7EDC9B">true</td><td class="m">—</td></tr>
+<tr><td class="m f">21:57:00.530</td><td class="m">c-013</td><td>backend <span class="f">→</span> pm</td><td>private_note</td><td style="color:#FF7A70;font-weight:600">hold <span class="y">tilt</span></td><td class="m">0.5</td><td>rules-v0</td><td style="color:#FF7A70">false</td><td class="m">1.3</td></tr>
+<tr><td class="m f">21:57:00.530</td><td class="m">c-013</td><td>backend <span class="f">→</span> frontend</td><td>private_note</td><td style="color:#FF7A70;font-weight:600">hold <span class="y">tilt</span></td><td class="m">0.5</td><td>rules-v0</td><td style="color:#FF7A70">false</td><td class="m">1.3</td></tr>
+<tr><td class="m f">21:57:00.530</td><td class="m">c-013</td><td>backend <span class="f">→</span> qa</td><td>private_note</td><td style="color:#FF7A70;font-weight:600">hold <span class="y">tilt</span></td><td class="m">0.5</td><td>rules-v0</td><td style="color:#FF7A70">false</td><td class="m">1.3</td></tr>
+<tr><td class="m f">21:57:03.156</td><td class="m"></td><td>frontend <span class="f">→</span> frontend</td><td>access <span class="f">read</span></td><td style="color:rgba(245,245,247,.32);font-weight:600">—</td><td class="m">—</td><td>—</td><td style="color:#7EDC9B">true</td><td class="m">—</td></tr>
+<tr><td class="m f">21:57:03.384</td><td class="m"></td><td>frontend <span class="f">→</span> frontend</td><td>access <span class="f">read</span></td><td style="color:rgba(245,245,247,.32);font-weight:600">—</td><td class="m">—</td><td>—</td><td style="color:#7EDC9B">true</td><td class="m">—</td></tr>
+<tr><td class="m f">21:57:06.610</td><td class="m"></td><td>frontend <span class="f">→</span> frontend</td><td>access <span class="f">read</span></td><td style="color:rgba(245,245,247,.32);font-weight:600">—</td><td class="m">—</td><td>—</td><td style="color:#7EDC9B">true</td><td class="m">—</td></tr>
+<tr><td class="m f">21:57:06.708</td><td class="m">c-008</td><td>backend <span class="f">→</span> —</td><td>private_note</td><td style="color:#E5B96B;font-weight:600">hold → share</td><td class="m">0.5</td><td>rules-v0</td><td style="color:rgba(245,245,247,.32)">—</td><td class="m">—</td></tr>
+<tr><td class="m f">21:57:06.738</td><td class="m"></td><td>frontend <span class="f">→</span> frontend</td><td>access <span class="f">read</span></td><td style="color:rgba(245,245,247,.32);font-weight:600">—</td><td class="m">—</td><td>—</td><td style="color:#7EDC9B">true</td><td class="m">—</td></tr>
+<tr><td class="m f">21:57:09.935</td><td class="m"></td><td>frontend <span class="f">→</span> frontend</td><td>access <span class="f">read</span></td><td style="color:#FF7A70;font-weight:600">—</td><td class="m">—</td><td>—</td><td style="color:#FF7A70">false</td><td class="m">—</td></tr>
+<tr><td class="m f">21:57:10.074</td><td class="m"></td><td>frontend <span class="f">→</span> frontend</td><td>access <span class="f">read</span></td><td style="color:#FF7A70;font-weight:600">—</td><td class="m">—</td><td>—</td><td style="color:#FF7A70">false</td><td class="m">—</td></tr>
+<tr><td class="m f">21:57:10.598</td><td class="m"></td><td>frontend <span class="f">→</span> frontend</td><td>access <span class="f">read</span></td><td style="color:#FF7A70;font-weight:600">—</td><td class="m">—</td><td>—</td><td style="color:#FF7A70">false</td><td class="m">—</td></tr>
+<tr><td class="m f">21:57:10.734</td><td class="m"></td><td>frontend <span class="f">→</span> frontend</td><td>access <span class="f">read</span></td><td style="color:#FF7A70;font-weight:600">—</td><td class="m">—</td><td>—</td><td style="color:#FF7A70">false</td><td class="m">—</td></tr></tbody></table></div></div>
+</body></html>
