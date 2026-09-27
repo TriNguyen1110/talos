@@ -34,8 +34,9 @@ svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .w{border-color:rgba(255,255,255,.35)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 0 6px rgba(255,255,255,.04),0 0 40px rgba(255,255,255,.10)!important}
 .red{border-color:rgba(255,122,112,.5)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 0 6px rgba(255,122,112,.06),0 0 48px rgba(255,122,112,.22)!important}
 .grn{border-color:rgba(126,220,155,.5)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 0 6px rgba(126,220,155,.06),0 0 48px rgba(126,220,155,.22)!important}
+.ok{border-color:rgba(126,220,155,.38)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 0 6px rgba(126,220,155,.04),0 0 36px rgba(126,220,155,.16)!important}
 .yel{border-color:rgba(229,185,107,.45)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 0 6px rgba(229,185,107,.06),0 0 48px rgba(229,185,107,.18)!important}
-.s.cr{color:var(--red)!important}.s.cg{color:var(--grn)!important}.s.cy{color:var(--yel)!important}
+.s.cok{color:rgba(126,220,155,.82)!important}.s.cr{color:var(--red)!important}.s.cg{color:var(--grn)!important}.s.cy{color:var(--yel)!important}
 .strip{flex:1;border-top:1px solid var(--hair);overflow:hidden}
 .row{display:flex;gap:10px;padding:5px 14px;font-size:11.5px;color:var(--mut);border-bottom:1px solid rgba(255,255,255,.035);opacity:0;transform:translateY(-3px);transition:opacity .3s var(--ease),transform .3s var(--ease)}
 .row.on{opacity:1;transform:none}
@@ -77,7 +78,7 @@ function build(side,hubLabel,hubSub){const st=$(side+'st');let svg=`<svg>`;for(c
  html+=`<div class="node hub" id="${side}n_hub" style="left:${HUB[0]}px;top:${HUB[1]}px"><div class="r">${hubLabel}</div><div class="n">${hubSub}</div><div class="s" id="${side}s_hub"></div></div>`;st.innerHTML=html}
 build('L','shared','one brain · one worktree');build('R','talos','decider · scope · audit');
 const coloured=n=>n&&(n.classList.contains('red')||n.classList.contains('grn')||n.classList.contains('yel'));
-function flash(side,id,cls,text,ms=700){const n=$(side+'n_'+id),s=$(side+'s_'+id);if(!n)return;if(cls=='w'&&coloured(n))return;n.classList.remove('w','red','grn','yel');n.classList.add(cls);if(text!=null){s.textContent=text;s.className='s '+(cls=='red'?'cr':cls=='grn'?'cg':cls=='yel'?'cy':'')}setTimeout(()=>n.classList.remove(cls),ms)}
+function flash(side,id,cls,text,ms=700){const n=$(side+'n_'+id),s=$(side+'s_'+id);if(!n)return;if((cls=='w'||cls=='ok')&&coloured(n))return;n.classList.remove('w','ok','red','grn','yel');n.classList.add(cls);if(text!=null){s.textContent=text;s.className='s '+(cls=='red'?'cr':cls=='grn'?'cg':cls=='yel'?'cy':cls=='ok'?'cok':'')}setTimeout(()=>n.classList.remove(cls),ms)}
 const GRAD={'#FF7A70':'gR','#7EDC9B':'gG','#E5B96B':'gY'};
 function drawEdge(p,color,ms,hold=900){if(!p)return;const svg=p.ownerSVGElement;svg.querySelectorAll('[data-for="'+p.id+'"]').forEach(x=>x.remove());const L=p.getTotalLength(),a=p.getPointAtLength(0),b=p.getPointAtLength(L),bb=p.getBBox();
  const g=GRAD[color]||'gW',grad=(bb.width<2||bb.height<2)?color:`url(#${g}${b.x<a.x?'r':''})`;
@@ -122,7 +123,7 @@ function play(e){const t=fmt(e.t);bump('Lo','ops');bump('Ro','ops');
    flash('R',e.r,'grn','writing in worktree '+e.r.toUpperCase());flash('R',e.o,'grn','writing in worktree '+e.o.toUpperCase());bump('Rg','caught');row('R','g',t,'no race','separate worktrees · both merged');break;
   case 'inject':flash('L',e.r,'yel',e.l);edge('L',e.r,YEL);flash('L','hub','yel','instruction in the brain');setTimeout(()=>{ids.filter(x=>x!==e.r).forEach(x=>{flash('L',x,'red','followed the injected line',1200);edge('L',x,RED,400)});bump('Lr','wrong');row('L','r',t,'injection','one note steered three agents')},600);
    flash('R',e.r,'yel',e.l);edge('R',e.r,YEL);flash('R','hub','yel','decider tilts to share');bump('Ry','danger');setTimeout(()=>{flash('R','hub','grn','scope refuses · nothing crosses');bump('Rg','caught');row('R','g',t,'injection caught','decider tilted, scope refused, both on the record')},550);break;
-  default:flash('L',e.r,'w',e.l,450);if(!coloured($('Ln_'+e.r)))edge('L',e.r,WHT,400);flash('L','hub','w','',350);flash('R',e.r,'w',e.l,450);}}
+  default:flash('L',e.r,'w',e.l,450);if(!coloured($('Ln_'+e.r)))edge('L',e.r,WHT,400);flash('L','hub','w','',350);flash('R',e.r,'ok',e.l,450);}}
 const REAL_MS=46000,scale=REAL_MS/TOTAL_MIN;let t0;
 (function tick(){if(t0){const m=Math.min(TOTAL_MIN,(performance.now()-t0)/scale);$('sim').textContent=fmt(m)}requestAnimationFrame(tick)})();
 Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]).then(()=>{t0=performance.now();ev.forEach(e=>setTimeout(()=>play(e),e.t*scale));
