@@ -117,3 +117,9 @@ End every turn with one line: clock phase, what changed, the commits, the board 
 - `demo/factory/`: `server.mjs` (http://localhost:4242), `index.html` (left: audit log, flow graph, counters, processes; right: iframe of the app), `app/` (Startup College Dating, renders only what has crossed), `build.sh` (four rooms build it through Talos; 24 audit rows). Tested 15:57 PDT. For the live demo: start the server, open the page full screen, run `build.sh`. `FACTORY_COMMIT=1` makes each room commit as its own git author.
 
 - If Tri has not run the history rewrite yet, remind him; every new commit since is on top of the old history and gets replayed by the cherry-pick range (`5c1b53f..main-prep`), so the commands still work unchanged.
+
+## Update 16:25 PDT
+
+
+
+- The factory takes a product: `bash demo/factory/build.sh dating|feed [--fast]`; the page has a product switcher and a run button. Products are `demo/factory/products/*.sh` plus `demo/factory/app/<name>/index.html`; the pattern is in `demo/factory/products/README.md`. Codex may be adding a third product in parallel (new files only); do not edit `products/` or `app/` files you did not create.
