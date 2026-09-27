@@ -6,66 +6,132 @@
 <title>Startup College Dating</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0A0A0D;--fg:#F5F5F7;--mute:rgba(245,245,247,.56);--card:rgba(255,255,255,.04);--line:rgba(255,255,255,.09);--pink:#FF5E7E;--green:#7EDC9B;--yellow:#E5B96B;--red:#FF7A70}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 Inter,system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px}
-h1{font-size:22px;font-weight:700;letter-spacing:-.01em;margin:0}.sub{color:var(--mute);font-size:13px;margin:4px 0 18px}
-.empty{color:var(--mute);border:1px dashed var(--line);border-radius:18px;padding:40px 24px;text-align:center;max-width:360px}
-.deck{position:relative;width:340px;height:460px}
-.card{position:absolute;inset:0;background:#15151C center/cover no-repeat;border:1px solid var(--line);border-radius:22px;padding:22px;display:flex;flex-direction:column;justify-content:flex-end;transition:transform .35s ease,opacity .35s ease;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-.card::after{content:'';position:absolute;inset:0;border-radius:22px;background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.85) 100%)}.card>*{position:relative;z-index:1}.card .ava{position:absolute;top:22px;left:22px;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:22px;background:var(--pink);color:#111}.card.photo .ava{display:none}.card .age{color:var(--mute);font-weight:400;font-size:20px;margin-left:8px}
-.card h2{margin:0;font-size:26px}.card .tag{color:var(--pink);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
-.card p{color:var(--mute);margin:8px 0 0}.card.out-left{transform:translateX(-140%) rotate(-18deg);opacity:0}.card.out-right{transform:translateX(140%) rotate(18deg);opacity:0}
-.btns{display:flex;gap:18px;margin-top:18px}.btns button{width:64px;height:64px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:24px;cursor:pointer}
-.btns .like{border-color:var(--green);color:var(--green)}.btns .pass{border-color:var(--red);color:var(--red)}
-.matches{margin-top:22px;width:340px}.matches h3{font-size:13px;color:var(--mute);letter-spacing:.12em;text-transform:uppercase;margin:0 0 8px}
-.matches ul{list-style:none;margin:0;padding:0;display:flex;gap:8px;flex-wrap:wrap}.matches li{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px}
-.build{position:fixed;left:12px;bottom:10px;font-size:11px;color:var(--mute);font-family:ui-monospace,Menlo,monospace}
-.build b{color:var(--yellow);font-weight:600}
+:root{--bg:#0A0A0D;--fg:#F5F5F7;--mute:rgba(245,245,247,.56);--dim:rgba(245,245,247,.32);--card:rgba(255,255,255,.04);--line:rgba(255,255,255,.09);--pink:#FF5E7E;--green:#7EDC9B;--yellow:#E5B96B;--red:#FF7A70;--blue:#8AB4FF}
+*{box-sizing:border-box}html,body{height:100%}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 Inter,system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;-webkit-font-smoothing:antialiased;user-select:none}
+header{width:100%;max-width:420px;display:flex;align-items:center;justify-content:space-between;padding:18px 20px 8px}
+h1{font-size:20px;font-weight:700;letter-spacing:-.01em;margin:0;background:linear-gradient(90deg,#FF5E7E,#FF9A5E);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mute);font-size:12px}
+main{flex:1;width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center;padding:8px 20px 0;min-height:0}
+.empty{color:var(--mute);border:1px dashed var(--line);border-radius:18px;padding:40px 24px;text-align:center;width:100%;margin-top:40px}
+.deck{position:relative;width:100%;max-width:360px;height:520px;margin-top:6px}
+.card{position:absolute;inset:0;background:#15151C center/cover no-repeat;border:1px solid var(--line);border-radius:22px;padding:22px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 20px 60px rgba(0,0,0,.5);transition:transform .35s ease,opacity .35s ease;cursor:grab;overflow:hidden;touch-action:none}
+.card.drag{transition:none;cursor:grabbing}.card.behind{transform:scale(.95) translateY(14px);opacity:.7;pointer-events:none}
+.card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,.88) 100%)}
+.card>*{position:relative;z-index:1}
+.dots{position:absolute;top:10px;left:14px;right:14px;display:flex;gap:4px;z-index:2}.dots i{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.35)}.dots i.on{background:#fff}
+.card .ava{position:absolute;top:22px;left:22px;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:22px;background:var(--pink);color:#111}.card.photo .ava{display:none}
+.card h2{margin:0;font-size:28px;display:flex;align-items:baseline;gap:8px}.card h2 span{font-weight:400;font-size:22px;color:rgba(255,255,255,.75)}
+.card .tag{color:var(--pink);font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.card .meta{color:rgba(255,255,255,.7);font-size:13px;margin-top:2px;display:flex;gap:10px}.card p{color:rgba(255,255,255,.8);margin:8px 0 0;font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.chips b{font-weight:500;font-size:12px;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:3px 10px;background:rgba(0,0,0,.25)}
+.stamp{position:absolute;top:34px;font-size:34px;font-weight:800;letter-spacing:.08em;padding:4px 12px;border:4px solid;border-radius:10px;opacity:0;transform:rotate(-16deg);z-index:2}
+.stamp.like{left:22px;color:var(--green);border-color:var(--green)}.stamp.nope{right:22px;color:var(--red);border-color:var(--red);transform:rotate(16deg)}.stamp.super{left:50%;top:auto;bottom:120px;transform:translateX(-50%);color:var(--blue);border-color:var(--blue)}
+.out-left{transform:translate(-160%,40px) rotate(-22deg)!important;opacity:0}.out-right{transform:translate(160%,40px) rotate(22deg)!important;opacity:0}.out-up{transform:translateY(-140%) scale(.9)!important;opacity:0}
+.btns{display:flex;gap:14px;margin:18px 0 12px;align-items:center}.btns button{border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer;display:grid;place-items:center;font-size:22px;transition:transform .12s}
+.btns button:active{transform:scale(.9)}.btns .sm{width:48px;height:48px;font-size:18px}.btns .lg{width:64px;height:64px}
+.btns .rewind{color:var(--yellow);border-color:rgba(229,185,107,.5)}.btns .pass{color:var(--red);border-color:rgba(255,122,112,.6)}.btns .super{color:var(--blue);border-color:rgba(138,180,255,.6)}.btns .like{color:var(--green);border-color:rgba(126,220,155,.6)}.btns .boost{color:#C39BFF;border-color:rgba(195,155,255,.5)}
+nav{width:100%;max-width:420px;display:flex;justify-content:space-around;border-top:1px solid var(--line);padding:10px 0 14px;background:var(--bg)}
+nav button{background:none;border:0;color:var(--dim);font:inherit;font-size:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}nav button.on{color:var(--pink)}nav button b{font-size:18px;font-weight:400}
+nav button .badge{position:relative}nav button .badge s{position:absolute;top:-4px;right:-10px;text-decoration:none;background:var(--pink);color:#111;font-size:10px;font-weight:700;border-radius:999px;padding:0 5px}
+.list{width:100%;display:flex;flex-direction:column;gap:10px;margin-top:10px}.row{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 12px}
+.row .pic{width:52px;height:52px;border-radius:50%;background:#333 center/cover;flex:none}.row .t{flex:1;min-width:0}.row .t b{display:block}.row .t span{color:var(--mute);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}.row .when{color:var(--dim);font-size:11px}
+.me{width:100%;text-align:center;margin-top:20px}.me .pic{width:120px;height:120px;border-radius:50%;margin:0 auto 12px;background:linear-gradient(135deg,#FF5E7E,#FF9A5E);display:grid;place-items:center;font-size:40px;font-weight:700;color:#111}.me .stats{display:flex;justify-content:center;gap:24px;margin-top:14px}.me .stats div b{display:block;font-size:22px}.me .stats div span{color:var(--mute);font-size:12px}
+.match{position:fixed;inset:0;background:rgba(10,10,13,.92);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:9;text-align:center;padding:24px}.match.on{display:flex}
+.match h2{font-size:44px;margin:0;background:linear-gradient(90deg,#FF5E7E,#FF9A5E);-webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic}
+.match .pair{display:flex;gap:-10px}.match .pair .pic{width:110px;height:110px;border-radius:50%;border:3px solid var(--bg);background:#333 center/cover}.match .pair .pic+ .pic{margin-left:-22px}
+.match p{color:var(--mute);max-width:300px;margin:0}.match button{border:0;border-radius:999px;padding:12px 26px;font:inherit;font-weight:600;cursor:pointer}.match .go{background:var(--pink);color:#111}.match .keep{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.toast{position:fixed;bottom:86px;left:50%;transform:translateX(-50%);background:#1E1E27;border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:12px;color:var(--mute);opacity:0;transition:opacity .2s;pointer-events:none}.toast.on{opacity:1}
+.build{position:fixed;left:12px;bottom:6px;font-size:10px;color:var(--dim);font-family:ui-monospace,Menlo,monospace}.build b{color:var(--yellow);font-weight:600}
 </style>
 </head>
 <body>
-<h1 id="title">Startup College Dating</h1>
-<div class="sub" id="sub">waiting for the rooms…</div>
-<div id="root"></div>
+<header><div><h1 id="title">Startup College Dating</h1><div class="sub" id="sub">waiting for the rooms…</div></div><div class="sub" id="where"></div></header>
+<main id="root"></main>
+<nav id="nav"></nav>
+<div class="match" id="match"></div>
+<div class="toast" id="toast"></div>
 <div class="build" id="build"></div>
 <script>
-// The app the rooms build. It renders whatever the build state says exists; nothing is faked ahead of
-// the crossing that enabled it. state.json and profiles.json are written by the rooms' steps.
-let state = {}, profiles = [], idx = 0, matches = [];
+// The app the rooms build. It renders only what the build state says exists; state.json and
+// profiles.json are written by the rooms' steps, and nothing shows before its crossing arrived.
+let state = {}, profiles = [], idx = 0, matches = [], history = [], tab = "deck", photoIdx = 0, superLeft = 1;
 const $ = (s) => document.querySelector(s);
+const F = () => new Set(state.features || []);
 async function j(u){ try { const r = await fetch(u + "?t=" + Date.now()); return r.ok ? r.json() : null; } catch { return null; } }
-function list(data){ // the contract decides the field name; the frontend follows the contract it was told about
-  if (!data) return [];
-  return (state.contract === "v2" ? data.nodes : data.items) || [];
+const list = (d) => !d ? [] : ((state.contract === "v2" ? d.nodes : d.items) || []);
+const photos = (p) => p.photos && p.photos.length ? p.photos : (p.photo ? [p.photo] : []);
+const toast = (m) => { const t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("on"), 1400); };
+
+function card(p, behind){
+  const ph = photos(p), src = ph[behind ? 0 : Math.min(photoIdx, ph.length - 1)];
+  return `<div class="card${src ? " photo" : ""}${behind ? " behind" : ""}" id="${behind ? "next" : "card"}" style="${src ? `background-image:url(${src})` : ""}">
+    ${ph.length > 1 && !behind ? `<div class="dots">${ph.map((_, i) => `<i class="${i === photoIdx ? "on" : ""}"></i>`).join("")}</div>` : ""}
+    <div class="stamp like">LIKE</div><div class="stamp nope">NOPE</div><div class="stamp super">SUPER LIKE</div>
+    <div class="ava">${p.name[0]}</div>
+    <div class="tag">${p.startup} · ${p.college}</div>
+    <h2>${p.name}<span>${p.age || ""}</span></h2>
+    ${F().has("details") ? `<div class="meta"><span>📍 ${p.distance || "1"} mi</span><span>🎓 ${p.year || "senior"}</span><span>🚀 ${p.stage || "pre-seed"}</span></div>` : ""}
+    <p>${p.bio}</p>
+    ${F().has("details") && p.interests ? `<div class="chips">${p.interests.map(i => `<b>${i}</b>`).join("")}</div>` : ""}
+  </div>`;
 }
 function render(){
-  const f = new Set(state.features || []);
+  const f = F();
   $("#title").textContent = state.title || "Startup College Dating";
   $("#sub").textContent = state.tagline || "waiting for the rooms…";
+  $("#where").textContent = f.has("details") ? "Stanford · 2 mi" : "";
   $("#build").innerHTML = state.version ? `build <b>v${state.version}</b> · contract <b>${state.contract || "-"}</b> · ${(state.features||[]).join(" · ")}` : "";
+  $("#nav").innerHTML = f.has("tabs") ? [["deck","🔥","Swipe"],["matches","💬","Matches"],["me","👤","Profile"]].map(([k,i,l]) =>
+    `<button class="${tab===k?"on":""}" onclick="go('${k}')"><b class="badge">${i}${k==="matches"&&matches.length?`<s>${matches.length}</s>`:""}</b>${l}</button>`).join("") : "";
   const root = $("#root");
   if (!f.has("deck")) { root.innerHTML = `<div class="empty">${f.has("shell") ? "The deck arrives when Backend's contract crosses." : "PM has not scoped the product yet."}</div>`; return; }
-  const cur = profiles[idx];
+  if (tab === "matches") { root.innerHTML = `<div class="list">${matches.length ? matches.map(m => `<div class="row"><div class="pic" style="background-image:url(${photos(m)[0]||""})"></div><div class="t"><b>${m.name}</b><span>${m.super ? "⭐ super liked you back · " : ""}${m.startup} · say hi about ${m.interests ? m.interests[0].toLowerCase() : "their startup"}</span></div><div class="when">just now</div></div>`).join("") : `<div class="empty">No ${state.matchesLabel || "matches"} yet. Keep swiping.</div>`}</div>`; return; }
+  if (tab === "me") { root.innerHTML = `<div class="me"><div class="pic">T</div><h2 style="margin:0">Tri, 22</h2><div class="sub">Stanford · Talos · building the path between rooms</div><div class="stats"><div><b>${history.filter(h=>h.like).length}</b><span>likes sent</span></div><div><b>${matches.length}</b><span>${state.matchesLabel || "matches"}</span></div><div><b>${superLeft}</b><span>super like left</span></div></div></div>`; return; }
+  const cur = profiles[idx], nxt = profiles[idx + 1];
   root.innerHTML = `
-    <div class="deck">${cur ? `<div class="card${cur.photo?" photo":""}" id="card" style="${cur.photo?`background-image:url(${cur.photo})`:""}"><div class="ava">${cur.name[0]}</div><div class="tag">${cur.startup} · ${cur.college}</div><h2>${cur.name}<span class="age">${cur.age||""}</span></h2><p>${cur.bio}</p></div>` : `<div class="empty">No more founders nearby.</div>`}</div>
-    <div class="btns"><button class="pass" onclick="swipe(false)">✕</button><button class="like" onclick="swipe(true)">♥</button></div>
-    ${f.has("matches") ? `<div class="matches"><h3>${state.matchesLabel || "matches"}</h3><ul>${matches.map(m=>`<li>${m}</li>`).join("") || "<li style='opacity:.5'>none yet</li>"}</ul></div>` : ""}`;
+    <div class="deck">${nxt ? card(nxt, true) : ""}${cur ? card(cur, false) : `<div class="empty">No more founders nearby.<br><br><span style="font-size:12px">Change your radius in the next sprint.</span></div>`}</div>
+    <div class="btns">
+      ${f.has("rewind") ? `<button class="sm rewind" onclick="rewind()" title="rewind">↺</button>` : ""}
+      <button class="lg pass" onclick="swipe('nope')" title="nope">✕</button>
+      ${f.has("superlike") ? `<button class="sm super" onclick="swipe('super')" title="super like">★</button>` : ""}
+      <button class="lg like" onclick="swipe('like')" title="like">♥</button>
+      ${f.has("rewind") ? `<button class="sm boost" onclick="toast('Boost is a paid feature. PM has not scoped billing.')" title="boost">⚡</button>` : ""}
+    </div>`;
+  if (cur) wire($("#card"), cur);
 }
-window.swipe = (like) => {
-  const c = $("#card"); if (!c) return;
-  const cur = profiles[idx];
-  if (like && cur && cur.likesYou) matches.push(cur.name);
-  c.classList.add(like ? "out-right" : "out-left");
-  setTimeout(() => { idx++; render(); }, 320);
+function wire(el, p){
+  if (!F().has("gestures")) return;
+  let sx = 0, sy = 0, dx = 0, dy = 0, down = false, moved = false;
+  const stamps = { like: el.querySelector(".stamp.like"), nope: el.querySelector(".stamp.nope"), super: el.querySelector(".stamp.super") };
+  el.onpointerdown = (e) => { down = true; moved = false; sx = e.clientX; sy = e.clientY; el.classList.add("drag"); el.setPointerCapture(e.pointerId); };
+  el.onpointermove = (e) => { if (!down) return; dx = e.clientX - sx; dy = e.clientY - sy; if (Math.abs(dx) + Math.abs(dy) > 6) moved = true;
+    el.style.transform = `translate(${dx}px,${dy}px) rotate(${dx / 14}deg)`;
+    stamps.like.style.opacity = Math.max(0, dx / 90); stamps.nope.style.opacity = Math.max(0, -dx / 90); stamps.super.style.opacity = F().has("superlike") ? Math.max(0, -dy / 110) : 0; };
+  el.onpointerup = (e) => { down = false; el.classList.remove("drag");
+    if (!moved) { const ph = photos(p); if (ph.length > 1) { photoIdx = (photoIdx + 1) % ph.length; render(); } return; }
+    if (dx > 100) return swipe("like"); if (dx < -100) return swipe("nope"); if (dy < -120 && F().has("superlike")) return swipe("super");
+    el.style.transform = ""; Object.values(stamps).forEach(s => s.style.opacity = 0); };
+}
+window.go = (t) => { tab = t; render(); };
+window.swipe = (kind) => {
+  const c = $("#card"), cur = profiles[idx]; if (!c || !cur) return;
+  if (kind === "super") { if (superLeft <= 0) return toast("No super likes left today."); superLeft--; }
+  c.querySelector(`.stamp.${kind === "super" ? "super" : kind}`).style.opacity = 1;
+  c.classList.add(kind === "like" ? "out-right" : kind === "nope" ? "out-left" : "out-up");
+  history.push({ i: idx, like: kind !== "nope", super: kind === "super" });
+  const matched = kind !== "nope" && cur.likesYou;
+  setTimeout(() => { idx++; photoIdx = 0; if (matched && F().has("matchscreen")) { matches.push({ ...cur, super: kind === "super" }); showMatch(cur); } else if (matched) { matches.push(cur); toast(`${cur.name} liked you back`); } render(); }, 320);
 };
+window.rewind = () => { const h = history.pop(); if (!h) return toast("Nothing to rewind."); idx = h.i; photoIdx = 0; if (h.like) matches = matches.filter(m => m.id !== profiles[idx].id); toast("Rewound."); render(); };
+function showMatch(p){ const m = $("#match"); m.innerHTML = `<h2>It's a match!</h2><div class="pair"><div class="pic" style="background:linear-gradient(135deg,#FF5E7E,#FF9A5E)"></div><div class="pic" style="background-image:url(${photos(p)[0]||""})"></div></div><p>You and ${p.name} both want to talk about ${p.interests ? p.interests[0].toLowerCase() : "startups"}.</p><button class="go" onclick="closeMatch('matches')">Say hi</button><button class="keep" onclick="closeMatch('deck')">Keep swiping</button>`; m.classList.add("on"); }
+window.closeMatch = (t) => { $("#match").classList.remove("on"); tab = t; render(); };
 async function tick(){
   const s = await j("state.json");
   if (s && JSON.stringify(s) !== JSON.stringify(state)) {
     const contractChanged = s.contract !== state.contract;
-    state = s;
-    const p = await j("profiles.json");
-    profiles = list(p);
-    if (contractChanged) idx = 0;
+    state = s; profiles = list(await j("profiles.json"));
+    if (contractChanged) { idx = 0; history = []; }
+    if (!F().has("tabs")) tab = "deck";
     render();
   }
 }

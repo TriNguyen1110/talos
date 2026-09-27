@@ -8,7 +8,19 @@
    "startup": "Loopwise",
    "bio": "Building a scheduling agent for labs. Will trade a coffee for a code review.",
    "likesYou": true,
-   "photo": "https://i.pravatar.cc/600?img=47"
+   "photos": [
+    "https://i.pravatar.cc/600?img=47",
+    "https://i.pravatar.cc/600?img=45",
+    "https://i.pravatar.cc/600?img=44"
+   ],
+   "interests": [
+    "Agents",
+    "Climbing",
+    "Espresso"
+   ],
+   "distance": 1,
+   "year": "junior",
+   "stage": "pre-seed"
   },
   {
    "id": 2,
@@ -18,7 +30,18 @@
    "startup": "Kelp",
    "bio": "Carbon accounting for food trucks. Ships on Sundays.",
    "likesYou": false,
-   "photo": "https://i.pravatar.cc/600?img=12"
+   "photos": [
+    "https://i.pravatar.cc/600?img=12",
+    "https://i.pravatar.cc/600?img=13"
+   ],
+   "interests": [
+    "Climate",
+    "Cycling",
+    "Ramen"
+   ],
+   "distance": 3,
+   "year": "senior",
+   "stage": "seed"
   },
   {
    "id": 3,
@@ -28,7 +51,18 @@
    "startup": "Nightjar",
    "bio": "Sleep tracking without a wearable. Wants a cofounder who reads papers.",
    "likesYou": true,
-   "photo": "https://i.pravatar.cc/600?img=32"
+   "photos": [
+    "https://i.pravatar.cc/600?img=32",
+    "https://i.pravatar.cc/600?img=31"
+   ],
+   "interests": [
+    "Neuroscience",
+    "Film",
+    "Tennis"
+   ],
+   "distance": 1,
+   "year": "sophomore",
+   "stage": "pre-seed"
   },
   {
    "id": 4,
@@ -38,7 +72,18 @@
    "startup": "Rewired",
    "bio": "Repairs e-bikes with a marketplace on top. Knows every bike lane.",
    "likesYou": true,
-   "photo": "https://i.pravatar.cc/600?img=59"
+   "photos": [
+    "https://i.pravatar.cc/600?img=59",
+    "https://i.pravatar.cc/600?img=56"
+   ],
+   "interests": [
+    "Hardware",
+    "Bikes",
+    "Tacos"
+   ],
+   "distance": 8,
+   "year": "senior",
+   "stage": "bootstrapped"
   },
   {
    "id": 5,
@@ -48,7 +93,18 @@
    "startup": "Stacky",
    "bio": "Pancake robot. Yes, really. Seed round closing.",
    "likesYou": false,
-   "photo": "https://i.pravatar.cc/600?img=25"
+   "photos": [
+    "https://i.pravatar.cc/600?img=25",
+    "https://i.pravatar.cc/600?img=26"
+   ],
+   "interests": [
+    "Robotics",
+    "Brunch",
+    "Jazz"
+   ],
+   "distance": 4,
+   "year": "junior",
+   "stage": "seed"
   },
   {
    "id": 6,
@@ -58,7 +114,19 @@
    "startup": "Glassline",
    "bio": "AR try-on for thrift stores. Sends memes at 3am.",
    "likesYou": true,
-   "photo": "https://i.pravatar.cc/600?img=68"
+   "photos": [
+    "https://i.pravatar.cc/600?img=68",
+    "https://i.pravatar.cc/600?img=69",
+    "https://i.pravatar.cc/600?img=70"
+   ],
+   "interests": [
+    "AR",
+    "Thrifting",
+    "Memes"
+   ],
+   "distance": 2,
+   "year": "senior",
+   "stage": "pre-seed"
   }
  ]
 }
