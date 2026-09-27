@@ -13,5 +13,8 @@ npm run timeline                          # data/audit.jsonl -> demo/timeline.ht
 
 Numbers (measured, with dates) and the 60-second recording go here on the day.
 
+Design target for the demo screens (mockups, invented data): https://talos-visuals.vercel.app
+(graph at /graph, two-terminal comparison at /split; source in `demo/mock/`).
+
 Not true yet:
 - (list what the demo does not do, on the same page as what it does)
