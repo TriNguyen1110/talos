@@ -41,16 +41,15 @@ nav button .badge{position:relative}nav button .badge s{position:absolute;top:-4
 .match .pair{display:flex;gap:-10px}.match .pair .pic{width:110px;height:110px;border-radius:50%;border:3px solid var(--bg);background:#333 center/cover}.match .pair .pic+ .pic{margin-left:-22px}
 .match p{color:var(--mute);max-width:300px;margin:0}.match button{border:0;border-radius:999px;padding:12px 26px;font:inherit;font-weight:600;cursor:pointer}.match .go{background:var(--pink);color:#111}.match .keep{background:transparent;color:var(--fg);border:1px solid var(--line)}
 .toast{position:fixed;bottom:86px;left:50%;transform:translateX(-50%);background:#1E1E27;border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:12px;color:var(--mute);opacity:0;transition:opacity .2s;pointer-events:none}.toast.on{opacity:1}
-.build{position:fixed;left:12px;bottom:6px;font-size:10px;color:var(--dim);font-family:ui-monospace,Menlo,monospace}.build b{color:var(--yellow);font-weight:600}
+.build{font-size:10px;color:var(--dim);font-family:ui-monospace,Menlo,monospace;max-width:200px;line-height:1.4}.build b{color:var(--yellow);font-weight:600}
 </style>
 </head>
 <body>
-<header><div><h1 id="title">Startup College Dating</h1><div class="sub" id="sub">waiting for the rooms…</div></div><div class="sub" id="where"></div></header>
+<header><div><h1 id="title">Startup College Dating</h1><div class="sub" id="sub">waiting for the rooms…</div></div><div style="text-align:right"><div class="sub" id="where"></div><div class="build" id="build"></div></div></header>
 <main id="root"></main>
 <nav id="nav"></nav>
 <div class="match" id="match"></div>
 <div class="toast" id="toast"></div>
-<div class="build" id="build"></div>
 <script>
 // The app the rooms build. It renders only what the build state says exists; state.json and
 // profiles.json are written by the rooms' steps, and nothing shows before its crossing arrived.
@@ -80,7 +79,7 @@ function render(){
   $("#title").textContent = state.title || "Startup College Dating";
   $("#sub").textContent = state.tagline || "waiting for the rooms…";
   $("#where").textContent = f.has("details") ? "Stanford · 2 mi" : "";
-  $("#build").innerHTML = state.version ? `build <b>v${state.version}</b> · contract <b>${state.contract || "-"}</b> · ${(state.features||[]).join(" · ")}` : "";
+  $("#build").innerHTML = state.version ? `build <b>v${state.version}</b> · contract <b>${state.contract || "-"}</b> · ${(state.features||[]).length} features` : "";
   $("#nav").innerHTML = f.has("tabs") ? [["deck","🔥","Swipe"],["matches","💬","Matches"],["me","👤","Profile"]].map(([k,i,l]) =>
     `<button class="${tab===k?"on":""}" onclick="go('${k}')"><b class="badge">${i}${k==="matches"&&matches.length?`<s>${matches.length}</s>`:""}</b>${l}</button>`).join("") : "";
   const root = $("#root");
