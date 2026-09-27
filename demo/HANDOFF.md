@@ -118,7 +118,7 @@ End every turn with one line: clock phase, what changed, the commits, the board 
 
 - If Tri has not run the history rewrite yet, remind him; every new commit since is on top of the old history and gets replayed by the cherry-pick range (`5c1b53f..main-prep`), so the commands still work unchanged.
 
-## Update 16:25 PDT
+## Update 15:55 PDT
 
 
 

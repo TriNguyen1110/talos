@@ -81,6 +81,25 @@ text is kept; nothing verified against is truncated.
 The test is `tests/demo-path.test.mjs`, the six beats as assertions, written before the
 implementation: `TALOS_IMPL=1 npm test`.
 
+## The factory builds a product
+
+```bash
+node demo/factory/server.mjs &            # http://localhost:4242, then press "run the factory"
+bash demo/factory/build.sh dating         # four rooms build Startup College Dating, ~2 min
+bash demo/factory/build.sh feed           # the same four rooms build Campus Feed, a Twitter clone
+```
+
+One page. Left: the audit log live, the flow graph between the four rooms and Talos, counters
+for delivered, held, refused and denied, and what each room is doing. Right: the app itself,
+a swipe deck of founders at your college, rendering only what has crossed to Frontend. PM
+scopes it, Backend publishes the profiles contract, Frontend builds the deck when the contract
+reaches it, two Backend notes stay home (one held, one injected and refused), Backend renames
+the field and Frontend hears it mid-task, QA rejects then approves, QA is denied a read it was
+never granted, PM revokes Frontend. The steps are scripted; every verdict, refusal and denial
+is the real decider and the real scope check. Two products so far, each a step file plus a one-file app under `demo/factory/`; adding one is
+documented in `demo/factory/products/README.md`. Run on 2026-09-27 15:50 PDT: 31 audit rows per
+product, 16 crossings delivered, 3 refused, 2 reads denied.
+
 ## The rest of the week through the same path
 
 `bash demo/run.sh factory` writes five ordinary things into the rooms and prints what the decider
