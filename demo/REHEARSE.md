@@ -61,3 +61,23 @@ If a judge asks "is this polling?": B makes one wrapped tool call per step it wa
 
 
 If a judge asks about feature requests, bug fixes or CI: `bash demo/run.sh factory` in the A terminal. Five lines: a PM feature request crosses to all three rooms as a decision, a QA verdict (what a CI result looks like from the QA room) crosses to PM and both owners, an internal bug fix is discarded, a breaking bug fix and a UI contract change cross as contracts. Then `npm run timeline` and show the rows. Say plainly that no pipeline writes the verdict in this build; the QA room does.
+
+## The factory demo (the main event if the two-terminal run is not needed)
+
+
+
+Left half: logs, the flow graph, counters, what each room is doing. Right half: the app the rooms are building, live.
+
+
+
+```
+
+node demo/factory/server.mjs &        # http://localhost:4242 ; open it full screen
+
+bash demo/factory/build.sh            # ~2 min; --fast for 40 s
+
+```
+
+
+
+What to say while it runs: PM scopes, Frontend hears it on its first call and the shell appears; Backend publishes the profiles contract, Frontend hears it on its test run and the deck appears; two Backend notes stay home (one held, one injected and refused three times, watch the red edges); Backend renames the field, Frontend hears it mid-task, the matches list appears against the new contract; QA rejects, Frontend fixes, QA approves; QA asks to read Backend and is denied; PM revokes Frontend and its next call is denied. The steps are scripted; every verdict, refusal and denial on the left is real. Say that sentence out loud.
