@@ -134,6 +134,10 @@ The walls held: `gbrain get c1-change --source-id talos-backend` returns the pag
   model is trained on them in this build. Jev and River, named in the deck, were cut on the day.
 - **No QM adapter.** Rooms are directories with a file watcher. The QM route it would attach
   to is a room's external memory provider; `src/rooms/qm.mjs` names it and does nothing.
+- **No connectors yet.** GitHub (merged PRs and CI results as contracts and verdicts), Linear
+  (assignments as decisions), Slack (channel decisions cross, DMs stay home) and Supabase
+  (migrations as contract changes) are the next adapters, the same shape as the directory
+  watcher: a watcher on a write path feeding the same decider and scope check. None is built.
 - **"Nobody polled" means this:** B's script fetches `changes` on each tool call it was already
   making. The call is real and unrelated; the fetch rides it. A QM or GBrain integration would
   do the same inside the tool result.
