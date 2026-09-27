@@ -16,7 +16,7 @@ Chatter goes to `demo/run.log`; `tail -f demo/run.log` in a third window if a ju
 
 Say: "B is correct, careful, and wrong. Forty seconds; in real teams one to five hours."
 
-## Pass 2: with Talos (beats 2 to 5). Decider rules (or jev if the key is set: leave TALOS_DECIDER unset).
+## Pass 2: with Talos (beats 2 to 5). Decider rules.
 
 | step | left (A) | right (B) | screen shows |
 |---|---|---|---|

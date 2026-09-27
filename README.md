@@ -97,8 +97,8 @@ reaches it, two Backend notes stay home (one held, one injected and refused), Ba
 the field and Frontend hears it mid-task, QA rejects then approves, QA is denied a read it was
 never granted, PM revokes Frontend. The steps are scripted; every verdict, refusal and denial
 is the real decider and the real scope check. Two products so far, each a step file plus a one-file app under `demo/factory/`; adding one is
-documented in `demo/factory/products/README.md`. Run on 2026-09-27 15:50 PDT: 31 audit rows per
-product, 16 crossings delivered, 3 refused, 2 reads denied.
+documented in `demo/factory/products/README.md`. Run on 2026-09-27 16:15 PDT: 31 audit rows per
+product, 19 crossings delivered, 1 held, 3 refused by scope, 2 reads denied, 0 leaks.
 
 ## The rest of the week through the same path
 

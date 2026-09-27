@@ -51,7 +51,7 @@ revokes Frontend, and its very next call is denied. 0.1 seconds on the same toke
 
 **2:00 · what you just saw** (25 s)
 
-Thirty-one audit rows. Sixteen crossings delivered, three refused, two reads denied, zero leaks. Every
+Thirty-one audit rows. Nineteen crossings delivered, one held, three refused by scope, two reads denied, zero leaks. Every
 number on that screen is a view of one table. The test is six beats written before the code; we broke
 the implementation five ways and each break turned a beat red. *If asked "is this polling": Frontend
 makes one wrapped call per step it was already doing; the change rides that call.*
@@ -61,7 +61,7 @@ makes one wrapped call per step it was already doing; the change rides that call
 We ran it three ways today. Through our CLI. Through a plain file dropped into a room's directory,
 0.4 seconds. And through GBrain: both rooms are GBrain brains, a page written with GBrain's own put
 crossed in 2.3 seconds, and reads back from one brain only. QM is the same shape; the adapter is named,
-not run. Same four rooms just built a Twitter clone too. *Click Campus Feed if there is time.*
+not run. The same four rooms built a Twitter clone today too, 31 rows, same shape. *Click Campus Feed if there is time.*
 
 **2:45 · not true yet, and next** (15 s)
 

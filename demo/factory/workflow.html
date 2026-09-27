@@ -52,7 +52,7 @@ async function load(){
     [`<b>${steps.filter(s=>s.room!=="app").length}</b><span>steps by the rooms</span>`],
     [`<b class="g">${n(r=>r.to_room&&r.allowed===true&&r.verdict==="share")}</b><span>crossings delivered</span>`],
     [`<b class="y">${n(r=>r.verdict==="hold"&&!r.to_room)}</b><span>held in the room</span>`],
-    [`<b class="r">${n(r=>r.to_room&&r.allowed===false)}</b><span>refused by scope</span>`],
+    [`<b class="r">${n(r=>r.kind!=="access"&&r.to_room&&r.allowed===false)}</b><span>refused by scope</span>`],
     [`<b class="r">${n(r=>r.kind==="access"&&!r.allowed)}</b><span>reads denied</span>`],
   ].map(x => `<div class="tile">${x}</div>`).join("");
   const t0 = Date.parse(run.steps[0]?.ts || run.finishedAt), sec = Math.max(0, Math.round((Date.parse(run.finishedAt) - t0) / 1000));
