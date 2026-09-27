@@ -1,0 +1,45 @@
+{
+  "v": 4,
+  "attachments": {},
+  "createdOnFiles": {
+    "at": "2026-09-26T05:20:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "faces": {
+    "ibm-plex-sans": {
+      "family": "IBM Plex Sans",
+      "href": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap"
+    },
+    "jetbrains-mono": {
+      "family": "JetBrains Mono",
+      "href": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap"
+    }
+  },
+  "order": [
+    "cover",
+    "whybuild",
+    "flow",
+    "decider",
+    "access",
+    "demo",
+    "proof",
+    "stack",
+    "why"
+  ],
+  "sections": {
+    "s1": {
+      "description": "Why build it, and what crosses between rooms",
+      "start": "cover"
+    },
+    "s2": {
+      "description": "Who decides, and what keeps it safe",
+      "start": "decider"
+    },
+    "s3": {
+      "description": "Demo, proof, what carried it, why it matters",
+      "start": "demo"
+    }
+  },
+  "title": "Talos Software Factory"
+}

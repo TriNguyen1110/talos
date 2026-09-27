@@ -1,0 +1,14 @@
+<section id="proof" data-transition="fade" style="background:#F4F1EA; color:#1B2430; font-family:'IBM Plex Sans', Arial, sans-serif; padding:112px 128px 140px; display:flex; flex-direction:column; gap:40px">
+
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; text-transform:uppercase; color:#F2994A">How we know it worked</p>
+<h2 style="font-size:58px; font-weight:600; line-height:1.1; color:#1B2430">One audit table. Every claim on this deck is a view of it.</h2>
+<div style="display:flex; gap:24px">
+<div style="flex:1; display:flex; flex-direction:column; gap:12px; background:#FFFFFF; padding:28px; border:1px solid #DDD7CB; border-top:6px solid #F2994A; border-radius:16px"><h3 style="font-size:28px; font-weight:600">The test</h3><ul style="font-size:22px; line-height:1.45; color:#5B6472"><li>Six beats as assertions, written before the code</li><li>Five deliberate breaks, each turned a beat red</li><li>A 2,000-character change kept in full in its row</li></ul></div>
+<div style="flex:1; display:flex; flex-direction:column; gap:12px; background:#FFFFFF; padding:28px; border:1px solid #DDD7CB; border-top:6px solid #3FB6C9; border-radius:16px"><h3 style="font-size:28px; font-weight:600">Access is real</h3><ul style="font-size:22px; line-height:1.45; color:#5B6472"><li>Every forbidden cell of the matrix refused, with a row</li><li>Same token: a read allowed, revoke, the next read denied, 0.105 s apart</li><li>Leaks across the negative matrix: 0</li></ul></div>
+<div style="flex:1; display:flex; flex-direction:column; gap:12px; background:#FFFFFF; padding:28px; border:1px solid #DDD7CB; border-top:6px solid #3FB6C9; border-radius:16px"><h3 style="font-size:28px; font-weight:600">On screen</h3><ul style="font-size:22px; line-height:1.45; color:#5B6472"><li>Timeline: two swimlanes, a line across on share, red on refusal</li><li>The change text is typed live, never seeded</li><li>Seconds come from a clock, never from us</li></ul></div>
+</div>
+<div style="display:flex; align-items:center; gap:24px; background:#0F1720; padding:22px 32px; border-radius:16px"><x-icon name="Database" style="color:#F2994A; width:40px; height:40px"></x-icon><p style="font-size:25px; line-height:1.4; color:#F4F1EA">Not true yet, on the README: the decider does not learn yet, no QM adapter, no CI pipeline writes the verdict, two agents only, single-laptop numbers.</p></div>
+
+<p style="position:absolute; left:128px; bottom:56px; width:1200px; font-family:'JetBrains Mono', 'Courier New', monospace; font-size:22px; color:#5B6472">Next: what carried it</p>
+<aside>Verifier run 2026-09-27 15:04 to 15:09 PDT: mutations that went red were revoke as a no-op, check always allowed, changes ignoring the allowed flag, rules sharing a private note, and skipping the audit row on a hold. Show the denials live, not from CI. Never say instantly.</aside>
+</section>
