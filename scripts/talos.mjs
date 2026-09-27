@@ -49,6 +49,19 @@ async function main([cmd, ...a]) {
       return bridge.override(need(a[0], "crossing_id"), need(a[1], "verdict"));
     case "seq":
       return { seq: audit.lastSeq() };
+    case "watch": {
+      // The adapter path: a page written into rooms/<room>/brain/ (by an agent, or by a GBrain-backed
+      // agent whose brain is that directory) crosses through the watcher, not through `write`.
+      // Long-running: prints {"watching":room} then one JSON line per crossing, until killed.
+      const room = need(a[0], "room");
+      if (!access.ROOMS.includes(room)) throw new Error(`unknown room: ${room}`);
+      const { watch } = await import("../src/rooms/dir.mjs");
+      const close = watch(room, async (from, text) => out(await bridge.onWrite(from, text)));
+      out({ watching: room, dir: brainDir(room) });
+      await new Promise((resolve) => { process.on("SIGINT", resolve); process.on("SIGTERM", resolve); });
+      close();
+      return { stopped: room };
+    }
     case "reset": {
       audit.reset();
       access.resetTokens();
@@ -60,7 +73,7 @@ async function main([cmd, ...a]) {
       return { reset: true };
     }
     default:
-      throw new Error(`usage: talos.mjs mint|write|changes|check|revoke|revoke-role|override|seq|reset (got: ${cmd ?? "nothing"})`);
+      throw new Error(`usage: talos.mjs mint|write|changes|check|revoke|revoke-role|override|seq|watch|reset (got: ${cmd ?? "nothing"})`);
   }
 }
 
