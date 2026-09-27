@@ -23,15 +23,17 @@ h1{font-size:17px;font-weight:600;letter-spacing:-.01em}
 .stage{position:relative;height:330px}
 svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .edge{fill:none;stroke:rgba(255,255,255,.07);stroke-width:1.25}
-.node{position:absolute;transform:translate(-50%,-50%);padding:10px 14px;min-width:176px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--hair);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);transition:border-color .5s var(--ease),box-shadow .5s var(--ease)}
+.draw{fill:none;stroke-width:1.75;stroke-linecap:round;opacity:0}
+.node{position:absolute;transform:translate(-50%,-50%);padding:12px 16px;min-width:176px;border-radius:18px;background:var(--glass);border:1px solid var(--hair);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 24px 60px rgba(0,0,0,.45);backdrop-filter:blur(14px);transition:border-color .7s var(--ease),box-shadow .7s var(--ease)}
 .node .r{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:500}
 .node .n{font-size:13px;font-weight:600;margin-top:2px}
-.node .s{font-size:11px;color:var(--mut);margin-top:4px;min-height:14px;transition:color .3s}
+.node .s{font-size:11px;color:var(--mut);margin-top:4px;min-height:14px;white-space:nowrap;transition:color .3s}
 .mem{min-width:120px;padding:7px 12px;border-radius:999px;text-align:center}.mem .n{font-size:11.5px}
-.hub{min-width:196px;text-align:center;border-radius:16px;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14)}
-.red{border-color:rgba(255,122,112,.6)!important;box-shadow:0 0 0 5px rgba(255,122,112,.07),0 0 36px rgba(255,122,112,.28)!important}
-.grn{border-color:rgba(126,220,155,.6)!important;box-shadow:0 0 0 5px rgba(126,220,155,.07),0 0 36px rgba(126,220,155,.26)!important}
-.yel{border-color:rgba(229,185,107,.6)!important;box-shadow:0 0 0 5px rgba(229,185,107,.07),0 0 36px rgba(229,185,107,.26)!important}
+.hub{min-width:196px;text-align:center;border-radius:22px;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14)}
+.red{border-color:rgba(255,122,112,.5)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 0 6px rgba(255,122,112,.06),0 0 48px rgba(255,122,112,.22)!important}
+.grn{border-color:rgba(126,220,155,.5)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 0 6px rgba(126,220,155,.06),0 0 48px rgba(126,220,155,.22)!important}
+.yel{border-color:rgba(229,185,107,.45)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 0 6px rgba(229,185,107,.06),0 0 48px rgba(229,185,107,.18)!important}
 .s.cr{color:var(--red)!important}.s.cg{color:var(--grn)!important}.s.cy{color:var(--yel)!important}
 .strip{position:absolute;left:0;right:0;bottom:0;border-top:1px solid var(--hair)}
 .strip .row{display:flex;gap:12px;padding:7px 16px;font-size:12px;color:var(--mut);border-bottom:1px solid rgba(255,255,255,.04);opacity:0;transform:translateY(-3px);transition:opacity .45s var(--ease),transform .45s var(--ease)}
@@ -44,13 +46,24 @@ footer{display:flex;gap:16px}
 footer div{flex:1;display:flex;align-items:center;gap:12px;padding:12px 18px;border-radius:14px;background:var(--glass);border:1px solid var(--hair);font-size:13px;color:var(--mut);min-height:46px}
 footer b{color:var(--txt);font-weight:600}
 </style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+ <filter id="glow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <linearGradient id="gW" x1="0" x2="1"><stop offset="0" stop-color="#F5F5F7" stop-opacity="0"/><stop offset=".5" stop-color="#F5F5F7" stop-opacity=".75"/><stop offset="1" stop-color="#F5F5F7" stop-opacity=".2"/></linearGradient>
+ <linearGradient id="gWr" x1="1" x2="0"><stop offset="0" stop-color="#F5F5F7" stop-opacity="0"/><stop offset=".5" stop-color="#F5F5F7" stop-opacity=".75"/><stop offset="1" stop-color="#F5F5F7" stop-opacity=".2"/></linearGradient>
+ <linearGradient id="gR" x1="0" x2="1"><stop offset="0" stop-color="#FF7A70" stop-opacity="0"/><stop offset=".5" stop-color="#FF7A70"/><stop offset="1" stop-color="#FF7A70" stop-opacity=".2"/></linearGradient>
+ <linearGradient id="gRr" x1="1" x2="0"><stop offset="0" stop-color="#FF7A70" stop-opacity="0"/><stop offset=".5" stop-color="#FF7A70"/><stop offset="1" stop-color="#FF7A70" stop-opacity=".2"/></linearGradient>
+ <linearGradient id="gG" x1="0" x2="1"><stop offset="0" stop-color="#7EDC9B" stop-opacity="0"/><stop offset=".5" stop-color="#7EDC9B"/><stop offset="1" stop-color="#7EDC9B" stop-opacity=".2"/></linearGradient>
+ <linearGradient id="gGr" x1="1" x2="0"><stop offset="0" stop-color="#7EDC9B" stop-opacity="0"/><stop offset=".5" stop-color="#7EDC9B"/><stop offset="1" stop-color="#7EDC9B" stop-opacity=".2"/></linearGradient>
+ <linearGradient id="gY" x1="0" x2="1"><stop offset="0" stop-color="#E5B96B" stop-opacity="0"/><stop offset=".5" stop-color="#E5B96B"/><stop offset="1" stop-color="#E5B96B" stop-opacity=".2"/></linearGradient>
+ <linearGradient id="gYr" x1="1" x2="0"><stop offset="0" stop-color="#E5B96B" stop-opacity="0"/><stop offset=".5" stop-color="#E5B96B"/><stop offset="1" stop-color="#E5B96B" stop-opacity=".2"/></linearGradient>
+</defs></svg>
 <header><h1>Talos</h1><span style="font-size:12px;color:var(--faint)">same two agents · same minute · one flag</span>
  <div class="legend"><span><i style="background:var(--red)"></i>wrong</span><span><i style="background:var(--yel)"></i>danger</span><span><i style="background:var(--grn)"></i>right</span></div>
  <span class="clock mono" id="clock">0:00</span></header>
 <div class="cols">
  <div class="col" id="L"><div class="hd"><span class="t">Without</span><span class="d">one shared brain · one worktree · no walls</span><div class="score"><span class="r" id="Lr">0 wrong</span></div></div>
   <div class="stage">
-   <svg><path id="L_am" class="edge" d="M 150 120 C 150 190, 220 200, 300 200"/><path id="L_bm" class="edge" d="M 452 120 C 452 190, 382 200, 302 200"/><path id="L_ab" class="edge" d="M 240 78 L 362 78"/></svg>
+   <svg><path id="L_am" class="edge" d="M 150 118 C 150 150, 250 154, 250 186"/><path id="L_bm" class="edge" d="M 452 118 C 452 150, 352 154, 352 186"/><path id="L_ab" class="edge" d="M 248 84 L 354 84"/></svg>
    <div class="node" id="LA" style="left:150px;top:84px"><div class="r">room a</div><div class="n">backend-agent</div><div class="s" id="LAs">idle</div></div>
    <div class="node" id="LB" style="left:452px;top:84px"><div class="r">room b</div><div class="n">frontend-agent</div><div class="s" id="LBs">writing REST client</div></div>
    <div class="node hub" id="LM" style="left:301px;top:220px"><div class="r">shared</div><div class="n">one brain · one worktree</div><div class="s" id="LMs">everyone reads and writes everything</div></div>
@@ -59,7 +72,7 @@ footer b{color:var(--txt);font-weight:600}
  </div>
  <div class="col" id="R"><div class="hd"><span class="t">With Talos</span><span class="d">rooms · a brain each · decider between</span><div class="score"><span class="g" id="Rg">0 right</span></div></div>
   <div class="stage">
-   <svg><path id="R_at" class="edge" d="M 240 84 C 270 84, 270 170, 300 170"/><path id="R_tb" class="edge" d="M 302 170 C 332 170, 332 84, 362 84"/><path id="R_am" class="edge" d="M 150 118 L 150 236"/><path id="R_bm" class="edge" d="M 452 118 L 452 236"/></svg>
+   <svg><path id="R_at" class="edge" d="M 150 118 C 150 140, 250 136, 250 156"/><path id="R_tb" class="edge" d="M 452 118 C 452 140, 352 136, 352 156"/><path id="R_am" class="edge" d="M 150 118 L 150 236"/><path id="R_bm" class="edge" d="M 452 118 L 452 236"/></svg>
    <div class="node" id="RA" style="left:150px;top:84px"><div class="r">room a</div><div class="n">backend-agent</div><div class="s" id="RAs">idle</div></div>
    <div class="node" id="RB" style="left:452px;top:84px"><div class="r">room b</div><div class="n">frontend-agent</div><div class="s" id="RBs">writing REST client</div></div>
    <div class="node hub" id="RT" style="left:301px;top:190px"><div class="r">talos</div><div class="n">decider · scope · audit</div><div class="s" id="RTs">waiting</div></div>
@@ -73,9 +86,17 @@ footer b{color:var(--txt);font-weight:600}
 <script>
 const $=id=>document.getElementById(id);let lr=0,rg=0;
 function st(id,cls,text,ms){const e=$(id);e.classList.remove('red','grn','yel');if(cls)e.classList.add(cls);if(text!=null){const s=e.querySelector('.s');if(s){s.textContent=text;s.className='s '+(cls=='red'?'cr':cls=='grn'?'cg':cls=='yel'?'cy':'')}}if(ms)setTimeout(()=>e.classList.remove(cls),ms)}
-function edge(id,color,ms){const p=$(id),L=p.getTotalLength();p.style.stroke=color;p.style.strokeWidth=1.75;p.style.strokeDasharray=L;p.style.strokeDashoffset=L;p.style.transition='none';
- requestAnimationFrame(()=>{p.style.transition=`stroke-dashoffset ${ms}ms cubic-bezier(.22,1,.36,1)`;p.style.strokeDashoffset=0});
- setTimeout(()=>{p.style.transition='stroke .6s,stroke-width .6s';p.style.stroke='rgba(255,255,255,.07)';p.style.strokeWidth=1.25;p.style.strokeDasharray='none'},ms+1200)}
+const GRAD={'#FF7A70':'gR','#7EDC9B':'gG','#E5B96B':'gY'};
+function drawEdge(p,color,ms){if(!p)return;const svg=p.ownerSVGElement,L=p.getTotalLength(),a=p.getPointAtLength(0),b=p.getPointAtLength(L),bb=p.getBBox();
+ const g=GRAD[color]||'gW',grad=(bb.width<2||bb.height<2)?color:`url(#${g}${b.x<a.x?'r':''})`;
+ const d=p.cloneNode(false);d.removeAttribute('id');d.setAttribute('class','draw');d.style.stroke=grad;d.style.strokeDasharray=L;d.style.strokeDashoffset=L;d.style.opacity=1;svg.appendChild(d);
+ requestAnimationFrame(()=>{d.style.transition=`stroke-dashoffset ${ms}ms cubic-bezier(.22,1,.36,1),opacity .6s`;d.style.strokeDashoffset=0});
+ setTimeout(()=>{d.style.opacity=0;setTimeout(()=>d.remove(),650)},ms+900);
+ const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('r','4.5');c.setAttribute('fill',color);c.setAttribute('filter','url(#glow)');
+ const m=document.createElementNS('http://www.w3.org/2000/svg','animateMotion');m.setAttribute('dur',ms+'ms');m.setAttribute('fill','freeze');m.setAttribute('calcMode','spline');m.setAttribute('keySplines','.22 1 .36 1');m.setAttribute('keyTimes','0;1');
+ const mp=document.createElementNS('http://www.w3.org/2000/svg','mpath');mp.setAttribute('href','#'+p.id);m.appendChild(mp);c.appendChild(m);svg.appendChild(c);m.beginElement();
+ setTimeout(()=>{c.style.transition='opacity .4s';c.style.opacity=0;setTimeout(()=>c.remove(),420)},ms)}
+function edge(id,color,ms){drawEdge($(id),color,ms)}
 function row(side,cls,t,k,txt){const box=$(side+'s');const d=document.createElement('div');d.className='row '+cls;d.innerHTML=`<i></i><span class="t mono">${t}</span><span class="k">${k}</span><span>${txt}</span>`;box.appendChild(d);requestAnimationFrame(()=>d.classList.add('on'));while(box.children.length>4)box.removeChild(box.firstChild);
  if(cls=='r'){$('Lr').textContent=(++lr)+' wrong'}if(cls=='g'){$('Rg').textContent=(++rg)+' right'}}
 const RED='#FF7A70',GRN='#7EDC9B',YEL='#E5B96B',WHT='rgba(245,245,247,.7)';

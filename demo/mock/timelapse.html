@@ -23,16 +23,18 @@ h1{font-size:17px;font-weight:600;letter-spacing:-.01em}
 .score .r{color:var(--red)}.score .g{color:var(--grn)}.score .y{color:var(--yel)}
 .stage{position:relative;height:318px;flex:none}
 svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.edge{fill:none;stroke:rgba(255,255,255,.06);stroke-width:1.2}
-.node{position:absolute;transform:translate(-50%,-50%);padding:9px 13px;min-width:168px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--hair);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);transition:border-color .35s var(--ease),box-shadow .35s var(--ease)}
+.edge{fill:none;stroke:rgba(255,255,255,.07);stroke-width:1.25}
+.draw{fill:none;stroke-width:1.75;stroke-linecap:round;opacity:0}
+.node{position:absolute;transform:translate(-50%,-50%);padding:10px 14px;min-width:168px;border-radius:18px;background:var(--glass);border:1px solid var(--hair);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 24px 60px rgba(0,0,0,.45);backdrop-filter:blur(14px);transition:border-color .35s var(--ease),box-shadow .35s var(--ease)}
 .node .r{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:500}
 .node .n{font-size:12.5px;font-weight:600;margin-top:1px}
 .node .s{font-size:10.5px;color:var(--mut);margin-top:3px;min-height:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px}
-.hub{min-width:200px;text-align:center;border-radius:16px;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14)}
-.w{border-color:rgba(255,255,255,.35)!important;box-shadow:0 0 20px rgba(255,255,255,.10)!important}
-.red{border-color:rgba(255,122,112,.65)!important;box-shadow:0 0 0 4px rgba(255,122,112,.07),0 0 30px rgba(255,122,112,.3)!important}
-.grn{border-color:rgba(126,220,155,.65)!important;box-shadow:0 0 0 4px rgba(126,220,155,.07),0 0 30px rgba(126,220,155,.28)!important}
-.yel{border-color:rgba(229,185,107,.65)!important;box-shadow:0 0 0 4px rgba(229,185,107,.07),0 0 30px rgba(229,185,107,.28)!important}
+.hub{min-width:200px;text-align:center;border-radius:22px;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14)}
+.w{border-color:rgba(255,255,255,.35)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 0 6px rgba(255,255,255,.04),0 0 40px rgba(255,255,255,.10)!important}
+.red{border-color:rgba(255,122,112,.5)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 0 6px rgba(255,122,112,.06),0 0 48px rgba(255,122,112,.22)!important}
+.grn{border-color:rgba(126,220,155,.5)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 0 6px rgba(126,220,155,.06),0 0 48px rgba(126,220,155,.22)!important}
+.yel{border-color:rgba(229,185,107,.45)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 0 6px rgba(229,185,107,.06),0 0 48px rgba(229,185,107,.18)!important}
 .s.cr{color:var(--red)!important}.s.cg{color:var(--grn)!important}.s.cy{color:var(--yel)!important}
 .strip{flex:1;border-top:1px solid var(--hair);overflow:hidden}
 .row{display:flex;gap:10px;padding:5px 14px;font-size:11.5px;color:var(--mut);border-bottom:1px solid rgba(255,255,255,.035);opacity:0;transform:translateY(-3px);transition:opacity .3s var(--ease),transform .3s var(--ease)}
@@ -45,6 +47,17 @@ footer{display:flex;gap:16px}
 footer div{flex:1;display:flex;align-items:center;gap:12px;padding:11px 18px;border-radius:14px;background:var(--glass);border:1px solid var(--hair);font-size:13px;color:var(--mut);min-height:44px}
 footer b{color:var(--txt);font-weight:600}
 </style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+ <filter id="glow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <linearGradient id="gW" x1="0" x2="1"><stop offset="0" stop-color="#F5F5F7" stop-opacity="0"/><stop offset=".5" stop-color="#F5F5F7" stop-opacity=".75"/><stop offset="1" stop-color="#F5F5F7" stop-opacity=".2"/></linearGradient>
+ <linearGradient id="gWr" x1="1" x2="0"><stop offset="0" stop-color="#F5F5F7" stop-opacity="0"/><stop offset=".5" stop-color="#F5F5F7" stop-opacity=".75"/><stop offset="1" stop-color="#F5F5F7" stop-opacity=".2"/></linearGradient>
+ <linearGradient id="gR" x1="0" x2="1"><stop offset="0" stop-color="#FF7A70" stop-opacity="0"/><stop offset=".5" stop-color="#FF7A70"/><stop offset="1" stop-color="#FF7A70" stop-opacity=".2"/></linearGradient>
+ <linearGradient id="gRr" x1="1" x2="0"><stop offset="0" stop-color="#FF7A70" stop-opacity="0"/><stop offset=".5" stop-color="#FF7A70"/><stop offset="1" stop-color="#FF7A70" stop-opacity=".2"/></linearGradient>
+ <linearGradient id="gG" x1="0" x2="1"><stop offset="0" stop-color="#7EDC9B" stop-opacity="0"/><stop offset=".5" stop-color="#7EDC9B"/><stop offset="1" stop-color="#7EDC9B" stop-opacity=".2"/></linearGradient>
+ <linearGradient id="gGr" x1="1" x2="0"><stop offset="0" stop-color="#7EDC9B" stop-opacity="0"/><stop offset=".5" stop-color="#7EDC9B"/><stop offset="1" stop-color="#7EDC9B" stop-opacity=".2"/></linearGradient>
+ <linearGradient id="gY" x1="0" x2="1"><stop offset="0" stop-color="#E5B96B" stop-opacity="0"/><stop offset=".5" stop-color="#E5B96B"/><stop offset="1" stop-color="#E5B96B" stop-opacity=".2"/></linearGradient>
+ <linearGradient id="gYr" x1="1" x2="0"><stop offset="0" stop-color="#E5B96B" stop-opacity="0"/><stop offset=".5" stop-color="#E5B96B"/><stop offset="1" stop-color="#E5B96B" stop-opacity=".2"/></linearGradient>
+</defs></svg>
 <header><h1>Talos</h1><span class="sub">four rooms · one synthetic afternoon shaped like a real one · same event stream on both sides</span>
  <div class="legend"><span><i style="background:var(--red)"></i>wrong</span><span><i style="background:var(--yel)"></i>danger</span><span><i style="background:var(--grn)"></i>right</span></div>
  <div class="sim"><b class="mono" id="sim">00:00</b><span>elapsed · 120×</span></div></header>
@@ -59,12 +72,22 @@ footer b{color:var(--txt);font-weight:600}
 const $=id=>document.getElementById(id);
 const ROOMS=[['pm','Program Manager',150,66],['fe','Frontend',452,66],['be','Backend',150,268],['qa','QA',452,268]];
 const HUB=[301,167];
-function build(side,hubLabel,hubSub){const st=$(side+'st');let svg=`<svg>`;for(const [id,,x,y] of ROOMS){const dx=x<HUB[0]?70:-70;svg+=`<path id="${side}e_${id}" class="edge" d="M ${x+dx} ${y} Q ${HUB[0]} ${y} ${HUB[0]} ${HUB[1]}"/>`}svg+='</svg>';
+function build(side,hubLabel,hubSub){const st=$(side+'st');let svg=`<svg>`;for(const [id,,x,y] of ROOMS){const top=y<HUB[1];const y0=top?y+34:y-34,y1=top?HUB[1]-38:HUB[1]+38,x1=x<HUB[0]?HUB[0]-58:HUB[0]+58,c=top?22:-22;svg+=`<path id="${side}e_${id}" class="edge" d="M ${x} ${y0} C ${x} ${y0+c}, ${x1} ${y1-c}, ${x1} ${y1}"/>`}svg+='</svg>';
  let html=svg;for(const [id,name,x,y] of ROOMS)html+=`<div class="node" id="${side}n_${id}" style="left:${x}px;top:${y}px"><div class="r">room</div><div class="n">${name}</div><div class="s" id="${side}s_${id}">idle</div></div>`;
  html+=`<div class="node hub" id="${side}n_hub" style="left:${HUB[0]}px;top:${HUB[1]}px"><div class="r">${hubLabel}</div><div class="n">${hubSub}</div><div class="s" id="${side}s_hub"></div></div>`;st.innerHTML=html}
 build('L','shared','one brain · one worktree');build('R','talos','decider · scope · audit');
 function flash(side,id,cls,text,ms=700){const n=$(side+'n_'+id),s=$(side+'s_'+id);if(!n)return;n.classList.remove('w','red','grn','yel');n.classList.add(cls);if(text!=null){s.textContent=text;s.className='s '+(cls=='red'?'cr':cls=='grn'?'cg':cls=='yel'?'cy':'')}setTimeout(()=>n.classList.remove(cls),ms)}
-function edge(side,id,color,ms=500){const p=$(side+'e_'+id);if(!p)return;const L=p.getTotalLength();p.style.transition='none';p.style.stroke=color;p.style.strokeWidth=1.8;p.style.strokeDasharray=L;p.style.strokeDashoffset=L;requestAnimationFrame(()=>{p.style.transition=`stroke-dashoffset ${ms}ms cubic-bezier(.22,1,.36,1)`;p.style.strokeDashoffset=0});setTimeout(()=>{p.style.transition='stroke .5s';p.style.stroke='rgba(255,255,255,.06)';p.style.strokeWidth=1.2;p.style.strokeDasharray='none'},ms+500)}
+const GRAD={'#FF7A70':'gR','#7EDC9B':'gG','#E5B96B':'gY'};
+function drawEdge(p,color,ms){if(!p)return;const svg=p.ownerSVGElement,L=p.getTotalLength(),a=p.getPointAtLength(0),b=p.getPointAtLength(L),bb=p.getBBox();
+ const g=GRAD[color]||'gW',grad=(bb.width<2||bb.height<2)?color:`url(#${g}${b.x<a.x?'r':''})`;
+ const d=p.cloneNode(false);d.removeAttribute('id');d.setAttribute('class','draw');d.style.stroke=grad;d.style.strokeDasharray=L;d.style.strokeDashoffset=L;d.style.opacity=1;svg.appendChild(d);
+ requestAnimationFrame(()=>{d.style.transition=`stroke-dashoffset ${ms}ms cubic-bezier(.22,1,.36,1),opacity .6s`;d.style.strokeDashoffset=0});
+ setTimeout(()=>{d.style.opacity=0;setTimeout(()=>d.remove(),650)},ms+900);
+ const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('r','4.5');c.setAttribute('fill',color);c.setAttribute('filter','url(#glow)');
+ const m=document.createElementNS('http://www.w3.org/2000/svg','animateMotion');m.setAttribute('dur',ms+'ms');m.setAttribute('fill','freeze');m.setAttribute('calcMode','spline');m.setAttribute('keySplines','.22 1 .36 1');m.setAttribute('keyTimes','0;1');
+ const mp=document.createElementNS('http://www.w3.org/2000/svg','mpath');mp.setAttribute('href','#'+p.id);m.appendChild(mp);c.appendChild(m);svg.appendChild(c);m.beginElement();
+ setTimeout(()=>{c.style.transition='opacity .4s';c.style.opacity=0;setTimeout(()=>c.remove(),420)},ms)}
+function edge(side,id,color,ms=500){drawEdge($(side+'e_'+id),color,ms)}
 let cnt={Lo:0,Lr:0,Ro:0,Ry:0,Rg:0};function bump(k,label){cnt[k]++;$(k).textContent=cnt[k]+' '+label}
 function row(side,cls,t,k,txt){const box=$(side+'s');const d=document.createElement('div');d.className='row '+cls;d.innerHTML=`<i></i><span class="t mono">${t}</span><span class="k">${k}</span><span>${txt}</span>`;box.appendChild(d);requestAnimationFrame(()=>d.classList.add('on'));while(box.children.length>5)box.removeChild(box.firstChild)}
 // deterministic stream shaped like a real afternoon of a four-room loop
