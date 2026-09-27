@@ -95,3 +95,17 @@ and must never be committed; `.gitignore` is not writable today, so simply never
 - `run.sh` uses `node -e` to parse JSON; `jq` is not needed.
 
 End every turn with one line: clock phase, what changed, the commits, the board rows appended.
+
+## Update 15:25 PDT
+
+
+
+- Items 03, 04, 05, 10, 11, 13 are `done`. Everything is pushed to `origin` through commit 99b4d03.
+
+- `scripts/talos.mjs watch <room>` exists: the adapter path. Sponsor test done and on the board (`sponsors-20260927`): GBrain `put` into a registered room source wrote through to the brain directory and crossed in 2.3 s; plain page write 0.44 s; isolation confirmed by `gbrain get` against each source. QM not standing. Two GBrain sources are registered on the personal brain (`talos-backend`, `talos-frontend`); remove them after the event with `gbrain sources remove <id> --confirm-destructive` if unwanted.
+
+- Five-run median propagation 2.9 s is on the board (`p50-20260927`) and in the README draft.
+
+- **Pending for Tri, not for an agent:** the history rewrite so no commit predates today (the six git commands in the chat; they force-push). If Tri has run it, `git log` shows a single `prep:` commit at the bottom dated today; then pull is not needed because it was done locally. If a later push is rejected as non-fast-forward, Tri rewrote after your last fetch: `git fetch origin && git rebase origin/main` and push again, never force.
+
+- The README swap at 16:15 is unchanged: `git mv demo/README.draft.md README.md`, check numbers, commit, push.
