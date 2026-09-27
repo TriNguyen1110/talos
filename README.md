@@ -12,6 +12,10 @@ says which commit landed when.
 
 ## Run it
 
+Live copy of the factory demo, static, from the last saved runs: https://talos-factory.vercel.app
+(`?product=dating` or `?product=feed`; the workflow page at `/workflow.html?product=feed`). Live builds
+with the run button need the local server below.
+
 One shell, thirty seconds, no keys, no network:
 
 ```bash

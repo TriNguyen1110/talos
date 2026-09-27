@@ -22,4 +22,6 @@ Talos is a software factory: rooms of agents, one per role, that build, manage a
 
 **Not true yet.** The decider is rules only and does not learn yet. No QM adapter, no connectors (GitHub, Linear, Slack, Supabase are each one watcher on a write path). Two agents, one laptop, single-run numbers except where a median is stated.
 
+**Demo.** https://talos-factory.vercel.app (static copy of the last runs; live builds run locally).
+
 **Repo.** https://github.com/TriNguyen1110/talos, created today; prep work from the days before is at talos-prep and named in the first commit.
