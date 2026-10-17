@@ -29,6 +29,12 @@ const listA = await rpc(tokenA, "tools/list");
 t.check(listA.status === 200 && listA.tools.includes("memory_ingest"), "token A is accepted", `HTTP ${listA.status}, ${listA.tools.length} tools`);
 const listB = await rpc(tokenB, "tools/list");
 t.check(listB.status === 200 && listB.tools.includes("memory_query"), "token B is accepted", `HTTP ${listB.status}, ${listB.tools.length} tools`);
+if (listA.status !== 200 || listB.status !== 200) {
+  // Every later check needs two working tokens; with a refused one they would pass for the wrong reason.
+  console.log("\nStopping: both tokens must be accepted before a leak can be tested. See README.md, step 2.");
+  t.finish();
+  process.exit();
+}
 
 const write = await callTool(tokenA, "memory_ingest", {
   content: `The leak check canary is ${canary}. It must only be readable in scope A.`,
@@ -49,16 +55,16 @@ const queryB = await callTool(tokenB, "memory_query", { query: canary, limit: 50
 t.check(queryB.status === 200 && !queryB.text.includes(canary), "token B's search does not return the canary", brief(queryB.text));
 
 const changesB = await callTool(tokenB, "memory_changes", {});
-t.check(!changesB.text.includes(canary), "token B's change feed does not mention the canary", `HTTP ${changesB.status}`);
+t.check(changesB.status === 200 && !changesB.text.includes(canary), "token B's change feed does not mention the canary", `HTTP ${changesB.status}`);
 
 if (scopeA) {
   const named = await callTool(tokenB, "memory_query", { query: canary, scopePath: scopeA, limit: 50 });
-  t.check(!named.text.includes(canary), "token B naming scope A explicitly still gets no canary", brief(named.text));
+  t.check(named.status === 200 && !named.text.includes(canary), "token B naming scope A explicitly still gets no canary", brief(named.text));
 } else {
   console.log("SKIP  token B naming scope A explicitly (set LEAK_SCOPE_A to run it)");
 }
 
 const writeB = await callTool(tokenB, "memory_ingest", { content: `read-only write attempt ${canary}`, name: "leak check canary" });
-t.check(writeB.isError || writeB.status !== 200, "token B (read-only) cannot write", brief(writeB.text));
+t.check(writeB.status === 200 && writeB.isError && !writeB.text.includes("Stored"), "token B (read-only) cannot write", brief(writeB.text));
 
 t.finish();

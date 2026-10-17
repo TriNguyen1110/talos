@@ -2,19 +2,15 @@
 // and its very next call is refused. Exit 0 means it was accepted before and refused after.
 //
 //   WILLDER_TOKEN  any token you are willing to revoke
-//
-//   node revoke-check.mjs          interactive: checks, waits for you to revoke, checks again
-//   node revoke-check.mjs --after  only the "after" half, for a token already revoked
 
 import { createInterface } from "node:readline/promises";
 import { ENDPOINT, rpc, callTool, requireToken, ledger, brief } from "./mcp.mjs";
 
 const token = requireToken("WILLDER_TOKEN");
-const afterOnly = process.argv.includes("--after");
 const t = ledger();
 console.log(`Endpoint: ${ENDPOINT}\n`);
 
-if (!afterOnly) {
+{
   const before = await rpc(token, "tools/list");
   t.check(before.status === 200 && before.tools.length > 0, "the token is accepted before revocation", `HTTP ${before.status}, ${before.tools.length} tools`);
   if (before.status !== 200) {

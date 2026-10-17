@@ -122,8 +122,11 @@ it cannot recall what the token already read.
 - `token A reads the canary back` fails: token A has `read` instead of `write`, or the
   service is slow. Run the script again; a new canary is used each time.
 - `revoke-check` says the token is not accepted now: it was already revoked or expired.
-  Issue a new `revoke_probe` token. `node revoke-check.mjs --after` runs only the second
-  half, for a token you have already revoked.
+  Issue a new `revoke_probe` token and run it again. The script refuses to test a token it
+  has not first seen working, since refusing a dead token proves nothing.
+- `Stopping: both tokens must be accepted`: one of the two leak tokens is refused (a typo,
+  expired, or revoked). Every later check needs both, so the script stops rather than pass
+  them for the wrong reason.
 
 Clean up afterwards: revoke `leak_writer` and `leak_reader` in **Access → Tokens** (they
 also expire on their own after an hour). The canary fact stays in `Leak A`.
